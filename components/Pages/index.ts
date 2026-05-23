@@ -12,3 +12,4 @@ export { default as BusinessInsightPage } from "./BusinessInsightPage";
 export { default as ApiStatusPage } from "./ApiStatusPage";
 export { default as EmailPreferencesPage } from "./EmailPreferencesPage";
 export { default as ApiDocsPage } from "./ApiDocsPage";
+export { default as ProcurementPage } from "./ProcurementPage";

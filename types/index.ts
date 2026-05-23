@@ -77,6 +77,23 @@ export type {
   InvoiceFilters,
 } from "./invoice";
 
+// Procure-to-Pay (P2P) types
+export type {
+  PurchaseOrderStatus,
+  GoodsReceiptStatus,
+  APInvoiceStatus,
+  PurchaseOrder,
+  PurchaseOrderItem,
+  GoodsReceipt,
+  GoodsReceiptItem,
+  APInvoice,
+  CreatePurchaseOrderInput,
+  UpdatePurchaseOrderInput,
+  CreateGoodsReceiptInput,
+  CreateAPInvoiceInput,
+  RecordAPInvoicePaymentInput,
+} from "./p2p";
+
 // History (Import History) types
 export type {
   ImportHistoryForPage,

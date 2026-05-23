@@ -108,6 +108,118 @@ model OrderItem {
   product     Product  @relation(fields: [productId], references: [id]) // Reference to product
 }
 
+model PurchaseOrder {
+  id             String              @id @default(auto()) @map("_id") @db.ObjectId
+  poNumber       String              @unique // Unique purchase order number (e.g., PO-20240523-120001-1234)
+  supplierId     String              @db.ObjectId // Supplier reference (master supplier entity)
+  warehouseId    String              @db.ObjectId // Target warehouse for receipt
+  userId         String              @db.ObjectId // User who created the PO
+  status         String              @default("draft") // draft, posted, completed, cancelled
+  subtotal       Float               @default(0)
+  tax            Float? // Optional tax amount
+  total          Float               @default(0)
+  expectedDate   DateTime?           @db.Date // Planned arrival date
+  notes          String?
+  createdAt      DateTime            @default(now()) @db.Date
+  updatedAt      DateTime?           @db.Date
+  createdBy      String              @db.ObjectId
+  updatedBy      String?             @db.ObjectId
+  items          PurchaseOrderItem[]
+  goodsReceipts  GoodsReceipt[]
+  apInvoices     APInvoice[]
+
+  @@index([userId, status, createdAt])
+  @@index([supplierId])
+  @@index([warehouseId])
+}
+
+model PurchaseOrderItem {
+  id               String        @id @default(auto()) @map("_id") @db.ObjectId
+  purchaseOrderId  String        @db.ObjectId
+  productId        String        @db.ObjectId
+  productName      String
+  sku              String?
+  quantity         BigInt
+  unitCost         Float
+  subtotal         Float
+  receivedQuantity BigInt        @default(0) // Received qty so far from goods receipts
+  createdAt        DateTime      @default(now()) @db.Date
+  purchaseOrder    PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+
+  @@index([purchaseOrderId])
+  @@index([productId])
+}
+
+model GoodsReceipt {
+  id              String             @id @default(auto()) @map("_id") @db.ObjectId
+  receiptNumber   String             @unique // Unique receipt number (e.g., GR-20240523-120001-1234)
+  purchaseOrderId String             @db.ObjectId
+  supplierId      String             @db.ObjectId
+  warehouseId     String             @db.ObjectId
+  userId          String             @db.ObjectId // User who posted receipt
+  status          String             @default("received") // received, reversed
+  receivedAt      DateTime           @default(now()) @db.Date
+  notes           String?
+  createdAt       DateTime           @default(now()) @db.Date
+  updatedAt       DateTime?          @db.Date
+  createdBy       String             @db.ObjectId
+  updatedBy       String?            @db.ObjectId
+  purchaseOrder   PurchaseOrder      @relation(fields: [purchaseOrderId], references: [id], onDelete: Restrict)
+  items           GoodsReceiptItem[]
+  apInvoices      APInvoice[]
+
+  @@index([purchaseOrderId])
+  @@index([supplierId])
+  @@index([warehouseId])
+  @@index([userId, status, receivedAt])
+}
+
+model GoodsReceiptItem {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  goodsReceiptId String       @db.ObjectId
+  productId      String       @db.ObjectId
+  productName    String
+  sku            String?
+  quantity       BigInt
+  unitCost       Float
+  subtotal       Float
+  createdAt      DateTime     @default(now()) @db.Date
+  goodsReceipt   GoodsReceipt @relation(fields: [goodsReceiptId], references: [id], onDelete: Cascade)
+
+  @@index([goodsReceiptId])
+  @@index([productId])
+}
+
+model APInvoice {
+  id              String         @id @default(auto()) @map("_id") @db.ObjectId
+  invoiceNumber   String         @unique // Unique AP invoice number (e.g., AP-20240523-120001-1234)
+  purchaseOrderId String?        @db.ObjectId
+  goodsReceiptId  String?        @db.ObjectId
+  supplierId      String         @db.ObjectId
+  userId          String         @db.ObjectId // User who created AP invoice
+  status          String         @default("unpaid") // draft, unpaid, partial, paid, cancelled
+  subtotal        Float          @default(0)
+  tax             Float?
+  total           Float          @default(0)
+  amountPaid      Float          @default(0)
+  amountDue       Float          @default(0)
+  dueDate         DateTime?      @db.Date
+  issuedAt        DateTime       @default(now()) @db.Date
+  paidAt          DateTime?      @db.Date
+  notes           String?
+  createdAt       DateTime       @default(now()) @db.Date
+  updatedAt       DateTime?      @db.Date
+  createdBy       String         @db.ObjectId
+  updatedBy       String?        @db.ObjectId
+  purchaseOrder   PurchaseOrder? @relation(fields: [purchaseOrderId], references: [id], onDelete: SetNull)
+  goodsReceipt    GoodsReceipt?  @relation(fields: [goodsReceiptId], references: [id], onDelete: SetNull)
+
+  @@index([supplierId])
+  @@index([userId, status, dueDate])
+  @@index([purchaseOrderId])
+  @@index([goodsReceiptId])
+}
+
 model Permission {
   id       String @id @default(auto()) @map("_id") @db.ObjectId
   /// Field referred in an index, but found no data to define the type.
