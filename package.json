@@ -10,6 +10,8 @@
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
     "test:invalidate": "vitest run lib/react-query/invalidate-coverage.test.ts",
     "prisma": "prisma",
     "prisma:generate": "prisma generate",
@@ -90,6 +92,7 @@
     "zustand": "^5.0.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/exceljs": "^0.5.3",
     "@types/js-cookie": "^3.0.6",

@@ -234,6 +234,8 @@ export async function POST(request: NextRequest) {
         imageUrl: imageUrl || null,
         imageFileId: imageFileId || null,
         expirationDate: expirationDate ? new Date(expirationDate) : null,
+        deletedAt: null,
+        deletedBy: null,
         createdAt: new Date(),
         updatedAt: null, // Set to null on creation - will be set when updated
       },
