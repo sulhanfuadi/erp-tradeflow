@@ -12,6 +12,7 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",
+    "submit:smoke": "bash scripts/run-submit-smoke.sh",
     "test:invalidate": "vitest run lib/react-query/invalidate-coverage.test.ts",
     "prisma": "prisma",
     "prisma:generate": "prisma generate",

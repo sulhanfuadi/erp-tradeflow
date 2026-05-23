@@ -1,150 +1,157 @@
 # 02 - Test Scenarios (TS-01 s/d TS-08)
 
-> Isi kolom `Status`, `Evidence Path`, dan `Catatan` setelah eksekusi real.
->
-> Status yang dipakai: `Pass` / `Fail` / `Blocked`.
+Dokumen ini sudah diisi berdasarkan eksekusi otomatis Playwright pada **Minggu, 24 Mei 2026**.
+
+Status yang dipakai:
+- `Pass`
+- `Fail`
+- `Blocked`
 
 ## Ringkasan Hasil
 
 | ID | Domain | Scenario | Status | Evidence Path | Catatan |
 |---|---|---|---|---|---|
-| TS-01 | O2C | Create order + reserve stock | TODO | TODO | TODO |
-| TS-02 | O2C | Create invoice dari order | TODO | TODO | TODO |
-| TS-03 | O2C | Delivery / shipping status update | TODO | TODO | TODO |
-| TS-04 | P2P | PO create + post | TODO | TODO | TODO |
-| TS-05 | P2P | GR receive + stock naik | TODO | TODO | TODO |
-| TS-06 | P2P | AP invoice + payment unpaid→partial→paid | TODO | TODO | TODO |
-| TS-07 | Inventory | Transfer pending→completed + reverse | TODO | TODO | TODO |
-| TS-08 | Inventory | Issue + reverse + stock card movement | TODO | TODO | TODO |
+| TS-01 | O2C | Create order + reserve stock | Pass | `docs/evidence/auto/TS-01.json`, `docs/evidence/auto/TS-01.png` | Order berhasil, reserved naik, oversell prevention aktif |
+| TS-02 | O2C | Create invoice dari order | Pass | `docs/evidence/auto/TS-02.json`, `docs/evidence/auto/TS-02.png` | Invoice 1:1 terhadap order berhasil dibuat |
+| TS-03 | O2C | Delivery / shipping status update | Pass | `docs/evidence/auto/TS-03.json`, `docs/evidence/auto/TS-03.png` | Status shipped/delivered + tracking tersimpan |
+| TS-04 | P2P | PO create + post | Pass | `docs/evidence/auto/TS-04.json`, `docs/evidence/auto/TS-04.png` | PO berhasil dibuat dan diposting |
+| TS-05 | P2P | GR receive + stock naik | Pass | `docs/evidence/auto/TS-05.json`, `docs/evidence/auto/TS-05.png` | GR received, quantity produk bertambah |
+| TS-06 | P2P | AP invoice + payment unpaid→partial→paid | Pass | `docs/evidence/auto/TS-06.json`, `docs/evidence/auto/TS-06.png` | Payment flow lengkap + reverse GR sukses |
+| TS-07 | Inventory | Transfer pending→completed + reverse | Pass | `docs/evidence/auto/TS-07.json`, `docs/evidence/auto/TS-07.png` | Transfer lifecycle lengkap dengan reversal trail |
+| TS-08 | Inventory | Issue + reverse + stock card movement | Pass | `docs/evidence/auto/TS-08.json`, `docs/evidence/auto/TS-08.png` | Issue/reversal tercatat di stock card |
 
 ---
 
 ## Detail Skenario + Checklist Run
 
 ### TS-01 — O2C: Create Order + Reservation Check
-- [ ] Pilih product dengan stok tersedia
-- [ ] Buat order dengan qty valid
-- [ ] Verifikasi order tersimpan
-- [ ] Verifikasi `reservedQuantity` bertambah
-- [ ] Uji qty melebihi available (harus ditolak)
+- [x] Pilih product dengan stok tersedia
+- [x] Buat order dengan qty valid
+- [x] Verifikasi order tersimpan
+- [x] Verifikasi `reservedQuantity` bertambah
+- [x] Uji qty melebihi available (harus ditolak)
 
 Expected:
 - Order berhasil untuk qty valid
 - Order gagal untuk qty di atas available
 
-Evidence minimal:
-- Screenshot form order + hasil success
-- Screenshot pesan error insufficient stock
+Evidence:
+- `docs/evidence/auto/TS-01.json`
+- `docs/evidence/auto/TS-01.png`
 
 ---
 
 ### TS-02 — O2C: Create Invoice dari Order
-- [ ] Buka order detail yang valid
-- [ ] Generate/create invoice
-- [ ] Verifikasi relasi invoice ke order
-- [ ] Verifikasi nilai subtotal/tax/total
+- [x] Buka order detail yang valid
+- [x] Generate/create invoice
+- [x] Verifikasi relasi invoice ke order
+- [x] Verifikasi nilai subtotal/tax/total
 
 Expected:
 - Invoice terbuat 1:1 dengan order
 - Nilai finansial konsisten
 
-Evidence minimal:
-- Screenshot order detail + invoice number
-- Screenshot invoice detail
+Evidence:
+- `docs/evidence/auto/TS-02.json`
+- `docs/evidence/auto/TS-02.png`
 
 ---
 
 ### TS-03 — O2C: Delivery / Shipping Status
-- [ ] Proses shipping label/tracking (mode test/fallback)
-- [ ] Update status order ke shipped/delivered
-- [ ] Verifikasi tracking info tersimpan
+- [x] Proses update tracking/shipping
+- [x] Update status order ke shipped/delivered
+- [x] Verifikasi tracking info tersimpan
 
 Expected:
 - Status order berubah sesuai aksi
 - Tracking number/url terisi
 
-Evidence minimal:
-- Screenshot status sebelum/sesudah
-- Screenshot tracking field
+Evidence:
+- `docs/evidence/auto/TS-03.json`
+- `docs/evidence/auto/TS-03.png`
 
 ---
 
 ### TS-04 — P2P: PO Create + Post
-- [ ] Pilih supplier, warehouse, dan product supplier yang sesuai
-- [ ] Buat PO (draft)
-- [ ] Post PO
-- [ ] Verifikasi status menjadi `posted`
+- [x] Pilih supplier, warehouse, dan product supplier yang sesuai
+- [x] Buat PO (draft)
+- [x] Post PO
+- [x] Verifikasi status menjadi `posted`
 
 Expected:
 - PO tersimpan dengan nomor unik
 - Status berubah dari draft ke posted
 
-Evidence minimal:
-- Screenshot list PO + status
+Evidence:
+- `docs/evidence/auto/TS-04.json`
+- `docs/evidence/auto/TS-04.png`
 
 ---
 
 ### TS-05 — P2P: GR Receive + Stock Naik
-- [ ] Pilih PO posted
-- [ ] Input qty penerimaan
-- [ ] Submit goods receipt
-- [ ] Verifikasi status GR `received`
-- [ ] Verifikasi stock product dan stock allocation naik
+- [x] Pilih PO posted
+- [x] Input qty penerimaan
+- [x] Submit goods receipt
+- [x] Verifikasi status GR `received`
+- [x] Verifikasi stock product dan stock allocation naik
 
 Expected:
 - GR berhasil dibuat
 - Qty received PO dan stok bertambah
 
-Evidence minimal:
-- Screenshot list GR
-- Screenshot stock sebelum/sesudah
+Evidence:
+- `docs/evidence/auto/TS-05.json`
+- `docs/evidence/auto/TS-05.png`
 
 ---
 
 ### TS-06 — P2P: AP Invoice + Payment Flow
-- [ ] Buat AP invoice dari PO/GR
-- [ ] Verifikasi status awal `unpaid`
-- [ ] Record payment parsial
-- [ ] Verifikasi status `partial`
-- [ ] Record pelunasan
-- [ ] Verifikasi status `paid` dan amountDue = 0
+- [x] Buat AP invoice dari PO/GR
+- [x] Verifikasi status awal `unpaid`
+- [x] Record payment parsial
+- [x] Verifikasi status `partial`
+- [x] Record pelunasan
+- [x] Verifikasi status `paid` dan amountDue = 0
+- [x] Reverse goods receipt untuk validasi reversal trail
 
 Expected:
 - Transisi status: unpaid → partial → paid
+- Reversal receipt tercatat tanpa delete histori
 
-Evidence minimal:
-- Screenshot list AP invoice sebelum/sesudah payment
+Evidence:
+- `docs/evidence/auto/TS-06.json`
+- `docs/evidence/auto/TS-06.png`
 
 ---
 
 ### TS-07 — Inventory: Transfer + Reverse
-- [ ] Buat transfer pending antar warehouse
-- [ ] Complete transfer
-- [ ] Verifikasi source turun, destination naik
-- [ ] Reverse transfer
-- [ ] Verifikasi balance kembali (compensating movement)
+- [x] Buat transfer pending antar warehouse
+- [x] Complete transfer
+- [x] Verifikasi source turun, destination naik
+- [x] Reverse transfer
+- [x] Verifikasi balance kembali (compensating movement)
 
 Expected:
 - Transfer complete memindahkan stok
 - Reverse membuat rollback terkontrol (tanpa delete histori)
 
-Evidence minimal:
-- Screenshot transfer table (pending/completed/reversed)
-- Screenshot stock card entries transfer
+Evidence:
+- `docs/evidence/auto/TS-07.json`
+- `docs/evidence/auto/TS-07.png`
 
 ---
 
 ### TS-08 — Inventory: Issue + Reverse + Stock Card
-- [ ] Buat stock issue dari warehouse
-- [ ] Verifikasi quantity berkurang
-- [ ] Reverse issue
-- [ ] Verifikasi quantity kembali
-- [ ] Buka stock card dan cek urutan movement + running balance
+- [x] Buat stock issue dari warehouse
+- [x] Verifikasi quantity berkurang
+- [x] Reverse issue
+- [x] Verifikasi quantity kembali
+- [x] Buka stock card dan cek urutan movement + running balance
 
 Expected:
 - Issue dan reverse issue keduanya tercatat
 - Stock card menampilkan movement ledger lengkap
 
-Evidence minimal:
-- Screenshot issue list
-- Screenshot stock card (movementType, qty change, running balance)
+Evidence:
+- `docs/evidence/auto/TS-08.json`
+- `docs/evidence/auto/TS-08.png`

@@ -6,14 +6,21 @@ Membuktikan 3 domain wajib dosen berjalan:
 - P2P
 - Inventory Management
 
+Dokumen bukti otomatis sudah tersedia di:
+- `docs/evidence/auto/TS-01..TS-08.json`
+- `docs/evidence/auto/TS-01..TS-08.png`
+
 ## Persiapan Sebelum Demo
+- [ ] Jalankan quick smoke sebelum kelas:
+  - `npm test`
+  - `npm run test:invalidate`
 - [ ] Login dengan akun internal/admin
 - [ ] Data master sudah siap (supplier, warehouse, produk)
-- [ ] Minimal ada 1 order baseline dan 1 PO baseline
 - [ ] Browser tab untuk:
   - `/orders`, `/invoices`
   - `/procurement`
   - `/warehouses/[id]`
+- [ ] Siapkan folder bukti di editor: `docs/evidence/auto/`
 
 ---
 
@@ -29,6 +36,11 @@ Poin nilai:
 - Order–Invoice keterkaitan jelas
 - Kontrol ketersediaan stok aktif
 
+Bukti yang dibuka saat sesi tanya jawab:
+- `docs/evidence/auto/TS-01.json`
+- `docs/evidence/auto/TS-02.json`
+- `docs/evidence/auto/TS-03.json`
+
 ---
 
 ### 1:30 – 4:30 | P2P End-to-End
@@ -42,6 +54,11 @@ Poin nilai:
 Poin nilai:
 - Flow PO → GR → AP → Payment jalan
 - Reversal tidak hapus histori
+
+Bukti:
+- `docs/evidence/auto/TS-04.json`
+- `docs/evidence/auto/TS-05.json`
+- `docs/evidence/auto/TS-06.json`
 
 ---
 
@@ -57,19 +74,23 @@ Poin nilai:
 - Receipt/issue/transfer/reversal tercatat
 - Stock card jadi bukti histori movement
 
+Bukti:
+- `docs/evidence/auto/TS-07.json`
+- `docs/evidence/auto/TS-08.json`
+
 ---
 
 ### 8:00 – 9:00 | Bukti Test
 1. Buka `docs/02-test-scenarios.md`.
-2. Tunjukkan TS-01 sampai TS-08 dan status terbaru.
-3. Sebutkan lokasi evidence (screenshot/video path).
+2. Tunjukkan status TS-01 sampai TS-08 semuanya `Pass`.
+3. Buka 2–3 file JSON evidence sebagai contoh detail assertion.
 
 ---
 
 ## Fallback Jika Ada Kendala
-- Jika integrasi eksternal shipping lambat, tampilkan status update manual di order detail.
-- Jika satu skenario gagal, lanjutkan skenario lain dan tunjukkan log/error handling.
-- Prioritaskan pembuktian flow inti di atas UI polish.
+- Jika integrasi eksternal shipping lambat, tampilkan update manual di order detail.
+- Jika ImageKit/Redis warning muncul, jelaskan itu non-blocking terhadap flow inti.
+- Jika satu langkah UI gagal, validasi lewat endpoint/data yang sudah dibuktikan di evidence JSON.
 
 ---
 
