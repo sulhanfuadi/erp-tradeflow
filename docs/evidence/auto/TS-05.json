@@ -1,0 +1,23 @@
+{
+  "scenarioId": "TS-05",
+  "title": "P2P goods receipt and stock increment",
+  "status": "PASS",
+  "startedAt": "2026-05-23T22:41:54.572Z",
+  "assertions": {
+    "goodsReceiptCreated": true,
+    "goodsReceiptStatus": "received",
+    "productQtyBefore": 47,
+    "productQtyAfter": 53,
+    "poStatusAfterReceipt": "completed"
+  },
+  "ids": {
+    "purchaseOrderId": "6a122d30e7fc5f38a47ed8ca",
+    "goodsReceiptId": "6a122d32e7fc5f38a47ed8ce"
+  },
+  "notes": [
+    "Goods receipt berhasil dibuat.",
+    "Kuantitas produk bertambah sesuai quantity GR."
+  ],
+  "artifactPath": "docs/evidence/auto/TS-05.png",
+  "finishedAt": "2026-05-23T22:41:55.565Z"
+}

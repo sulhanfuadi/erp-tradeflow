@@ -1,0 +1,31 @@
+{
+  "scenarioId": "TS-01",
+  "title": "O2C order create + reservation + oversell prevention",
+  "status": "PASS",
+  "startedAt": "2026-05-23T22:41:43.901Z",
+  "assertions": {
+    "categoryCreated": true,
+    "supplierCreated": true,
+    "warehousesCreated": true,
+    "productCreated": true,
+    "orderCreated": true,
+    "reservedBefore": 0,
+    "reservedAfter": 3,
+    "oversellStatus": 500
+  },
+  "ids": {
+    "categoryId": "6a122d28e7fc5f38a47ed8b3",
+    "supplierId": "6a122d28e7fc5f38a47ed8b5",
+    "warehouseMainId": "6a122d28e7fc5f38a47ed8b7",
+    "warehouseSecondaryId": "6a122d28e7fc5f38a47ed8b9",
+    "productId": "6a122d28e7fc5f38a47ed8bb",
+    "orderId": "6a122d29e7fc5f38a47ed8bf"
+  },
+  "notes": [
+    "Master data berhasil dibuat via API.",
+    "Reserved quantity naik setelah order.",
+    "Oversell prevention aktif."
+  ],
+  "artifactPath": "docs/evidence/auto/TS-01.png",
+  "finishedAt": "2026-05-23T22:41:48.117Z"
+}

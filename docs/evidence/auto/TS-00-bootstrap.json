@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "baseURL": "http://127.0.0.1:3100",
+  "user": {
+    "name": "E2E User qst3x",
+    "email": "e2e.1779576102432.7ffx4qom@example.com"
+  },
+  "generatedAt": "2026-05-23T22:41:43.240Z"
+}

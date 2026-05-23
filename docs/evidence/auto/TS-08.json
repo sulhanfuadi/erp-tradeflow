@@ -1,0 +1,31 @@
+{
+  "scenarioId": "TS-08",
+  "title": "Inventory issue, reversal, and stock card",
+  "status": "PASS",
+  "startedAt": "2026-05-23T22:42:01.162Z",
+  "assertions": {
+    "issueId": "6a122d39e7fc5f38a47ed8e2",
+    "issueReversalId": "6a122d3ae7fc5f38a47ed8e4",
+    "stockCardRows": 7,
+    "movementTypes": [
+      "receipt",
+      "reversal",
+      "transfer_out",
+      "issue"
+    ],
+    "latestRunningBalance": 20
+  },
+  "ids": {
+    "issueId": "6a122d39e7fc5f38a47ed8e2",
+    "issueReversalId": "6a122d3ae7fc5f38a47ed8e4",
+    "warehouseId": "6a122d28e7fc5f38a47ed8b7",
+    "productId": "6a122d28e7fc5f38a47ed8bb"
+  },
+  "notes": [
+    "Issue stock berhasil.",
+    "Reverse issue berhasil.",
+    "Stock card mencatat movement inventory."
+  ],
+  "artifactPath": "docs/evidence/auto/TS-08.png",
+  "finishedAt": "2026-05-23T22:42:03.012Z"
+}

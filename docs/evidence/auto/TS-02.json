@@ -1,0 +1,20 @@
+{
+  "scenarioId": "TS-02",
+  "title": "O2C invoice creation",
+  "status": "PASS",
+  "startedAt": "2026-05-23T22:41:48.295Z",
+  "assertions": {
+    "invoiceCreated": true,
+    "linkedOrderId": "6a122d29e7fc5f38a47ed8bf",
+    "invoiceStatus": "draft"
+  },
+  "ids": {
+    "orderId": "6a122d29e7fc5f38a47ed8bf",
+    "invoiceId": "6a122d2ce7fc5f38a47ed8c3"
+  },
+  "notes": [
+    "Invoice berhasil dibuat untuk order TS-01."
+  ],
+  "artifactPath": "docs/evidence/auto/TS-02.png",
+  "finishedAt": "2026-05-23T22:41:50.018Z"
+}
