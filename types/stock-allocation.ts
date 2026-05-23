@@ -7,6 +7,13 @@
  */
 export type StockTransferStatus = "pending" | "completed" | "cancelled";
 
+export type StockMovementType =
+  | "receipt"
+  | "issue"
+  | "transfer_in"
+  | "transfer_out"
+  | "reversal";
+
 /**
  * Stock allocation interface (product in a warehouse)
  */
@@ -43,8 +50,12 @@ export interface StockTransfer {
   status: StockTransferStatus;
   notes: string | null;
   userId: string;
+  reversalOfId?: string | null;
+  reversalTransferId?: string | null;
   createdAt: string;
   completedAt: string | null;
+  reversedAt?: string | null;
+  reversedBy?: string | null;
   // Extended with relations
   product?: {
     id: string;
@@ -56,6 +67,29 @@ export interface StockTransfer {
     name: string;
   };
   toWarehouse?: {
+    id: string;
+    name: string;
+  };
+}
+
+export interface StockMovement {
+  id: string;
+  productId: string;
+  warehouseId: string;
+  userId: string;
+  movementType: StockMovementType;
+  quantityChange: number;
+  referenceType: string | null;
+  referenceId: string | null;
+  notes: string | null;
+  createdAt: string;
+  runningBalance?: number;
+  product?: {
+    id: string;
+    name: string;
+    sku: string;
+  };
+  warehouse?: {
     id: string;
     name: string;
   };
@@ -85,6 +119,21 @@ export interface CreateStockTransferInput {
   fromWarehouseId: string;
   toWarehouseId: string;
   quantity: number;
+  notes?: string;
+}
+
+export interface CreateStockIssueInput {
+  productId: string;
+  warehouseId: string;
+  quantity: number;
+  notes?: string;
+}
+
+export interface ReverseStockIssueInput {
+  notes?: string;
+}
+
+export interface ReverseStockTransferInput {
   notes?: string;
 }
 

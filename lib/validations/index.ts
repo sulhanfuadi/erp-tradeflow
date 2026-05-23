@@ -82,9 +82,15 @@ export {
   createStockAllocationSchema,
   updateStockAllocationSchema,
   createStockTransferSchema,
+  reverseStockTransferSchema,
+  createStockIssueSchema,
+  reverseStockIssueSchema,
   type CreateStockAllocationFormData,
   type UpdateStockAllocationFormData,
   type CreateStockTransferFormData,
+  type ReverseStockTransferFormData,
+  type CreateStockIssueFormData,
+  type ReverseStockIssueFormData,
 } from "./stock-allocation";
 
 export {
@@ -93,9 +99,11 @@ export {
   createGoodsReceiptSchema,
   createAPInvoiceSchema,
   recordAPInvoicePaymentSchema,
+  reverseGoodsReceiptSchema,
   type CreatePurchaseOrderFormData,
   type UpdatePurchaseOrderFormData,
   type CreateGoodsReceiptFormData,
   type CreateAPInvoiceFormData,
   type RecordAPInvoicePaymentFormData,
+  type ReverseGoodsReceiptFormData,
 } from "./p2p";

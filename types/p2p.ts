@@ -52,6 +52,7 @@ export interface PurchaseOrder {
 export interface GoodsReceiptItem {
   id: string;
   goodsReceiptId: string;
+  purchaseOrderItemId?: string | null;
   productId: string;
   productName: string;
   sku?: string | null;
@@ -70,11 +71,13 @@ export interface GoodsReceipt {
   userId: string;
   status: GoodsReceiptStatus;
   receivedAt: Date;
+  reversedAt?: Date | null;
   notes?: string | null;
   createdAt: Date;
   updatedAt?: Date | null;
   createdBy: string;
   updatedBy?: string | null;
+  reversedBy?: string | null;
   items: GoodsReceiptItem[];
 }
 
@@ -145,3 +148,6 @@ export interface RecordAPInvoicePaymentInput {
   notes?: string;
 }
 
+export interface ReverseGoodsReceiptInput {
+  notes?: string;
+}

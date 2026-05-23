@@ -237,6 +237,15 @@ export const queryKeys = {
       [...queryKeys.stockAllocation.all, "product", productId] as const,
     byWarehouse: (warehouseId: string) =>
       [...queryKeys.stockAllocation.all, "warehouse", warehouseId] as const,
+    transfers: () => [...queryKeys.stockAllocation.all, "transfers"] as const,
+    issues: () => [...queryKeys.stockAllocation.all, "issues"] as const,
+    stockCard: (warehouseId?: string, productId?: string) =>
+      [
+        ...queryKeys.stockAllocation.all,
+        "stock-card",
+        warehouseId ?? "all-warehouses",
+        productId ?? "all-products",
+      ] as const,
   },
 
   // Forecasting queries

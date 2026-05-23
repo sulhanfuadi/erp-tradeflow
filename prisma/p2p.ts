@@ -9,6 +9,7 @@ import type {
   CreateGoodsReceiptInput,
   CreatePurchaseOrderInput,
   RecordAPInvoicePaymentInput,
+  ReverseGoodsReceiptInput,
   UpdatePurchaseOrderInput,
 } from "@/types/p2p";
 import type { Prisma } from "@prisma/client";
@@ -277,6 +278,7 @@ export async function createGoodsReceipt(
 
     const poItemMap = new Map(purchaseOrder.items.map((item) => [item.id, item]));
     const receiptItemsPayload: Array<{
+      purchaseOrderItemId: string;
       productId: string;
       productName: string;
       sku: string | null;
@@ -303,6 +305,7 @@ export async function createGoodsReceipt(
       const lineSubtotal = item.quantity * Number(poItem.unitCost);
 
       receiptItemsPayload.push({
+        purchaseOrderItemId: poItem.id,
         productId: poItem.productId,
         productName: poItem.productName,
         sku: poItem.sku,
@@ -392,6 +395,20 @@ export async function createGoodsReceipt(
           },
         });
       }
+
+      await tx.stockMovement.create({
+        data: {
+          productId: poItem.productId,
+          warehouseId: purchaseOrder.warehouseId,
+          userId,
+          movementType: "receipt",
+          quantityChange: toBigInt(qty),
+          referenceType: "goods_receipt",
+          referenceId: goodsReceipt.id,
+          notes: `Receipt ${goodsReceipt.receiptNumber}`,
+          createdAt: new Date(),
+        },
+      });
     }
 
     const refreshedItems = await tx.purchaseOrderItem.findMany({
@@ -413,6 +430,186 @@ export async function createGoodsReceipt(
     });
 
     return goodsReceipt;
+  });
+}
+
+export async function reverseGoodsReceipt(
+  id: string,
+  data: ReverseGoodsReceiptInput,
+  userId: string,
+) {
+  return prisma.$transaction(async (tx) => {
+    const receipt = await tx.goodsReceipt.findFirst({
+      where: { id, userId },
+      include: {
+        items: true,
+        purchaseOrder: {
+          include: { items: true },
+        },
+      },
+    });
+
+    if (receipt == null) {
+      throw new Error("Goods receipt not found");
+    }
+
+    if (receipt.status !== "received") {
+      throw new Error("Only received goods receipt can be reversed");
+    }
+
+    for (const item of receipt.items) {
+      const product = await tx.product.findUnique({
+        where: { id: item.productId },
+        select: { id: true, quantity: true },
+      });
+
+      if (product == null) {
+        throw new Error(`Product not found: ${item.productId}`);
+      }
+
+      if (Number(product.quantity) < Number(item.quantity)) {
+        throw new Error(
+          `Cannot reverse receipt: insufficient current stock for product ${item.productName}`,
+        );
+      }
+
+      const allocation = await tx.stockAllocation.findUnique({
+        where: {
+          productId_warehouseId: {
+            productId: item.productId,
+            warehouseId: receipt.warehouseId,
+          },
+        },
+      });
+
+      if (allocation == null || Number(allocation.quantity) < Number(item.quantity)) {
+        throw new Error(
+          `Cannot reverse receipt: warehouse allocation stock is insufficient for ${item.productName}`,
+        );
+      }
+    }
+
+    for (const item of receipt.items) {
+      const quantity = Number(item.quantity);
+
+      await tx.product.update({
+        where: { id: item.productId },
+        data: {
+          quantity: { decrement: quantity },
+          updatedAt: new Date(),
+          updatedBy: userId,
+        },
+      });
+
+      await tx.stockAllocation.update({
+        where: {
+          productId_warehouseId: {
+            productId: item.productId,
+            warehouseId: receipt.warehouseId,
+          },
+        },
+        data: {
+          quantity: { decrement: quantity },
+          updatedAt: new Date(),
+        },
+      });
+
+      if (item.purchaseOrderItemId != null && item.purchaseOrderItemId !== "") {
+        await tx.purchaseOrderItem.update({
+          where: { id: item.purchaseOrderItemId },
+          data: {
+            receivedQuantity: { decrement: quantity },
+          },
+        });
+      } else {
+        let remainingToRollback = quantity;
+        const candidateItems = await tx.purchaseOrderItem.findMany({
+          where: {
+            purchaseOrderId: receipt.purchaseOrderId,
+            productId: item.productId,
+          },
+          orderBy: { createdAt: "desc" },
+        });
+
+        for (const candidate of candidateItems) {
+          if (remainingToRollback <= 0) break;
+
+          const rollbackQty = Math.min(
+            remainingToRollback,
+            Number(candidate.receivedQuantity),
+          );
+
+          if (rollbackQty <= 0) continue;
+
+          await tx.purchaseOrderItem.update({
+            where: { id: candidate.id },
+            data: {
+              receivedQuantity: { decrement: rollbackQty },
+            },
+          });
+
+          remainingToRollback -= rollbackQty;
+        }
+
+        if (remainingToRollback > 0) {
+          throw new Error(
+            `Cannot reverse receipt: failed to map PO item for ${item.productName}`,
+          );
+        }
+      }
+
+      await tx.stockMovement.create({
+        data: {
+          productId: item.productId,
+          warehouseId: receipt.warehouseId,
+          userId,
+          movementType: "reversal",
+          quantityChange: toBigInt(-quantity),
+          referenceType: "goods_receipt",
+          referenceId: receipt.id,
+          notes: `Reverse receipt ${receipt.receiptNumber}`,
+          createdAt: new Date(),
+        },
+      });
+    }
+
+    const refreshedItems = await tx.purchaseOrderItem.findMany({
+      where: { purchaseOrderId: receipt.purchaseOrderId },
+      select: { quantity: true, receivedQuantity: true },
+    });
+
+    const hasAnyReceipt = refreshedItems.some(
+      (item) => Number(item.receivedQuantity) > 0,
+    );
+    const isCompleted = refreshedItems.length > 0 && refreshedItems.every(
+      (item) => Number(item.receivedQuantity) >= Number(item.quantity),
+    );
+
+    await tx.purchaseOrder.update({
+      where: { id: receipt.purchaseOrderId },
+      data: {
+        status: isCompleted ? "completed" : hasAnyReceipt ? "posted" : "posted",
+        updatedAt: new Date(),
+        updatedBy: userId,
+      },
+    });
+
+    const mergedNotes = [receipt.notes, data.notes]
+      .filter((text): text is string => text != null && text.trim() !== "")
+      .join("\n");
+
+    return tx.goodsReceipt.update({
+      where: { id: receipt.id },
+      data: {
+        status: "reversed",
+        reversedAt: new Date(),
+        reversedBy: userId,
+        updatedAt: new Date(),
+        updatedBy: userId,
+        notes: mergedNotes || receipt.notes,
+      },
+      include: { items: true, purchaseOrder: true },
+    });
   });
 }
 
@@ -610,4 +807,3 @@ export function serializeP2PResult<T>(value: T): T {
     throw error;
   }
 }
-

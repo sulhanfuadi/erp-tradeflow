@@ -82,6 +82,10 @@ export const recordAPInvoicePaymentSchema = z.object({
   notes: z.string().optional(),
 });
 
+export const reverseGoodsReceiptSchema = z.object({
+  notes: z.string().max(500).optional(),
+});
+
 export type CreatePurchaseOrderFormData = z.infer<
   typeof createPurchaseOrderSchema
 >;
@@ -93,4 +97,6 @@ export type CreateAPInvoiceFormData = z.infer<typeof createAPInvoiceSchema>;
 export type RecordAPInvoicePaymentFormData = z.infer<
   typeof recordAPInvoicePaymentSchema
 >;
-
+export type ReverseGoodsReceiptFormData = z.infer<
+  typeof reverseGoodsReceiptSchema
+>;

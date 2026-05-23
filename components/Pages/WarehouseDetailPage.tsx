@@ -38,6 +38,7 @@ import {
   PageContentWrapper,
 } from "@/components/shared";
 import WarehouseDialog from "@/components/warehouses/WarehouseDialog";
+import WarehouseInventoryWorkbench from "@/components/warehouses/WarehouseInventoryWorkbench";
 import { AlertDialogWrapper } from "@/components/dialogs";
 import type { Warehouse as WarehouseType } from "@/types";
 import { cn } from "@/lib/utils";
@@ -697,6 +698,37 @@ export default function WarehouseDetailPage({
               </div>
             </GlassCard>
           </div>
+
+          <GlassCard variant="teal">
+            <div className="flex items-center gap-3 mb-4">
+              <div
+                className={cn(
+                  "p-2.5 rounded-xl border",
+                  variantConfig.teal.iconBg,
+                  "dark:border-teal-400/30 dark:bg-teal-500/20",
+                )}
+              >
+                <Boxes className="h-5 w-5 text-teal-600 dark:text-teal-400" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  Inventory Actions & Stock Card
+                </h3>
+                <p className="text-xs text-gray-600 dark:text-gray-400">
+                  Allocation, transfer, issue, reversal, dan movement ledger.
+                </p>
+              </div>
+            </div>
+
+            {isLoadingStock ? (
+              <p className="text-sm text-muted-foreground">Loading inventory workbench…</p>
+            ) : (
+              <WarehouseInventoryWorkbench
+                warehouseId={warehouse.id}
+                stockAllocations={stockAllocations ?? []}
+              />
+            )}
+          </GlassCard>
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4">

@@ -63,6 +63,12 @@ import type {
   SupplierPortalStats,
   StockAllocation,
   CreateStockAllocationInput,
+  StockTransfer,
+  CreateStockTransferInput,
+  StockMovement,
+  CreateStockIssueInput,
+  ReverseStockIssueInput,
+  ReverseStockTransferInput,
   WarehouseStockSummary,
   ForecastingSummary,
   SupplierPortalDashboard,
@@ -926,6 +932,153 @@ class ApiClient {
         API_ENDPOINTS.stockAllocations.base,
         data,
       );
+      return {
+        data: response.data,
+        status: response.status,
+        statusText: response.statusText,
+      };
+    },
+
+    getTransfers: async (filters?: {
+      productId?: string;
+      warehouseId?: string;
+    }): Promise<ApiResponse<StockTransfer[]>> => {
+      const query = new URLSearchParams();
+      if (filters?.productId) query.set("productId", filters.productId);
+      if (filters?.warehouseId) query.set("warehouseId", filters.warehouseId);
+
+      const queryString = query.toString();
+      const url = queryString
+        ? `${API_ENDPOINTS.stockAllocations.transfers}?${queryString}`
+        : API_ENDPOINTS.stockAllocations.transfers;
+
+      const response = await this.client.get<StockTransfer[]>(url);
+      return {
+        data: response.data,
+        status: response.status,
+        statusText: response.statusText,
+      };
+    },
+
+    createTransfer: async (
+      data: CreateStockTransferInput,
+    ): Promise<ApiResponse<StockTransfer>> => {
+      const response = await this.client.post<StockTransfer>(
+        API_ENDPOINTS.stockAllocations.transfers,
+        data,
+      );
+      return {
+        data: response.data,
+        status: response.status,
+        statusText: response.statusText,
+      };
+    },
+
+    completeTransfer: async (id: string): Promise<ApiResponse<StockTransfer>> => {
+      const response = await this.client.post<StockTransfer>(
+        `${API_ENDPOINTS.stockAllocations.transfers}/${id}/complete`,
+      );
+      return {
+        data: response.data,
+        status: response.status,
+        statusText: response.statusText,
+      };
+    },
+
+    cancelTransfer: async (id: string): Promise<ApiResponse<StockTransfer>> => {
+      const response = await this.client.post<StockTransfer>(
+        `${API_ENDPOINTS.stockAllocations.transfers}/${id}/cancel`,
+      );
+      return {
+        data: response.data,
+        status: response.status,
+        statusText: response.statusText,
+      };
+    },
+
+    reverseTransfer: async (
+      id: string,
+      data?: ReverseStockTransferInput,
+    ): Promise<ApiResponse<StockTransfer>> => {
+      const response = await this.client.post<StockTransfer>(
+        `${API_ENDPOINTS.stockAllocations.transfers}/${id}/reverse`,
+        data,
+      );
+      return {
+        data: response.data,
+        status: response.status,
+        statusText: response.statusText,
+      };
+    },
+
+    getIssues: async (filters?: {
+      warehouseId?: string;
+      productId?: string;
+    }): Promise<ApiResponse<StockMovement[]>> => {
+      const query = new URLSearchParams();
+      if (filters?.warehouseId) query.set("warehouseId", filters.warehouseId);
+      if (filters?.productId) query.set("productId", filters.productId);
+
+      const queryString = query.toString();
+      const url = queryString
+        ? `${API_ENDPOINTS.stockAllocations.issues}?${queryString}`
+        : API_ENDPOINTS.stockAllocations.issues;
+
+      const response = await this.client.get<StockMovement[]>(url);
+      return {
+        data: response.data,
+        status: response.status,
+        statusText: response.statusText,
+      };
+    },
+
+    createIssue: async (
+      data: CreateStockIssueInput,
+    ): Promise<ApiResponse<StockMovement>> => {
+      const response = await this.client.post<StockMovement>(
+        API_ENDPOINTS.stockAllocations.issues,
+        data,
+      );
+      return {
+        data: response.data,
+        status: response.status,
+        statusText: response.statusText,
+      };
+    },
+
+    reverseIssue: async (
+      id: string,
+      data?: ReverseStockIssueInput,
+    ): Promise<ApiResponse<StockMovement>> => {
+      const response = await this.client.post<StockMovement>(
+        `${API_ENDPOINTS.stockAllocations.issues}/${id}/reverse`,
+        data,
+      );
+      return {
+        data: response.data,
+        status: response.status,
+        statusText: response.statusText,
+      };
+    },
+
+    getStockCard: async (filters?: {
+      warehouseId?: string;
+      productId?: string;
+      limit?: number;
+    }): Promise<ApiResponse<StockMovement[]>> => {
+      const query = new URLSearchParams();
+      if (filters?.warehouseId) query.set("warehouseId", filters.warehouseId);
+      if (filters?.productId) query.set("productId", filters.productId);
+      if (typeof filters?.limit === "number") {
+        query.set("limit", String(filters.limit));
+      }
+
+      const queryString = query.toString();
+      const url = queryString
+        ? `${API_ENDPOINTS.stockAllocations.stockCard}?${queryString}`
+        : API_ENDPOINTS.stockAllocations.stockCard;
+
+      const response = await this.client.get<StockMovement[]>(url);
       return {
         data: response.data,
         status: response.status,

@@ -159,11 +159,13 @@ model GoodsReceipt {
   userId          String             @db.ObjectId // User who posted receipt
   status          String             @default("received") // received, reversed
   receivedAt      DateTime           @default(now()) @db.Date
+  reversedAt      DateTime?          @db.Date
   notes           String?
   createdAt       DateTime           @default(now()) @db.Date
   updatedAt       DateTime?          @db.Date
   createdBy       String             @db.ObjectId
   updatedBy       String?            @db.ObjectId
+  reversedBy      String?            @db.ObjectId
   purchaseOrder   PurchaseOrder      @relation(fields: [purchaseOrderId], references: [id], onDelete: Restrict)
   items           GoodsReceiptItem[]
   apInvoices      APInvoice[]
@@ -177,6 +179,7 @@ model GoodsReceipt {
 model GoodsReceiptItem {
   id             String       @id @default(auto()) @map("_id") @db.ObjectId
   goodsReceiptId String       @db.ObjectId
+  purchaseOrderItemId String? @db.ObjectId
   productId      String       @db.ObjectId
   productName    String
   sku            String?
@@ -187,6 +190,7 @@ model GoodsReceiptItem {
   goodsReceipt   GoodsReceipt @relation(fields: [goodsReceiptId], references: [id], onDelete: Cascade)
 
   @@index([goodsReceiptId])
+  @@index([purchaseOrderItemId])
   @@index([productId])
 }
 
@@ -292,13 +296,37 @@ model StockTransfer {
   status            String    @default("pending") // pending, completed, cancelled
   notes             String?                 // Optional notes
   userId            String    @db.ObjectId // User who initiated transfer
+  reversalOfId      String?   @db.ObjectId // If this transfer is a reversal of another transfer
+  reversalTransferId String?  @db.ObjectId // If this transfer has been reversed, points to reversal transfer
   createdAt         DateTime  @default(now()) @db.Date
   completedAt       DateTime? @db.Date
+  reversedAt        DateTime? @db.Date
+  reversedBy        String?   @db.ObjectId
 
   @@index([productId])
   @@index([fromWarehouseId])
   @@index([toWarehouseId])
   @@index([status])
+  @@index([reversalOfId])
+  @@index([reversalTransferId])
+}
+
+model StockMovement {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  productId      String   @db.ObjectId
+  warehouseId    String   @db.ObjectId
+  userId         String   @db.ObjectId
+  movementType   String // receipt, issue, transfer_in, transfer_out, reversal
+  quantityChange BigInt // signed quantity delta (+in, -out)
+  referenceType  String? // goods_receipt, stock_transfer, stock_issue, reversal
+  referenceId    String?  @db.ObjectId
+  notes          String?
+  createdAt      DateTime @default(now()) @db.Date
+
+  @@index([warehouseId, createdAt])
+  @@index([productId, createdAt])
+  @@index([userId, createdAt])
+  @@index([referenceType, referenceId])
 }
 
 model Warehouse {

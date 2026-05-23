@@ -136,10 +136,9 @@ export default function WarehouseList() {
         </h2>
         <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
           Manage warehouse locations. Add, edit, and track warehouses for
-          multi-location inventory. Stock allocation and inter-warehouse
-          transfers are not yet implemented—you can create and edit warehouses
-          now; assigning stock to locations and moving stock between warehouses
-          will be available in a future update.
+          multi-location inventory. Stock allocation, inter-warehouse transfer,
+          stock issue, reversal, dan stock card movement sudah tersedia di
+          warehouse detail.
         </p>
       </div>
 

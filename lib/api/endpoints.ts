@@ -102,6 +102,9 @@ export const API_ENDPOINTS = {
   // Stock Allocations
   stockAllocations: {
     base: "/stock-allocations",
+    transfers: "/stock-allocations/transfers",
+    issues: "/stock-allocations/issues",
+    stockCard: "/stock-allocations/stock-card",
   },
 
   // Forecasting

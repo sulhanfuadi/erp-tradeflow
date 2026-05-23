@@ -22,6 +22,21 @@ export const createStockTransferSchema = z.object({
   notes: z.string().max(500).optional(),
 });
 
+export const reverseStockTransferSchema = z.object({
+  notes: z.string().max(500).optional(),
+});
+
+export const createStockIssueSchema = z.object({
+  productId: z.string().min(1, "Product is required"),
+  warehouseId: z.string().min(1, "Warehouse is required"),
+  quantity: z.number().int().min(1, "Quantity must be at least 1"),
+  notes: z.string().max(500).optional(),
+});
+
+export const reverseStockIssueSchema = z.object({
+  notes: z.string().max(500).optional(),
+});
+
 export type CreateStockAllocationFormData = z.infer<
   typeof createStockAllocationSchema
 >;
@@ -31,3 +46,8 @@ export type UpdateStockAllocationFormData = z.infer<
 export type CreateStockTransferFormData = z.infer<
   typeof createStockTransferSchema
 >;
+export type ReverseStockTransferFormData = z.infer<
+  typeof reverseStockTransferSchema
+>;
+export type CreateStockIssueFormData = z.infer<typeof createStockIssueSchema>;
+export type ReverseStockIssueFormData = z.infer<typeof reverseStockIssueSchema>;

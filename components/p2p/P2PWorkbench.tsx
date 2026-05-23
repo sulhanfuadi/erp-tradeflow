@@ -587,6 +587,39 @@ export default function P2PWorkbench() {
     }
   }
 
+  async function reverseGoodsReceipt(receiptId: string) {
+    if (!window.confirm("Reverse this goods receipt and roll back stock?")) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await apiFetch(`/api/p2p/goods-receipts/${receiptId}/reverse`, {
+        method: "POST",
+        body: JSON.stringify({
+          notes: "Reversed from procurement workbench",
+        }),
+      });
+
+      toast({
+        title: "Goods receipt reversed",
+        description: "Stock and PO receipt quantity have been rolled back.",
+      });
+
+      await reloadAfterMutation();
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Failed to reverse goods receipt";
+      toast({
+        title: "Reverse goods receipt failed",
+        description: message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   return (
     <div className="space-y-6 px-2 pb-8 pt-4 sm:px-4">
       <Card>
@@ -1190,6 +1223,7 @@ export default function P2PWorkbench() {
                     <th className="py-2">Status</th>
                     <th className="py-2">Items</th>
                     <th className="py-2">Received At</th>
+                    <th className="py-2">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1204,6 +1238,20 @@ export default function P2PWorkbench() {
                       <td className="py-2">{receipt.items.length}</td>
                       <td className="py-2">
                         {new Date(receipt.receivedAt).toLocaleString()}
+                      </td>
+                      <td className="py-2">
+                        {receipt.status === "received" ? (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            disabled={isSubmitting}
+                            onClick={() => reverseGoodsReceipt(receipt.id)}
+                          >
+                            Reverse
+                          </Button>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">-</span>
+                        )}
                       </td>
                     </tr>
                   ))}

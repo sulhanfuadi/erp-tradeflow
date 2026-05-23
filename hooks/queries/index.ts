@@ -129,6 +129,15 @@ export {
   useWarehouseStockSummary,
   useStockByWarehouse,
   useCreateStockAllocation,
+  useStockTransfers,
+  useCreateStockTransfer,
+  useCompleteStockTransfer,
+  useCancelStockTransfer,
+  useReverseStockTransfer,
+  useStockIssues,
+  useCreateStockIssue,
+  useReverseStockIssue,
+  useStockCard,
 } from "./use-stock-allocation";
 
 // System Configuration hooks

@@ -92,6 +92,7 @@ export type {
   CreateGoodsReceiptInput,
   CreateAPInvoiceInput,
   RecordAPInvoicePaymentInput,
+  ReverseGoodsReceiptInput,
 } from "./p2p";
 
 // History (Import History) types
@@ -153,11 +154,16 @@ export type {
 // Stock Allocation types
 export type {
   StockTransferStatus,
+  StockMovementType,
   StockAllocation,
   StockTransfer,
+  StockMovement,
   CreateStockAllocationInput,
   UpdateStockAllocationInput,
   CreateStockTransferInput,
+  CreateStockIssueInput,
+  ReverseStockIssueInput,
+  ReverseStockTransferInput,
   WarehouseStockSummary,
 } from "./stock-allocation";
 
