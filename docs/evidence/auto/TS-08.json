@@ -2,10 +2,10 @@
   "scenarioId": "TS-08",
   "title": "Inventory issue, reversal, and stock card",
   "status": "PASS",
-  "startedAt": "2026-05-23T22:42:01.162Z",
+  "startedAt": "2026-05-23T23:12:45.702Z",
   "assertions": {
-    "issueId": "6a122d39e7fc5f38a47ed8e2",
-    "issueReversalId": "6a122d3ae7fc5f38a47ed8e4",
+    "issueId": "6a12346df4af2f8fa024586f",
+    "issueReversalId": "6a12346ef4af2f8fa0245871",
     "stockCardRows": 7,
     "movementTypes": [
       "receipt",
@@ -16,10 +16,10 @@
     "latestRunningBalance": 20
   },
   "ids": {
-    "issueId": "6a122d39e7fc5f38a47ed8e2",
-    "issueReversalId": "6a122d3ae7fc5f38a47ed8e4",
-    "warehouseId": "6a122d28e7fc5f38a47ed8b7",
-    "productId": "6a122d28e7fc5f38a47ed8bb"
+    "issueId": "6a12346df4af2f8fa024586f",
+    "issueReversalId": "6a12346ef4af2f8fa0245871",
+    "warehouseId": "6a12345df4af2f8fa0245844",
+    "productId": "6a12345ef4af2f8fa0245848"
   },
   "notes": [
     "Issue stock berhasil.",
@@ -27,5 +27,5 @@
     "Stock card mencatat movement inventory."
   ],
   "artifactPath": "docs/evidence/auto/TS-08.png",
-  "finishedAt": "2026-05-23T22:42:03.012Z"
+  "finishedAt": "2026-05-23T23:12:47.477Z"
 }

@@ -2,19 +2,19 @@
   "scenarioId": "TS-03",
   "title": "O2C shipping and delivery update",
   "status": "PASS",
-  "startedAt": "2026-05-23T22:41:50.244Z",
+  "startedAt": "2026-05-23T23:12:35.464Z",
   "assertions": {
     "shippedStatus": "shipped",
     "deliveredStatus": "delivered",
-    "trackingNumber": "TRK-1779576103463-e9mkdh"
+    "trackingNumber": "TRK-1779577948852-lfuqhi"
   },
   "ids": {
-    "orderId": "6a122d29e7fc5f38a47ed8bf"
+    "orderId": "6a12345ff4af2f8fa024584c"
   },
   "notes": [
     "Order berhasil berubah ke shipped.",
     "Order berhasil berubah ke delivered."
   ],
   "artifactPath": "docs/evidence/auto/TS-03.png",
-  "finishedAt": "2026-05-23T22:41:52.102Z"
+  "finishedAt": "2026-05-23T23:12:37.049Z"
 }

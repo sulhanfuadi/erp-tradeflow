@@ -2,7 +2,7 @@
   "scenarioId": "TS-01",
   "title": "O2C order create + reservation + oversell prevention",
   "status": "PASS",
-  "startedAt": "2026-05-23T22:41:43.901Z",
+  "startedAt": "2026-05-23T23:12:29.288Z",
   "assertions": {
     "categoryCreated": true,
     "supplierCreated": true,
@@ -14,12 +14,12 @@
     "oversellStatus": 500
   },
   "ids": {
-    "categoryId": "6a122d28e7fc5f38a47ed8b3",
-    "supplierId": "6a122d28e7fc5f38a47ed8b5",
-    "warehouseMainId": "6a122d28e7fc5f38a47ed8b7",
-    "warehouseSecondaryId": "6a122d28e7fc5f38a47ed8b9",
-    "productId": "6a122d28e7fc5f38a47ed8bb",
-    "orderId": "6a122d29e7fc5f38a47ed8bf"
+    "categoryId": "6a12345df4af2f8fa0245840",
+    "supplierId": "6a12345df4af2f8fa0245842",
+    "warehouseMainId": "6a12345df4af2f8fa0245844",
+    "warehouseSecondaryId": "6a12345df4af2f8fa0245846",
+    "productId": "6a12345ef4af2f8fa0245848",
+    "orderId": "6a12345ff4af2f8fa024584c"
   },
   "notes": [
     "Master data berhasil dibuat via API.",
@@ -27,5 +27,5 @@
     "Oversell prevention aktif."
   ],
   "artifactPath": "docs/evidence/auto/TS-01.png",
-  "finishedAt": "2026-05-23T22:41:48.117Z"
+  "finishedAt": "2026-05-23T23:12:33.453Z"
 }

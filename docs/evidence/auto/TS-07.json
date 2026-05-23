@@ -2,20 +2,20 @@
   "scenarioId": "TS-07",
   "title": "Inventory transfer lifecycle",
   "status": "PASS",
-  "startedAt": "2026-05-23T22:41:58.077Z",
+  "startedAt": "2026-05-23T23:12:42.680Z",
   "assertions": {
     "transferCreatedStatus": "pending",
     "transferCompletedStatus": "completed",
-    "reversalTransferId": "6a122d37e7fc5f38a47ed8de",
-    "originalHasReversalTransferId": "6a122d37e7fc5f38a47ed8de"
+    "reversalTransferId": "6a12346cf4af2f8fa024586b",
+    "originalHasReversalTransferId": "6a12346cf4af2f8fa024586b"
   },
   "ids": {
-    "transferId": "6a122d36e7fc5f38a47ed8d8",
-    "transferReversalId": "6a122d37e7fc5f38a47ed8de"
+    "transferId": "6a12346af4af2f8fa0245865",
+    "transferReversalId": "6a12346cf4af2f8fa024586b"
   },
   "notes": [
     "Transfer berhasil pending -> completed -> reversed."
   ],
   "artifactPath": "docs/evidence/auto/TS-07.png",
-  "finishedAt": "2026-05-23T22:42:00.994Z"
+  "finishedAt": "2026-05-23T23:12:45.517Z"
 }

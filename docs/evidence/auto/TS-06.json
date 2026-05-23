@@ -2,9 +2,9 @@
   "scenarioId": "TS-06",
   "title": "P2P AP invoice unpaid->partial->paid and reverse GR",
   "status": "PASS",
-  "startedAt": "2026-05-23T22:41:55.662Z",
+  "startedAt": "2026-05-23T23:12:40.310Z",
   "assertions": {
-    "apInvoiceId": "6a122d33e7fc5f38a47ed8d2",
+    "apInvoiceId": "6a123468f4af2f8fa024585f",
     "apStatusAfterCreate": "unpaid",
     "apStatusAfterPartial": "partial",
     "apStatusAfterFinal": "paid",
@@ -14,13 +14,13 @@
     "productQtyAfterReverse": 47
   },
   "ids": {
-    "apInvoiceId": "6a122d33e7fc5f38a47ed8d2",
-    "goodsReceiptId": "6a122d32e7fc5f38a47ed8ce"
+    "apInvoiceId": "6a123468f4af2f8fa024585f",
+    "goodsReceiptId": "6a123467f4af2f8fa024585b"
   },
   "notes": [
     "AP Invoice berhasil unpaid -> partial -> paid.",
     "Goods receipt berhasil direverse (storno)."
   ],
   "artifactPath": "docs/evidence/auto/TS-06.png",
-  "finishedAt": "2026-05-23T22:41:57.965Z"
+  "finishedAt": "2026-05-23T23:12:42.588Z"
 }
