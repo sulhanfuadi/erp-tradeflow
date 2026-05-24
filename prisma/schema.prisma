@@ -57,6 +57,7 @@ model Invoice {
   createdBy     String   @db.ObjectId // Same as userId, for clarity
   updatedBy     String?  @db.ObjectId // Last updated by user ID
   order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade) // Relation to Order (one-to-one)
+  customerPayments CustomerPayment[]
 
   @@index([userId, status, dueDate]) // Index for efficient querying by user, status, and due date
   // orderId already has @unique, so it's automatically indexed
@@ -92,6 +93,8 @@ model Order {
   updatedBy         String?     @db.ObjectId // Last updated by user ID
   items             OrderItem[] // Order items (one-to-many relationship)
   invoice           Invoice? // Invoice for this order (one-to-one relationship)
+  itemFulfillments  ItemFulfillment[]
+  customerPayments  CustomerPayment[]
 }
 
 model OrderItem {
@@ -101,6 +104,8 @@ model OrderItem {
   productName String // Product name at time of order (snapshot)
   sku         String? // Product SKU at time of order (snapshot)
   quantity    Int // Quantity ordered
+  fulfilledQuantity Int @default(0) // Quantity already fulfilled (NetSuite Item Fulfillment parity)
+  billedQuantity Int @default(0) // Quantity already billed (NetSuite Invoice parity)
   price       Float // Unit price at time of order (snapshot)
   subtotal    Float // Line item subtotal (quantity * price)
   createdAt   DateTime @default(now()) @db.Date
@@ -127,6 +132,7 @@ model PurchaseOrder {
   items          PurchaseOrderItem[]
   goodsReceipts  GoodsReceipt[]
   apInvoices     APInvoice[]
+  billPayments   BillPayment[]
 
   @@index([userId, status, createdAt])
   @@index([supplierId])
@@ -143,6 +149,7 @@ model PurchaseOrderItem {
   unitCost         Float
   subtotal         Float
   receivedQuantity BigInt        @default(0) // Received qty so far from goods receipts
+  billedQuantity   BigInt        @default(0) // Qty already billed into vendor bill (NetSuite parity)
   createdAt        DateTime      @default(now()) @db.Date
   purchaseOrder    PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
 
@@ -217,11 +224,91 @@ model APInvoice {
   updatedBy       String?        @db.ObjectId
   purchaseOrder   PurchaseOrder? @relation(fields: [purchaseOrderId], references: [id], onDelete: SetNull)
   goodsReceipt    GoodsReceipt?  @relation(fields: [goodsReceiptId], references: [id], onDelete: SetNull)
+  billPayments    BillPayment[]
 
   @@index([supplierId])
   @@index([userId, status, dueDate])
   @@index([purchaseOrderId])
   @@index([goodsReceiptId])
+}
+
+model ItemFulfillment {
+  id              String                @id @default(auto()) @map("_id") @db.ObjectId
+  fulfillmentNumber String              @unique // IF-YYYYMMDD-HHMMSS-XXXX
+  orderId         String                @db.ObjectId
+  userId          String                @db.ObjectId
+  status          String                @default("fulfilled") // fulfilled, reversed
+  fulfilledAt     DateTime              @default(now()) @db.Date
+  notes           String?
+  createdAt       DateTime              @default(now()) @db.Date
+  updatedAt       DateTime?             @db.Date
+  createdBy       String                @db.ObjectId
+  updatedBy       String?               @db.ObjectId
+  order           Order                 @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  items           ItemFulfillmentItem[]
+
+  @@index([orderId])
+  @@index([userId, fulfilledAt])
+}
+
+model ItemFulfillmentItem {
+  id                 String          @id @default(auto()) @map("_id") @db.ObjectId
+  itemFulfillmentId  String          @db.ObjectId
+  orderItemId        String          @db.ObjectId
+  productId          String          @db.ObjectId
+  productName        String
+  sku                String?
+  quantity           Int
+  createdAt          DateTime        @default(now()) @db.Date
+  itemFulfillment    ItemFulfillment @relation(fields: [itemFulfillmentId], references: [id], onDelete: Cascade)
+
+  @@index([itemFulfillmentId])
+  @@index([orderItemId])
+  @@index([productId])
+}
+
+model CustomerPayment {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  paymentNumber    String   @unique // CP-YYYYMMDD-HHMMSS-XXXX
+  invoiceId        String   @db.ObjectId
+  orderId          String?  @db.ObjectId
+  userId           String   @db.ObjectId
+  paymentAmount    Float
+  amountApplied    Float
+  amountRemaining  Float
+  status           String   @default("posted") // posted, void
+  paidAt           DateTime @default(now()) @db.Date
+  notes            String?
+  createdAt        DateTime @default(now()) @db.Date
+  createdBy        String   @db.ObjectId
+  invoice          Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  order            Order?   @relation(fields: [orderId], references: [id], onDelete: SetNull)
+
+  @@index([invoiceId])
+  @@index([orderId])
+  @@index([userId, paidAt])
+}
+
+model BillPayment {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  paymentNumber    String   @unique // BP-YYYYMMDD-HHMMSS-XXXX
+  apInvoiceId      String   @db.ObjectId
+  purchaseOrderId  String?  @db.ObjectId
+  userId           String   @db.ObjectId
+  paymentAmount    Float
+  amountApplied    Float
+  amountRemaining  Float
+  status           String   @default("posted") // posted, void
+  paidAt           DateTime @default(now()) @db.Date
+  notes            String?
+  createdAt        DateTime @default(now()) @db.Date
+  createdBy        String   @db.ObjectId
+  apInvoice        APInvoice @relation(fields: [apInvoiceId], references: [id], onDelete: Cascade)
+  purchaseOrder    PurchaseOrder? @relation(fields: [purchaseOrderId], references: [id], onDelete: SetNull)
+
+  @@index([apInvoiceId])
+  @@index([purchaseOrderId])
+  @@index([userId, paidAt])
 }
 
 model Permission {

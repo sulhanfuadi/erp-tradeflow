@@ -277,6 +277,34 @@ export const queryKeys = {
       ] as const,
   },
 
+  // NetSuite compatibility queries
+  netsuite: {
+    all: ["netsuite"] as const,
+    salesOrders: () => [...queryKeys.netsuite.all, "sales-orders"] as const,
+    itemFulfillments: () =>
+      [...queryKeys.netsuite.all, "item-fulfillments"] as const,
+    customerInvoices: () =>
+      [...queryKeys.netsuite.all, "customer-invoices"] as const,
+    customerPayments: () =>
+      [...queryKeys.netsuite.all, "customer-payments"] as const,
+    purchaseOrders: () =>
+      [...queryKeys.netsuite.all, "purchase-orders"] as const,
+    itemReceipts: () => [...queryKeys.netsuite.all, "item-receipts"] as const,
+    vendorBills: () => [...queryKeys.netsuite.all, "vendor-bills"] as const,
+    billPayments: () => [...queryKeys.netsuite.all, "bill-payments"] as const,
+    inventoryAllocations: () =>
+      [...queryKeys.netsuite.all, "inventory-allocations"] as const,
+    inventoryTransfers: (filters?: { productId?: string; warehouseId?: string }) =>
+      [...queryKeys.netsuite.all, "inventory-transfers", filters ?? {}] as const,
+    inventoryIssues: (filters?: { productId?: string; warehouseId?: string }) =>
+      [...queryKeys.netsuite.all, "inventory-issues", filters ?? {}] as const,
+    inventoryLedger: (filters?: {
+      warehouseId?: string;
+      productId?: string;
+      limit?: number;
+    }) => [...queryKeys.netsuite.all, "inventory-ledger", filters ?? {}] as const,
+  },
+
   // System Configuration queries
   systemConfig: {
     all: () => ["systemConfig"] as const,

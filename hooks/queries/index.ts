@@ -158,6 +158,20 @@ export {
   useClientBrowseProducts,
 } from "./use-portal";
 
+// NetSuite compatibility hooks
+export {
+  useNetSuiteSalesOrders,
+  useCreateNetSuiteSalesOrder,
+  useNetSuiteItemFulfillments,
+  useCreateNetSuiteItemFulfillment,
+  useNetSuiteCustomerInvoices,
+  useCreateNetSuiteCustomerInvoice,
+  useNetSuiteCustomerPayments,
+  useRecordNetSuiteCustomerPayment,
+  useNetSuiteBillPayments,
+  useRecordNetSuiteBillPayment,
+} from "./use-netsuite";
+
 // Auth hooks
 export { useSession, useLogin, useRegister, useLogout } from "./use-auth";
 

@@ -107,6 +107,22 @@ export const API_ENDPOINTS = {
     stockCard: "/stock-allocations/stock-card",
   },
 
+  // NetSuite compatibility endpoints
+  netsuite: {
+    salesOrders: "/netsuite/sales-orders",
+    itemFulfillments: "/netsuite/item-fulfillments",
+    customerInvoices: "/netsuite/customer-invoices",
+    customerPayments: "/netsuite/customer-payments",
+    purchaseOrders: "/netsuite/purchase-orders",
+    itemReceipts: "/netsuite/item-receipts",
+    vendorBills: "/netsuite/vendor-bills",
+    billPayments: "/netsuite/bill-payments",
+    inventoryAllocations: "/netsuite/inventory/allocations",
+    inventoryTransfers: "/netsuite/inventory/transfers",
+    inventoryIssues: "/netsuite/inventory/issues",
+    inventoryLedger: "/netsuite/inventory/ledger",
+  },
+
   // Forecasting
   forecasting: {
     base: "/forecasting",

@@ -27,6 +27,7 @@ export interface PurchaseOrderItem {
   unitCost: number;
   subtotal: number;
   receivedQuantity: number;
+  billedQuantity?: number;
   createdAt: Date;
 }
 
@@ -102,6 +103,7 @@ export interface APInvoice {
   updatedAt?: Date | null;
   createdBy: string;
   updatedBy?: string | null;
+  netsuiteStatus?: string;
 }
 
 export interface CreatePurchaseOrderInput {

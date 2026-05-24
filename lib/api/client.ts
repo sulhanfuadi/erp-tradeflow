@@ -70,6 +70,12 @@ import type {
   ReverseStockIssueInput,
   ReverseStockTransferInput,
   WarehouseStockSummary,
+  ItemFulfillment,
+  CustomerPayment,
+  BillPayment,
+  CreateItemFulfillmentInput,
+  RecordCustomerPaymentInput,
+  RecordBillPaymentInput,
   ForecastingSummary,
   SupplierPortalDashboard,
   ClientPortalDashboard,
@@ -1079,6 +1085,157 @@ class ApiClient {
         : API_ENDPOINTS.stockAllocations.stockCard;
 
       const response = await this.client.get<StockMovement[]>(url);
+      return {
+        data: response.data,
+        status: response.status,
+        statusText: response.statusText,
+      };
+    },
+  };
+
+  /**
+   * NetSuite compatibility API methods
+   */
+  netsuite = {
+    getSalesOrders: async (): Promise<ApiResponse<Order[]>> => {
+      const response = await this.client.get<Order[]>(API_ENDPOINTS.netsuite.salesOrders);
+      return {
+        data: response.data,
+        status: response.status,
+        statusText: response.statusText,
+      };
+    },
+
+    createSalesOrder: async (data: CreateOrderInput): Promise<ApiResponse<Order>> => {
+      const response = await this.client.post<Order>(
+        API_ENDPOINTS.netsuite.salesOrders,
+        data,
+      );
+      return {
+        data: response.data,
+        status: response.status,
+        statusText: response.statusText,
+      };
+    },
+
+    getItemFulfillments: async (): Promise<ApiResponse<ItemFulfillment[]>> => {
+      const response = await this.client.get<ItemFulfillment[]>(
+        API_ENDPOINTS.netsuite.itemFulfillments,
+      );
+      return {
+        data: response.data,
+        status: response.status,
+        statusText: response.statusText,
+      };
+    },
+
+    createItemFulfillment: async (
+      data: CreateItemFulfillmentInput,
+    ): Promise<ApiResponse<ItemFulfillment>> => {
+      const response = await this.client.post<ItemFulfillment>(
+        API_ENDPOINTS.netsuite.itemFulfillments,
+        data,
+      );
+      return {
+        data: response.data,
+        status: response.status,
+        statusText: response.statusText,
+      };
+    },
+
+    getCustomerInvoices: async (): Promise<ApiResponse<Invoice[]>> => {
+      const response = await this.client.get<Invoice[]>(
+        API_ENDPOINTS.netsuite.customerInvoices,
+      );
+      return {
+        data: response.data,
+        status: response.status,
+        statusText: response.statusText,
+      };
+    },
+
+    createCustomerInvoice: async (
+      data: CreateInvoiceInput,
+    ): Promise<ApiResponse<Invoice>> => {
+      const response = await this.client.post<Invoice>(
+        API_ENDPOINTS.netsuite.customerInvoices,
+        data,
+      );
+      return {
+        data: response.data,
+        status: response.status,
+        statusText: response.statusText,
+      };
+    },
+
+    getCustomerPayments: async (): Promise<ApiResponse<CustomerPayment[]>> => {
+      const response = await this.client.get<CustomerPayment[]>(
+        API_ENDPOINTS.netsuite.customerPayments,
+      );
+      return {
+        data: response.data,
+        status: response.status,
+        statusText: response.statusText,
+      };
+    },
+
+    recordCustomerPayment: async (
+      data: RecordCustomerPaymentInput,
+    ): Promise<ApiResponse<{ paymentDoc: CustomerPayment; invoice: Invoice }>> => {
+      const response = await this.client.post<{ paymentDoc: CustomerPayment; invoice: Invoice }>(
+        API_ENDPOINTS.netsuite.customerPayments,
+        data,
+      );
+      return {
+        data: response.data,
+        status: response.status,
+        statusText: response.statusText,
+      };
+    },
+
+    getPurchaseOrders: async (): Promise<ApiResponse<unknown[]>> => {
+      const response = await this.client.get<unknown[]>(API_ENDPOINTS.netsuite.purchaseOrders);
+      return {
+        data: response.data,
+        status: response.status,
+        statusText: response.statusText,
+      };
+    },
+
+    getItemReceipts: async (): Promise<ApiResponse<unknown[]>> => {
+      const response = await this.client.get<unknown[]>(API_ENDPOINTS.netsuite.itemReceipts);
+      return {
+        data: response.data,
+        status: response.status,
+        statusText: response.statusText,
+      };
+    },
+
+    getVendorBills: async (): Promise<ApiResponse<unknown[]>> => {
+      const response = await this.client.get<unknown[]>(API_ENDPOINTS.netsuite.vendorBills);
+      return {
+        data: response.data,
+        status: response.status,
+        statusText: response.statusText,
+      };
+    },
+
+    getBillPayments: async (): Promise<ApiResponse<BillPayment[]>> => {
+      const response = await this.client.get<BillPayment[]>(API_ENDPOINTS.netsuite.billPayments);
+      return {
+        data: response.data,
+        status: response.status,
+        statusText: response.statusText,
+      };
+    },
+
+    recordBillPayment: async (
+      data: RecordBillPaymentInput,
+    ): Promise<ApiResponse<{ paymentDoc: BillPayment; vendorBill: unknown }>> => {
+      const response = await this.client.post<{
+        paymentDoc: BillPayment;
+        vendorBill: unknown;
+      }>(API_ENDPOINTS.netsuite.billPayments, data);
       return {
         data: response.data,
         status: response.status,

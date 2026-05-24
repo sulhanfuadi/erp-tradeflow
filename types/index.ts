@@ -95,6 +95,22 @@ export type {
   ReverseGoodsReceiptInput,
 } from "./p2p";
 
+// NetSuite compatibility layer types
+export type {
+  NetSuiteSalesOrderStatus,
+  NetSuiteVendorBillStatus,
+  NetSuiteFulfillmentStatus,
+  ItemFulfillment,
+  ItemFulfillmentItem,
+  CustomerPayment,
+  BillPayment,
+  CreateItemFulfillmentInput,
+  CreateCustomerInvoiceInput,
+  RecordCustomerPaymentInput,
+  CreateVendorBillInput,
+  RecordBillPaymentInput,
+} from "./netsuite";
+
 // History (Import History) types
 export type {
   ImportHistoryForPage,

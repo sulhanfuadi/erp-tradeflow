@@ -51,6 +51,8 @@ export interface OrderItem {
   productName: string;
   sku?: string | null;
   quantity: number;
+  fulfilledQuantity?: number;
+  billedQuantity?: number;
   price: number;
   subtotal: number;
   createdAt: Date;
@@ -104,6 +106,15 @@ export interface Order {
   orderProductOwners?: { userId: string; name: string | null; email: string }[];
   /** Linked invoice when order has an invoice (for admin detail link) */
   invoiceForOrder?: { id: string; invoiceNumber: string } | null;
+  /** NetSuite mapped status for compatibility window */
+  netsuiteStatus?: string;
+  /** NetSuite document references for compatibility window */
+  netsuiteDocRefs?: {
+    salesOrderNumber?: string | null;
+    itemFulfillmentCount?: number;
+    customerInvoiceNumber?: string | null;
+    customerPaymentCount?: number;
+  };
 }
 
 /**
