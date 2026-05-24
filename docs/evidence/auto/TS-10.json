@@ -1,0 +1,19 @@
+{
+  "scenarioId": "TS-10",
+  "title": "Inventory issue to reverse issue",
+  "status": "PASS",
+  "startedAt": "2026-05-24T02:37:50.783Z",
+  "assertions": {
+    "issueMovementType": "issue",
+    "reverseMovementType": "reversal"
+  },
+  "ids": {
+    "issueId": "6a12647ecc8e863be5546936",
+    "issueReversalId": "6a12647fcc8e863be5546937"
+  },
+  "notes": [
+    "Issue stock dan reverse issue berhasil."
+  ],
+  "artifactPath": "docs/evidence/auto/TS-10.png",
+  "finishedAt": "2026-05-24T02:37:52.421Z"
+}

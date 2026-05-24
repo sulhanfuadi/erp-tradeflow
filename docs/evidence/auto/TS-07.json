@@ -1,21 +1,20 @@
 {
   "scenarioId": "TS-07",
-  "title": "Inventory transfer lifecycle",
+  "title": "Vendor Bill creation from PO/Item Receipt",
   "status": "PASS",
-  "startedAt": "2026-05-23T23:12:42.680Z",
+  "startedAt": "2026-05-24T02:37:45.511Z",
   "assertions": {
-    "transferCreatedStatus": "pending",
-    "transferCompletedStatus": "completed",
-    "reversalTransferId": "6a12346cf4af2f8fa024586b",
-    "originalHasReversalTransferId": "6a12346cf4af2f8fa024586b"
+    "vendorBillId": "6a126479cc8e863be554692c",
+    "vendorBillStatus": "unpaid"
   },
   "ids": {
-    "transferId": "6a12346af4af2f8fa0245865",
-    "transferReversalId": "6a12346cf4af2f8fa024586b"
+    "vendorBillId": "6a126479cc8e863be554692c",
+    "purchaseOrderId": "6a126476cc8e863be5546926",
+    "itemReceiptId": "6a126478cc8e863be5546929"
   },
   "notes": [
-    "Transfer berhasil pending -> completed -> reversed."
+    "Vendor Bill berhasil dibuat dari PO + Item Receipt."
   ],
   "artifactPath": "docs/evidence/auto/TS-07.png",
-  "finishedAt": "2026-05-23T23:12:45.517Z"
+  "finishedAt": "2026-05-24T02:37:46.495Z"
 }

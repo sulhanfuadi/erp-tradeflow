@@ -1,0 +1,30 @@
+{
+  "scenarioId": "TS-12",
+  "title": "Legacy API compatibility regression",
+  "status": "PASS",
+  "startedAt": "2026-05-24T02:37:53.711Z",
+  "assertions": {
+    "legacyOrdersStatus": 200,
+    "legacyInvoicesStatus": 200,
+    "legacyPOStatus": 200,
+    "legacyGoodsReceiptsStatus": 200,
+    "legacyApInvoicesStatus": 200,
+    "foundSalesOrder": true,
+    "foundVendorBill": true,
+    "legacyOrderCount": 1,
+    "legacyInvoiceCount": 1,
+    "legacyPOCount": 1
+  },
+  "ids": {
+    "salesOrderId": "6a12646dcc8e863be554691b",
+    "customerInvoiceId": "6a126473cc8e863be5546923",
+    "purchaseOrderId": "6a126476cc8e863be5546926",
+    "itemReceiptId": "6a126478cc8e863be5546929",
+    "vendorBillId": "6a126479cc8e863be554692c"
+  },
+  "notes": [
+    "Endpoint legacy tetap berjalan saat endpoint NetSuite aktif."
+  ],
+  "artifactPath": "docs/evidence/auto/TS-12.png",
+  "finishedAt": "2026-05-24T02:37:55.361Z"
+}

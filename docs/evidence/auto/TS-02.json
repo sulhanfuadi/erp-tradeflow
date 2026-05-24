@@ -1,20 +1,20 @@
 {
   "scenarioId": "TS-02",
-  "title": "O2C invoice creation",
+  "title": "Item Fulfillment partial/full + status transition",
   "status": "PASS",
-  "startedAt": "2026-05-23T23:12:33.631Z",
+  "startedAt": "2026-05-24T02:37:37.148Z",
   "assertions": {
-    "invoiceCreated": true,
-    "linkedOrderId": "6a12345ff4af2f8fa024584c",
-    "invoiceStatus": "draft"
+    "partialFulfillmentStatus": "fulfilled",
+    "finalSalesOrderNetSuiteStatus": "Pending Billing"
   },
   "ids": {
-    "orderId": "6a12345ff4af2f8fa024584c",
-    "invoiceId": "6a123461f4af2f8fa0245850"
+    "salesOrderId": "6a12646dcc8e863be554691b"
   },
   "notes": [
-    "Invoice berhasil dibuat untuk order TS-01."
+    "Item Fulfillment partial berhasil.",
+    "Item Fulfillment final berhasil.",
+    "Status Sales Order menjadi Pending Billing."
   ],
   "artifactPath": "docs/evidence/auto/TS-02.png",
-  "finishedAt": "2026-05-23T23:12:35.274Z"
+  "finishedAt": "2026-05-24T02:37:39.057Z"
 }

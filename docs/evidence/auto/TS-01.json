@@ -1,31 +1,28 @@
 {
   "scenarioId": "TS-01",
-  "title": "O2C order create + reservation + oversell prevention",
+  "title": "Sales Order create + reservation + oversell prevention",
   "status": "PASS",
-  "startedAt": "2026-05-23T23:12:29.288Z",
+  "startedAt": "2026-05-24T02:37:31.268Z",
   "assertions": {
-    "categoryCreated": true,
-    "supplierCreated": true,
-    "warehousesCreated": true,
-    "productCreated": true,
-    "orderCreated": true,
+    "salesOrderId": "6a12646dcc8e863be554691b",
+    "salesOrderItemId": "6a12646dcc8e863be554691c",
     "reservedBefore": 0,
     "reservedAfter": 3,
-    "oversellStatus": 500
+    "oversellStatus": 400
   },
   "ids": {
-    "categoryId": "6a12345df4af2f8fa0245840",
-    "supplierId": "6a12345df4af2f8fa0245842",
-    "warehouseMainId": "6a12345df4af2f8fa0245844",
-    "warehouseSecondaryId": "6a12345df4af2f8fa0245846",
-    "productId": "6a12345ef4af2f8fa0245848",
-    "orderId": "6a12345ff4af2f8fa024584c"
+    "categoryId": "6a12646bcc8e863be554690f",
+    "supplierId": "6a12646bcc8e863be5546911",
+    "warehouseMainId": "6a12646bcc8e863be5546913",
+    "warehouseSecondaryId": "6a12646bcc8e863be5546915",
+    "productId": "6a12646bcc8e863be5546917",
+    "salesOrderId": "6a12646dcc8e863be554691b"
   },
   "notes": [
-    "Master data berhasil dibuat via API.",
-    "Reserved quantity naik setelah order.",
+    "Sales Order berhasil dibuat.",
+    "Reservation naik sesuai kuantitas order.",
     "Oversell prevention aktif."
   ],
   "artifactPath": "docs/evidence/auto/TS-01.png",
-  "finishedAt": "2026-05-23T23:12:33.453Z"
+  "finishedAt": "2026-05-24T02:37:36.943Z"
 }

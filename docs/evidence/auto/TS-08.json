@@ -1,31 +1,20 @@
 {
   "scenarioId": "TS-08",
-  "title": "Inventory issue, reversal, and stock card",
+  "title": "Bill Payment partial to paid + payment doc",
   "status": "PASS",
-  "startedAt": "2026-05-23T23:12:45.702Z",
+  "startedAt": "2026-05-24T02:37:46.588Z",
   "assertions": {
-    "issueId": "6a12346df4af2f8fa024586f",
-    "issueReversalId": "6a12346ef4af2f8fa0245871",
-    "stockCardRows": 7,
-    "movementTypes": [
-      "receipt",
-      "reversal",
-      "transfer_out",
-      "issue"
-    ],
-    "latestRunningBalance": 20
+    "partialVendorBillStatus": "partial",
+    "finalVendorBillStatus": "paid",
+    "billPaymentDocs": 2
   },
   "ids": {
-    "issueId": "6a12346df4af2f8fa024586f",
-    "issueReversalId": "6a12346ef4af2f8fa0245871",
-    "warehouseId": "6a12345df4af2f8fa0245844",
-    "productId": "6a12345ef4af2f8fa0245848"
+    "vendorBillId": "6a126479cc8e863be554692c"
   },
   "notes": [
-    "Issue stock berhasil.",
-    "Reverse issue berhasil.",
-    "Stock card mencatat movement inventory."
+    "Bill Payment partial berhasil.",
+    "Bill Payment final berhasil dan Vendor Bill paid."
   ],
   "artifactPath": "docs/evidence/auto/TS-08.png",
-  "finishedAt": "2026-05-23T23:12:47.477Z"
+  "finishedAt": "2026-05-24T02:37:47.567Z"
 }

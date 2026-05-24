@@ -1,26 +1,21 @@
 {
   "scenarioId": "TS-06",
-  "title": "P2P AP invoice unpaid->partial->paid and reverse GR",
+  "title": "Item Receipt + stock increment",
   "status": "PASS",
-  "startedAt": "2026-05-23T23:12:40.310Z",
+  "startedAt": "2026-05-24T02:37:44.396Z",
   "assertions": {
-    "apInvoiceId": "6a123468f4af2f8fa024585f",
-    "apStatusAfterCreate": "unpaid",
-    "apStatusAfterPartial": "partial",
-    "apStatusAfterFinal": "paid",
-    "amountDueAfterFinal": 0,
-    "goodsReceiptStatusAfterReverse": "reversed",
-    "productQtyBeforeReverse": 53,
-    "productQtyAfterReverse": 47
+    "itemReceiptId": "6a126478cc8e863be5546929",
+    "itemReceiptStatus": "received",
+    "quantityBefore": 47,
+    "quantityAfter": 53
   },
   "ids": {
-    "apInvoiceId": "6a123468f4af2f8fa024585f",
-    "goodsReceiptId": "6a123467f4af2f8fa024585b"
+    "itemReceiptId": "6a126478cc8e863be5546929",
+    "purchaseOrderId": "6a126476cc8e863be5546926"
   },
   "notes": [
-    "AP Invoice berhasil unpaid -> partial -> paid.",
-    "Goods receipt berhasil direverse (storno)."
+    "Item Receipt berhasil, stok bertambah."
   ],
   "artifactPath": "docs/evidence/auto/TS-06.png",
-  "finishedAt": "2026-05-23T23:12:42.588Z"
+  "finishedAt": "2026-05-24T02:37:45.415Z"
 }
