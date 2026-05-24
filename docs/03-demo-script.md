@@ -1,100 +1,79 @@
-# 03 - Demo Script (5–10 Menit)
+# 03 - Demo Script (5–10 Menit, NetSuite Terms)
 
 ## Tujuan Demo
-Membuktikan 3 domain wajib dosen berjalan:
-- O2C
-- P2P
-- Inventory Management
+Membuktikan tiga domain wajib dosen berjalan sesuai acuan proses NetSuite:
+- O2C: **Sales Order → Item Fulfillment → Customer Invoice → Customer Payment**
+- P2P: **Purchase Order → Item Receipt → Vendor Bill → Bill Payment**
+- Inventory Management: allocation, transfer, issue, ledger, reversal trail
 
-Dokumen bukti otomatis sudah tersedia di:
-- `docs/evidence/auto/TS-01..TS-08.json`
-- `docs/evidence/auto/TS-01..TS-08.png`
+Bukti otomatis tersedia di:
+- `docs/evidence/auto/TS-01..TS-12.json`
+- `docs/evidence/auto/TS-01..TS-12.png`
 
 ## Persiapan Sebelum Demo
-- [ ] Jalankan quick smoke sebelum kelas:
+- [ ] Jalankan quick smoke:
+  - `npm run lint`
   - `npm test`
   - `npm run test:invalidate`
+  - `npm run test:e2e`
 - [ ] Login dengan akun internal/admin
-- [ ] Data master sudah siap (supplier, warehouse, produk)
-- [ ] Browser tab untuk:
-  - `/orders`, `/invoices`
-  - `/procurement`
-  - `/warehouses/[id]`
-- [ ] Siapkan folder bukti di editor: `docs/evidence/auto/`
+- [ ] Data master siap (supplier, warehouse, produk)
+- [ ] Buka tab utama:
+  - `/orders` (Sales Orders)
+  - `/invoices` (Customer Invoices)
+  - `/procurement` (P2P Workbench)
+  - `/warehouses/[id]` (Inventory)
 
 ---
 
-## Alur Presentasi (Rekomendasi)
+## Alur Presentasi
 
-### 0:00 – 1:30 | O2C Snapshot
-1. Buka Orders.
-2. Tunjukkan create order + validasi stock (anti oversell).
-3. Buka Invoice terkait order.
-4. Tunjukkan status delivery/tracking di order detail.
+### 0:00 – 2:30 | O2C (NetSuite Sequence)
+1. Buka **Sales Orders** (`/orders`).
+2. Tunjukkan pembuatan sales order + anti oversell.
+3. Tunjukkan **Item Fulfillment** (partial/full).
+4. Tunjukkan **Customer Invoice**.
+5. Tunjukkan **Customer Payment** partial lalu paid.
 
-Poin nilai:
-- Order–Invoice keterkaitan jelas
-- Kontrol ketersediaan stok aktif
+Evidence referensi:
+- `TS-01`, `TS-02`, `TS-03`, `TS-04`
 
-Bukti yang dibuka saat sesi tanya jawab:
-- `docs/evidence/auto/TS-01.json`
-- `docs/evidence/auto/TS-02.json`
-- `docs/evidence/auto/TS-03.json`
+### 2:30 – 5:00 | P2P (NetSuite Sequence)
+1. Buka **Procure-to-Pay** (`/procurement`).
+2. Tunjukkan create + post **Purchase Order**.
+3. Tunjukkan **Item Receipt** (stok naik).
+4. Tunjukkan create **Vendor Bill**.
+5. Tunjukkan **Bill Payment** partial lalu paid.
 
----
+Evidence referensi:
+- `TS-05`, `TS-06`, `TS-07`, `TS-08`
 
-### 1:30 – 4:30 | P2P End-to-End
-1. Buka Procurement page.
-2. Tunjukkan daftar PO lalu create/post PO.
-3. Tunjukkan create Goods Receipt dan efek stok naik.
-4. Tunjukkan create AP Invoice.
-5. Record payment sampai status paid.
-6. Tunjukkan reverse goods receipt (storno) untuk audit trail.
+### 5:00 – 8:00 | Inventory Management
+1. Buka warehouse detail (`/warehouses/[id]`).
+2. Tunjukkan transfer pending → completed → reverse.
+3. Tunjukkan issue → reverse issue.
+4. Tunjukkan stock ledger (movement + running balance).
 
-Poin nilai:
-- Flow PO → GR → AP → Payment jalan
-- Reversal tidak hapus histori
+Evidence referensi:
+- `TS-09`, `TS-10`, `TS-11`
 
-Bukti:
-- `docs/evidence/auto/TS-04.json`
-- `docs/evidence/auto/TS-05.json`
-- `docs/evidence/auto/TS-06.json`
+### 8:00 – 9:00 | Compatibility Proof
+1. Jelaskan endpoint legacy tetap aktif (compatibility 1 sprint).
+2. Tunjukkan bukti TS-12.
 
----
-
-### 4:30 – 8:00 | Inventory Management
-1. Buka Warehouse Detail.
-2. Tunjukkan Stock Allocation form.
-3. Buat transfer pending lalu complete.
-4. Lakukan reverse transfer.
-5. Buat stock issue lalu reverse issue.
-6. Tunjukkan stock card (movement ledger + running balance).
-
-Poin nilai:
-- Receipt/issue/transfer/reversal tercatat
-- Stock card jadi bukti histori movement
-
-Bukti:
-- `docs/evidence/auto/TS-07.json`
-- `docs/evidence/auto/TS-08.json`
+Evidence referensi:
+- `TS-12`
 
 ---
 
-### 8:00 – 9:00 | Bukti Test
-1. Buka `docs/02-test-scenarios.md`.
-2. Tunjukkan status TS-01 sampai TS-08 semuanya `Pass`.
-3. Buka 2–3 file JSON evidence sebagai contoh detail assertion.
-
----
-
-## Fallback Jika Ada Kendala
-- Jika integrasi eksternal shipping lambat, tampilkan update manual di order detail.
-- Jika ImageKit/Redis warning muncul, jelaskan itu non-blocking terhadap flow inti.
-- Jika satu langkah UI gagal, validasi lewat endpoint/data yang sudah dibuktikan di evidence JSON.
+## Fallback Saat Demo
+- Jika warning ImageKit/Redis muncul, jelaskan sebagai integrasi non-blocking.
+- Jika satu klik UI tidak responsif, validasi melalui evidence JSON/PNG yang sudah pass.
+- Jika waktu mepet, tampilkan ringkasan `docs/02-test-scenarios.md` + 2 bukti detail per domain.
 
 ---
 
 ## Closing (30 detik)
-- Project sudah mencakup O2C, P2P, dan Inventory.
-- Fitur berjalan end-to-end.
-- Bukti test dan script demo siap untuk evaluasi.
+- Scope wajib dosen terpenuhi: O2C + P2P + Inventory.
+- Flow berjalan end-to-end dengan istilah NetSuite.
+- Bukti test 12 skenario lengkap dan demo siap 5–10 menit.

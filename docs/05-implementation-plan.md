@@ -12,12 +12,12 @@
 
 | ID | Task | PIC | Priority | Status | Note |
 |---|---|---|---|---|---|
-| P0-01 | O2C order + invoice + delivery berjalan | Saya | P0 | TODO | |
-| P0-02 | P2P PO → GR → AP → Payment berjalan | Saya | P0 | TODO | |
-| P0-03 | Reverse GR (storno) berjalan | Saya | P0 | TODO | |
-| P0-04 | Inventory transfer + reverse berjalan | Saya | P0 | TODO | |
-| P0-05 | Stock issue + reverse berjalan | Saya | P0 | TODO | |
-| P0-06 | Stock card movement ledger tampil | Saya | P0 | TODO | |
+| P0-01 | O2C NetSuite sequence berjalan (SO→IF→CI→CP) | Saya | P0 | DONE | Endpoint NetSuite aktif + tested |
+| P0-02 | P2P NetSuite sequence berjalan (PO→IR→VB→BP) | Saya | P0 | DONE | Terminology dan flow aligned |
+| P0-03 | Reverse Item Receipt (storno) berjalan | Saya | P0 | DONE | Audit trail tersedia |
+| P0-04 | Inventory transfer + reverse berjalan | Saya | P0 | DONE | Pending→completed→reverse pass |
+| P0-05 | Stock issue + reverse berjalan | Saya | P0 | DONE | Pass di E2E TS-10 |
+| P0-06 | Stock ledger movement tampil | Saya | P0 | DONE | Pass di E2E TS-11 |
 
 ---
 
@@ -25,21 +25,23 @@
 
 | ID | Task | PIC | Priority | Status | Note |
 |---|---|---|---|---|---|
-| P1-01 | Isi TS-01 s/d TS-08 (Pass/Fail) | Saya | P1 | TODO | docs/02-test-scenarios.md |
-| P1-02 | Ambil screenshot/video evidence | Saya | P1 | TODO | folder evidence lokal |
-| P1-03 | Rehearsal demo run #1 | Saya | P1 | TODO | target ≤ 10 menit |
-| P1-04 | Rehearsal demo run #2 | Saya | P1 | TODO | perbaiki bagian yang macet |
+| P1-01 | Isi TS-01 s/d TS-12 (Pass/Fail) | Saya | P1 | DONE | `docs/02-test-scenarios.md` |
+| P1-02 | Generate evidence JSON + screenshot | Saya | P1 | DONE | `docs/evidence/auto/` |
+| P1-03 | Demo script 5–10 menit | Saya | P1 | DONE | `docs/03-demo-script.md` |
+| P1-04 | Rehearsal demo run #1 | Saya | P1 | TODO | Manual oleh mahasiswa |
+| P1-05 | Rehearsal demo run #2 | Saya | P1 | TODO | Manual oleh mahasiswa |
 
 ---
 
-## Quality Gate (Wajib Hijau)
-- [ ] `npm run lint`
-- [ ] `npm run test`
-- [ ] `npm run test:invalidate`
-- [ ] Semua route write baru punya invalidation server
+## Quality Gate
+- [x] `npm run lint`
+- [x] `npm test`
+- [x] `npm run test:invalidate`
+- [x] `npm run test:e2e`
+- [x] Route write NetSuite mengikuti invalidation contract
 
 ---
 
 ## Catatan Risiko
-- Integrasi eksternal (shipping/payment) bisa flaky → siapkan fallback mode test/manual.
-- Data dummy tidak konsisten bisa bikin demo macet → pakai checklist `04-dummy-data-pack.md`.
+- Integrasi eksternal (ImageKit/Redis/QStash) bisa memberi warning saat local run.
+- Warning tersebut non-blocking untuk flow inti O2C/P2P/Inventory.

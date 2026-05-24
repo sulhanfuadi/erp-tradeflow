@@ -5,6 +5,46 @@
 - Repo: `erp-tradeflow`
 - Course: `Sistem Enterprise`
 - Mandatory evaluator focus: implement and demonstrate core enterprise flow end-to-end.
+- Lecturer benchmark reference: **Oracle NetSuite** business flow as primary guidance.
+
+## Oracle NetSuite Alignment (Mandatory Guidance)
+
+All implementation and demo narratives should stay aligned with NetSuite-style process semantics.
+
+### O2C (NetSuite-style reference)
+
+Preferred conceptual sequence:
+
+- `Sales Order -> Fulfillment/Delivery -> Invoice -> Payment`
+
+Notes for this repository:
+
+- Current MVP can still use `Order -> Invoice -> Delivery` as long as end-to-end proof is stable.
+- When possible, labels/docs should mention NetSuite equivalents (`Sales Order`, `Item Fulfillment`, `Customer Invoice`).
+
+### P2P (NetSuite-style reference)
+
+Preferred conceptual sequence:
+
+- `Purchase Order -> Item Receipt -> Vendor Bill -> Bill Payment`
+
+Notes for this repository:
+
+- Existing flow `PO -> Goods Receipt -> AP Invoice -> Payment` is accepted as equivalent terminology.
+
+### Inventory (NetSuite-style reference)
+
+Minimum conceptual coverage:
+
+- `Item Receipt` impact to stock
+- `Issue/Fulfillment` impact to stock
+- `Transfer` antar warehouse
+- `Reversal/adjustment trail` without deleting historical movement
+
+### Submission Guardrail (NetSuite Benchmark)
+
+- During final demo/Q&A, always explain each implemented step with its NetSuite equivalent term.
+- Any new feature outside O2C/P2P/Inventory should not be prioritized before NetSuite-aligned core flow is stable.
 
 ## Mandatory Lecturer Requirements
 
