@@ -448,7 +448,7 @@ export default function P2PWorkbench() {
       });
 
       toast({
-        title: "Goods receipt posted",
+        title: "Item receipt posted",
         description: "Stock has been updated successfully.",
       });
 
@@ -458,9 +458,9 @@ export default function P2PWorkbench() {
       await reloadAfterMutation();
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Failed to create goods receipt";
+        error instanceof Error ? error.message : "Failed to create item receipt";
       toast({
-        title: "Create goods receipt failed",
+        title: "Create item receipt failed",
         description: message,
         variant: "destructive",
       });
@@ -507,8 +507,8 @@ export default function P2PWorkbench() {
       });
 
       toast({
-        title: "AP invoice created",
-        description: "Accounts payable invoice recorded successfully.",
+        title: "Vendor bill created",
+        description: "Vendor bill has been recorded successfully.",
       });
 
       setApForm({
@@ -524,9 +524,9 @@ export default function P2PWorkbench() {
       await reloadAfterMutation();
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Failed to create AP invoice";
+        error instanceof Error ? error.message : "Failed to create vendor bill";
       toast({
-        title: "Create AP invoice failed",
+        title: "Create vendor bill failed",
         description: message,
         variant: "destructive",
       });
@@ -540,8 +540,8 @@ export default function P2PWorkbench() {
 
     if (paymentForm.apInvoiceId === "") {
       toast({
-        title: "Select AP invoice",
-        description: "Please choose AP invoice for payment.",
+        title: "Select vendor bill",
+        description: "Please choose vendor bill for payment.",
         variant: "destructive",
       });
       return;
@@ -569,14 +569,14 @@ export default function P2PWorkbench() {
 
       toast({
         title: "Payment recorded",
-        description: "AP payment status has been updated.",
+        description: "Vendor bill payment status has been updated.",
       });
 
       setPaymentForm({ apInvoiceId: "", paymentAmount: "", notes: "" });
       await reloadAfterMutation();
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Failed to record AP payment";
+        error instanceof Error ? error.message : "Failed to record vendor bill payment";
       toast({
         title: "Record payment failed",
         description: message,
@@ -588,7 +588,7 @@ export default function P2PWorkbench() {
   }
 
   async function reverseGoodsReceipt(receiptId: string) {
-    if (!window.confirm("Reverse this goods receipt and roll back stock?")) {
+    if (!window.confirm("Reverse this item receipt and roll back stock?")) {
       return;
     }
 
@@ -602,16 +602,16 @@ export default function P2PWorkbench() {
       });
 
       toast({
-        title: "Goods receipt reversed",
+        title: "Item receipt reversed",
         description: "Stock and PO receipt quantity have been rolled back.",
       });
 
       await reloadAfterMutation();
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Failed to reverse goods receipt";
+        error instanceof Error ? error.message : "Failed to reverse item receipt";
       toast({
-        title: "Reverse goods receipt failed",
+        title: "Reverse item receipt failed",
         description: message,
         variant: "destructive",
       });
@@ -626,8 +626,8 @@ export default function P2PWorkbench() {
         <CardHeader>
           <CardTitle>Procure-to-Pay Workbench</CardTitle>
           <CardDescription>
-            Supplier → Purchase Order → Goods Receipt → AP Invoice → Payment
-            Status
+            Supplier → Purchase Order → Item Receipt → Vendor Bill → Bill
+            Payment
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-2 sm:grid-cols-4">
@@ -636,15 +636,15 @@ export default function P2PWorkbench() {
             <p className="text-xl font-semibold">{purchaseOrders.length}</p>
           </div>
           <div className="rounded-lg border p-3">
-            <p className="text-xs text-muted-foreground">Goods Receipts</p>
+            <p className="text-xs text-muted-foreground">Item Receipts</p>
             <p className="text-xl font-semibold">{goodsReceipts.length}</p>
           </div>
           <div className="rounded-lg border p-3">
-            <p className="text-xs text-muted-foreground">AP Invoices</p>
+            <p className="text-xs text-muted-foreground">Vendor Bills</p>
             <p className="text-xl font-semibold">{apInvoices.length}</p>
           </div>
           <div className="rounded-lg border p-3">
-            <p className="text-xs text-muted-foreground">Outstanding AP</p>
+            <p className="text-xs text-muted-foreground">Outstanding Bills</p>
             <p className="text-xl font-semibold">
               ${
                 apInvoices
@@ -823,7 +823,7 @@ export default function P2PWorkbench() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Post Goods Receipt</CardTitle>
+            <CardTitle>Post Item Receipt</CardTitle>
           </CardHeader>
           <CardContent>
             <form className="space-y-3" onSubmit={submitCreateGoodsReceipt}>
@@ -920,7 +920,7 @@ export default function P2PWorkbench() {
               </div>
 
               <Button disabled={isSubmitting} type="submit" className="w-full">
-                Post Goods Receipt
+                Post Item Receipt
               </Button>
             </form>
           </CardContent>
@@ -928,7 +928,7 @@ export default function P2PWorkbench() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Create AP Invoice</CardTitle>
+            <CardTitle>Create Vendor Bill</CardTitle>
           </CardHeader>
           <CardContent>
             <form className="space-y-3" onSubmit={submitCreateApInvoice}>
@@ -975,7 +975,7 @@ export default function P2PWorkbench() {
               </div>
 
               <div className="space-y-1">
-                <Label>Linked Goods Receipt</Label>
+                <Label>Linked Item Receipt</Label>
                 <select
                   value={apForm.goodsReceiptId}
                   onChange={(event) =>
@@ -986,7 +986,7 @@ export default function P2PWorkbench() {
                   }
                   className="w-full rounded-md border bg-background px-3 py-2 text-sm"
                 >
-                  <option value="">Select goods receipt (optional)</option>
+                  <option value="">Select item receipt (optional)</option>
                   {goodsReceipts.map((receipt) => (
                     <option key={receipt.id} value={receipt.id}>
                       {receipt.receiptNumber}
@@ -1057,7 +1057,7 @@ export default function P2PWorkbench() {
               </div>
 
               <Button disabled={isSubmitting} type="submit" className="w-full">
-                Create AP Invoice
+                Create Vendor Bill
               </Button>
             </form>
           </CardContent>
@@ -1066,15 +1066,15 @@ export default function P2PWorkbench() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Record AP Payment</CardTitle>
+          <CardTitle>Record Bill Payment</CardTitle>
           <CardDescription>
-            Update AP invoice payment status to Unpaid / Partial / Paid.
+            Update vendor bill payment status to Open / Partially Paid / Paid.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form className="grid gap-3 md:grid-cols-4" onSubmit={submitRecordPayment}>
             <div className="space-y-1 md:col-span-2">
-              <Label>AP Invoice</Label>
+              <Label>Vendor Bill</Label>
               <select
                 value={paymentForm.apInvoiceId}
                 onChange={(event) =>
@@ -1085,7 +1085,7 @@ export default function P2PWorkbench() {
                 }
                 className="w-full rounded-md border bg-background px-3 py-2 text-sm"
               >
-                <option value="">Select AP invoice</option>
+                <option value="">Select vendor bill</option>
                 {apInvoices.map((invoice) => (
                   <option key={invoice.id} value={invoice.id}>
                     {invoice.invoiceNumber} ({invoice.status})
@@ -1209,11 +1209,11 @@ export default function P2PWorkbench() {
       <div className="grid gap-6 xl:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Goods Receipts</CardTitle>
+            <CardTitle>Item Receipts</CardTitle>
           </CardHeader>
           <CardContent className="overflow-x-auto">
             {goodsReceipts.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No goods receipts yet.</p>
+              <p className="text-sm text-muted-foreground">No item receipts yet.</p>
             ) : (
               <table className="w-full min-w-[620px] text-sm">
                 <thead>
@@ -1263,11 +1263,11 @@ export default function P2PWorkbench() {
 
         <Card>
           <CardHeader>
-            <CardTitle>AP Invoices</CardTitle>
+            <CardTitle>Vendor Bills</CardTitle>
           </CardHeader>
           <CardContent className="overflow-x-auto">
             {apInvoices.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No AP invoices yet.</p>
+              <p className="text-sm text-muted-foreground">No vendor bills yet.</p>
             ) : (
               <table className="w-full min-w-[700px] text-sm">
                 <thead>

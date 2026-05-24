@@ -185,9 +185,9 @@ export default function Navbar({ children }: NavbarProps) {
   const adminNavItems: NavItem[] = [
     { label: "Dashboard", path: "/", hasDropdown: false },
     { label: "Products", path: "/products", hasDropdown: false },
-    { label: "Orders", path: "/orders", hasDropdown: false },
-    { label: "Invoices", path: "/invoices", hasDropdown: false },
-    { label: "Procurement", path: "/procurement", hasDropdown: false },
+    { label: "Sales Orders", path: "/orders", hasDropdown: false },
+    { label: "Customer Invoices", path: "/invoices", hasDropdown: false },
+    { label: "Procure-to-Pay", path: "/procurement", hasDropdown: false },
     { label: "Categories", path: "/categories", hasDropdown: false },
     { label: "Suppliers", path: "/suppliers", hasDropdown: false },
     { label: "Warehouses", path: "/warehouses", hasDropdown: false },
@@ -202,14 +202,14 @@ export default function Navbar({ children }: NavbarProps) {
   const clientNavItems: NavItem[] = [
     { label: "Client Portal", path: "/client", hasDropdown: false },
     { label: "Browse Products", path: "/products", hasDropdown: false },
-    { label: "My Orders", path: "/orders", hasDropdown: false },
-    { label: "My Invoices", path: "/invoices", hasDropdown: false },
+    { label: "My Sales Orders", path: "/orders", hasDropdown: false },
+    { label: "My Customer Invoices", path: "/invoices", hasDropdown: false },
   ];
 
   const supplierNavItems: NavItem[] = [
     { label: "Supplier Portal", path: "/supplier", hasDropdown: false },
     { label: "My Products", path: "/products", hasDropdown: false },
-    { label: "View Orders", path: "/orders", hasDropdown: false },
+    { label: "View Sales Orders", path: "/orders", hasDropdown: false },
   ];
 
   // Role from auth when available; else infer from pathname so client/supplier see correct nav on refresh (no admin flash).

@@ -40,8 +40,8 @@ const SIDEBAR_NAV_ITEMS: {
 }[] = [
   { path: "/", label: "Dashboard", icon: LayoutDashboard },
   { path: "/products", label: "Products", icon: Package },
-  { path: "/orders", label: "Orders", icon: ShoppingCart },
-  { path: "/invoices", label: "Invoices", icon: FileText },
+  { path: "/orders", label: "Sales Orders", icon: ShoppingCart },
+  { path: "/invoices", label: "Customer Invoices", icon: FileText },
   { path: "/categories", label: "Categories", icon: Tag },
   { path: "/suppliers", label: "Suppliers", icon: Users },
   { path: "/warehouses", label: "Warehouses", icon: Warehouse },
