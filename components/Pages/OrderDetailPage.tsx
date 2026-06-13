@@ -183,6 +183,8 @@ function GlassCard({
  */
 function getStatusBadgeClasses(status: OrderStatus): string {
   switch (status) {
+    case "pending_approval":
+      return "bg-rose-100 text-rose-800 dark:bg-rose-900/50 dark:text-rose-200 border border-rose-300/40";
     case "pending":
       return "bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200 border border-amber-300/40";
     case "confirmed":
@@ -292,7 +294,41 @@ export default function OrderDetailPage() {
   const isCancelling = deleteOrderMutation.isPending;
   const isSupplierRole = user?.role === "supplier";
   const isClientRole = user?.role === "client";
+  const isSalesManager = user?.role === "sales_manager" || user?.role === "admin";
   const disableOrderActions = isSupplierRole || isClientRole;
+
+  const [isApproving, setIsApproving] = useState(false);
+  const [isRejecting, setIsRejecting] = useState(false);
+
+  const handleApprove = async () => {
+    setIsApproving(true);
+    try {
+      const res = await fetch(`/api/netsuite/sales-orders/${orderId}/approve`, { method: "POST" });
+      if (!res.ok) throw new Error("Failed to approve order");
+      router.refresh();
+      await invalidateAfterOrderGraphChange(queryClient);
+      queryClient.invalidateQueries({ queryKey: queryKeys.orders.detail(orderId) });
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsApproving(false);
+    }
+  };
+
+  const handleReject = async () => {
+    setIsRejecting(true);
+    try {
+      const res = await fetch(`/api/netsuite/sales-orders/${orderId}/reject`, { method: "POST" });
+      if (!res.ok) throw new Error("Failed to reject order");
+      router.refresh();
+      await invalidateAfterOrderGraphChange(queryClient);
+      queryClient.invalidateQueries({ queryKey: queryKeys.orders.detail(orderId) });
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsRejecting(false);
+    }
+  };
 
   // Edit/Update Order: open OrderDialog in edit mode (same as OrderList/OrderActions)
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -937,6 +973,26 @@ export default function OrderDetailPage() {
                   : "Edit order details."}
               </TooltipContent>
             </Tooltip>
+
+            {order.status === "pending_approval" && isSalesManager && (
+              <>
+                <Button
+                  onClick={handleApprove}
+                  disabled={isApproving}
+                  className="w-full sm:w-auto gap-2 rounded-xl border border-emerald-400/30 bg-gradient-to-r from-emerald-500/70 via-emerald-500/50 to-emerald-500/30 text-white shadow-[0_10px_25px_rgba(16,185,129,0.35)] backdrop-blur-sm hover:border-emerald-300/50 hover:from-emerald-500/80 hover:via-emerald-500/60 hover:to-emerald-500/40 transition-all duration-300 disabled:opacity-50"
+                >
+                  {isApproving ? "Approving..." : "Approve Order"}
+                </Button>
+                <Button
+                  onClick={handleReject}
+                  disabled={isRejecting}
+                  className="w-full sm:w-auto gap-2 rounded-xl border border-rose-400/30 bg-gradient-to-r from-rose-500/70 via-rose-500/50 to-rose-500/30 text-white shadow-[0_10px_25px_rgba(225,29,72,0.35)] backdrop-blur-sm hover:border-rose-300/50 hover:from-rose-500/80 hover:via-rose-500/60 hover:to-rose-500/40 transition-all duration-300 disabled:opacity-50"
+                >
+                  {isRejecting ? "Rejecting..." : "Reject Order"}
+                </Button>
+              </>
+            )}
+
             {order.paymentStatus !== "paid" && order.status !== "cancelled" && (
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -981,6 +1037,7 @@ export default function OrderDetailPage() {
                 <ShippingManagement
                   order={order}
                   disabled={disableOrderActions}
+                  userRole={user?.role}
                   trigger={
                     <Button
                       disabled={disableOrderActions}

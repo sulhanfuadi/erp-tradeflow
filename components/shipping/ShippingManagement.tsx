@@ -14,6 +14,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { queryKeys, invalidateAllRelatedQueries } from "@/lib/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -44,6 +45,7 @@ interface ShippingManagementProps {
   order: Order;
   disabled?: boolean;
   trigger?: React.ReactNode;
+  userRole?: string;
 }
 
 const CARRIERS: { value: ShippingCarrier; label: string }[] = [
@@ -58,9 +60,17 @@ export default function ShippingManagement({
   order,
   disabled,
   trigger,
+  userRole,
 }: ShippingManagementProps) {
   const [open, setOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"auto" | "manual">("auto");
+  const [activeTab, setActiveTab] = useState<"auto" | "manual" | "fulfillment">("auto");
+
+  // Fetch item fulfillments if fulfillment tab is active
+  const [fulfillments, setFulfillments] = useState<any[]>([]);
+  const [isFetchingFulfillments, setIsFetchingFulfillments] = useState(false);
+  const [isFulfilling, setIsFulfilling] = useState(false);
+
+  const isInventoryManager = userRole === "inventory_manager" || userRole === "admin";
 
   // Auto generate form state
   const [carrier, setCarrier] = useState<ShippingCarrier>("usps");
@@ -164,7 +174,7 @@ export default function ShippingManagement({
             onValueChange={(v) => setActiveTab(v as "auto" | "manual")}
             className="flex flex-col min-h-full"
           >
-            <TabsList className="grid w-full grid-cols-2 h-11 p-1 rounded-lg bg-white/30 dark:bg-white/10 text-white shrink-0 border border-emerald-400/30 dark:border-white/20 shadow-[0_10px_30px_rgba(16,185,129,0.15)] dark:shadow-[0_10px_30px_rgba(16,185,129,0.1)]">
+            <TabsList className="grid w-full grid-cols-3 h-11 p-1 rounded-lg bg-white/30 dark:bg-white/10 text-white shrink-0 border border-emerald-400/30 dark:border-white/20 shadow-[0_10px_30px_rgba(16,185,129,0.15)] dark:shadow-[0_10px_30px_rgba(16,185,129,0.1)]">
               <TabsTrigger
                 value="auto"
                 className="h-9 gap-2 rounded-md data-[state=active]:border data-[state=active]:border-emerald-400 data-[state=active]:ring-2 data-[state=active]:ring-emerald-500/50 data-[state=active]:bg-background data-[state=active]:text-slate-700 dark:data-[state=active]:text-white dark:data-[state=active]:bg-white/20 data-[state=active]:shadow-[0_10px_30px_rgba(16,185,129,0.15)]"
@@ -179,6 +189,28 @@ export default function ShippingManagement({
                 <Tag className="h-4 w-4" />
                 Manual Entry
               </TabsTrigger>
+              {isInventoryManager && (
+                <TabsTrigger
+                  value="fulfillment"
+                  onClick={async () => {
+                    setIsFetchingFulfillments(true);
+                    try {
+                      const res = await fetch("/api/netsuite/item-fulfillments");
+                      const data = await res.json();
+                      const myFulfills = Array.isArray(data) ? data.filter(f => f.orderId === order.id) : [];
+                      setFulfillments(myFulfills);
+                    } catch (e) {
+                      console.error(e);
+                    } finally {
+                      setIsFetchingFulfillments(false);
+                    }
+                  }}
+                  className="h-9 gap-2 rounded-md data-[state=active]:border data-[state=active]:border-emerald-400 data-[state=active]:ring-2 data-[state=active]:ring-emerald-500/50 data-[state=active]:bg-background data-[state=active]:text-slate-700 dark:data-[state=active]:text-white dark:data-[state=active]:bg-white/20 data-[state=active]:shadow-[0_10px_30px_rgba(16,185,129,0.15)]"
+                >
+                  <Package className="h-4 w-4" />
+                  Fulfillment
+                </TabsTrigger>
+              )}
             </TabsList>
 
             {/* Auto Generate Tab */}
@@ -324,6 +356,117 @@ export default function ShippingManagement({
                 )}
               </Button>
             </TabsContent>
+
+            {/* NetSuite Fulfillment Tab */}
+            {isInventoryManager && (
+              <TabsContent
+                value="fulfillment"
+                className="space-y-4 mt-4 flex-1 min-h-0 data-[state=inactive]:hidden"
+              >
+                <p className="text-sm text-white/70">
+                  Manage NetSuite Item Fulfillments (Pick, Pack, Ship).
+                </p>
+
+                {isFetchingFulfillments ? (
+                  <p className="text-sm text-white">Loading...</p>
+                ) : fulfillments.length === 0 ? (
+                  <div className="space-y-4">
+                    <p className="text-sm text-white">No fulfillments found for this order.</p>
+                    <Button
+                      disabled={isFulfilling}
+                      onClick={async () => {
+                        setIsFulfilling(true);
+                        try {
+                          // Pass all items
+                          const items = order.items.map((i: any) => ({
+                            orderItemId: i.id,
+                            quantity: i.quantity,
+                          }));
+                          await fetch("/api/netsuite/item-fulfillments", {
+                            method: "POST",
+                            body: JSON.stringify({ orderId: order.id, items }),
+                          });
+                          await invalidateAllRelatedQueries(queryClient);
+                          // Refresh
+                          const res = await fetch("/api/netsuite/item-fulfillments");
+                          const data = await res.json();
+                          const myFulfills = Array.isArray(data) ? data.filter((f: any) => f.orderId === order.id) : [];
+                          setFulfillments(myFulfills);
+                        } catch (e) {
+                          console.error(e);
+                        } finally {
+                          setIsFulfilling(false);
+                        }
+                      }}
+                      className="w-full h-11 bg-white/20 hover:bg-white/30 text-white"
+                    >
+                      {isFulfilling ? "Picking..." : "Pick (Create Fulfillment)"}
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {fulfillments.map((f: any) => (
+                      <div key={f.id} className="p-3 border border-white/20 rounded-lg bg-white/5 space-y-3">
+                        <div className="flex justify-between items-center text-white">
+                          <span className="font-medium">{f.fulfillmentNumber || f.id}</span>
+                          <Badge variant="outline" className="text-white border-white/30">{f.status}</Badge>
+                        </div>
+                        <div className="flex gap-2">
+                          {f.status === "picked" && (
+                            <Button
+                              size="sm"
+                              disabled={isFulfilling}
+                              onClick={async () => {
+                                setIsFulfilling(true);
+                                try {
+                                  await fetch(`/api/netsuite/item-fulfillments/${f.id}/pack`, { method: "POST" });
+                                  await invalidateAllRelatedQueries(queryClient);
+                                  const res = await fetch("/api/netsuite/item-fulfillments");
+                                  const data = await res.json();
+                                  const myFulfills = Array.isArray(data) ? data.filter((ff: any) => ff.orderId === order.id) : [];
+                                  setFulfillments(myFulfills);
+                                } catch (e) {
+                                  console.error(e);
+                                } finally {
+                                  setIsFulfilling(false);
+                                }
+                              }}
+                              className="flex-1 bg-amber-500/50 hover:bg-amber-500/70 text-white"
+                            >
+                              Pack
+                            </Button>
+                          )}
+                          {f.status === "packed" && (
+                            <Button
+                              size="sm"
+                              disabled={isFulfilling}
+                              onClick={async () => {
+                                setIsFulfilling(true);
+                                try {
+                                  await fetch(`/api/netsuite/item-fulfillments/${f.id}/ship`, { method: "POST" });
+                                  await invalidateAllRelatedQueries(queryClient);
+                                  const res = await fetch("/api/netsuite/item-fulfillments");
+                                  const data = await res.json();
+                                  const myFulfills = Array.isArray(data) ? data.filter((ff: any) => ff.orderId === order.id) : [];
+                                  setFulfillments(myFulfills);
+                                } catch (e) {
+                                  console.error(e);
+                                } finally {
+                                  setIsFulfilling(false);
+                                }
+                              }}
+                              className="flex-1 bg-emerald-500/50 hover:bg-emerald-500/70 text-white"
+                            >
+                              Ship
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </TabsContent>
+            )}
           </Tabs>
         </div>
       </DialogContent>

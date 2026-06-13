@@ -179,6 +179,8 @@ function GlassCard({
  */
 function getStatusBadgeClasses(status: InvoiceStatus): string {
   switch (status) {
+    case "pending_approval":
+      return "bg-rose-500/20 text-rose-700 dark:text-rose-300 border-rose-400/30";
     case "draft":
       return "bg-gray-500/20 text-gray-700 dark:text-gray-300 border-gray-400/30";
     case "sent":

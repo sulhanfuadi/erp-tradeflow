@@ -44,7 +44,7 @@ type PurchaseOrderRecord = {
   poNumber: string;
   supplierId: string;
   warehouseId: string;
-  status: "draft" | "posted" | "completed" | "cancelled";
+  status: "draft" | "posted" | "completed" | "cancelled" | "reviewed";
   subtotal: number;
   tax: number | null;
   total: number;
@@ -79,7 +79,7 @@ type APInvoiceRecord = {
   purchaseOrderId: string | null;
   goodsReceiptId: string | null;
   supplierId: string;
-  status: "draft" | "unpaid" | "partial" | "paid" | "cancelled";
+  status: "draft" | "unpaid" | "partial" | "paid" | "cancelled" | "pending_approval" | "rejected";
   subtotal: number;
   tax: number | null;
   total: number;
@@ -1174,14 +1174,35 @@ export default function P2PWorkbench() {
                     <td className="py-2">
                       <div className="flex gap-2">
                         {purchaseOrder.status === "draft" && (
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            disabled={isSubmitting}
-                            onClick={() => updatePoStatus(purchaseOrder.id, "posted")}
-                          >
-                            Post
-                          </Button>
+                          <>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              disabled={isSubmitting}
+                              onClick={async () => {
+                                setIsSubmitting(true);
+                                try {
+                                  await apiFetch(`/api/netsuite/purchase-orders/${purchaseOrder.id}/review`, { method: "POST" });
+                                  toast({ title: "Purchase order reviewed" });
+                                  await reloadAfterMutation();
+                                } catch (e) {
+                                  toast({ title: "Failed to review", variant: "destructive" });
+                                } finally {
+                                  setIsSubmitting(false);
+                                }
+                              }}
+                            >
+                              Review
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              disabled={isSubmitting}
+                              onClick={() => updatePoStatus(purchaseOrder.id, "posted")}
+                            >
+                              Post
+                            </Button>
+                          </>
                         )}
                         {(purchaseOrder.status === "draft" ||
                           purchaseOrder.status === "posted") && (
@@ -1278,6 +1299,7 @@ export default function P2PWorkbench() {
                     <th className="py-2">Total</th>
                     <th className="py-2">Paid</th>
                     <th className="py-2">Due</th>
+                    <th className="py-2">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1291,6 +1313,50 @@ export default function P2PWorkbench() {
                       <td className="py-2">${invoice.total.toFixed(2)}</td>
                       <td className="py-2">${invoice.amountPaid.toFixed(2)}</td>
                       <td className="py-2">${invoice.amountDue.toFixed(2)}</td>
+                      <td className="py-2">
+                        {invoice.status === "pending_approval" && (
+                          <div className="flex gap-2">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              disabled={isSubmitting}
+                              onClick={async () => {
+                                setIsSubmitting(true);
+                                try {
+                                  await apiFetch(`/api/netsuite/vendor-bills/${invoice.id}/approve`, { method: "POST" });
+                                  toast({ title: "Vendor bill approved" });
+                                  await reloadAfterMutation();
+                                } catch (e) {
+                                  toast({ title: "Failed to approve", variant: "destructive" });
+                                } finally {
+                                  setIsSubmitting(false);
+                                }
+                              }}
+                            >
+                              Approve
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="destructive"
+                              disabled={isSubmitting}
+                              onClick={async () => {
+                                setIsSubmitting(true);
+                                try {
+                                  await apiFetch(`/api/netsuite/vendor-bills/${invoice.id}/reject`, { method: "POST" });
+                                  toast({ title: "Vendor bill rejected" });
+                                  await reloadAfterMutation();
+                                } catch (e) {
+                                  toast({ title: "Failed to reject", variant: "destructive" });
+                                } finally {
+                                  setIsSubmitting(false);
+                                }
+                              }}
+                            >
+                              Reject
+                            </Button>
+                          </div>
+                        )}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
