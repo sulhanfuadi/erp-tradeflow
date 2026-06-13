@@ -13,8 +13,6 @@ export type UserRole =
   | "inventory_manager"
   | "ar_analyst"
   | "purchasing_manager"
-  | "ap_analyst"
-  | "accounting_manager"
   | "warehouse_staff";
 
 export interface UserOverview {

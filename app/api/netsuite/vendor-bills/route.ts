@@ -27,8 +27,8 @@ export async function POST(request: NextRequest) {
     if (guard.errorResponse) return guard.errorResponse;
     const session = guard.session!;
 
-    if (session.role !== "ap_analyst" && session.role !== "admin") {
-      return NextResponse.json({ error: "Forbidden: Only A/P Analyst can create vendor bills" }, { status: 403 });
+    if (session.role !== "ar_analyst" && session.role !== "admin") {
+      return NextResponse.json({ error: "Forbidden: Only A/R Analyst can create vendor bills" }, { status: 403 });
     }
 
     const payload = await request.json();

@@ -14,6 +14,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys, invalidateAllRelatedQueries } from "@/lib/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -62,6 +63,7 @@ export default function ShippingManagement({
   trigger,
   userRole,
 }: ShippingManagementProps) {
+  const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"auto" | "manual" | "fulfillment">("auto");
 

@@ -21,6 +21,7 @@ import {
 } from "@/hooks/queries";
 import { useToast } from "@/hooks/use-toast";
 import type { StockAllocation } from "@/types";
+import { useAuth } from "@/contexts";
 
 interface WarehouseInventoryWorkbenchProps {
   warehouseId: string;
@@ -32,6 +33,8 @@ export default function WarehouseInventoryWorkbench({
   stockAllocations,
 }: WarehouseInventoryWorkbenchProps) {
   const { toast } = useToast();
+  const { user } = useAuth();
+  const isInventoryManager = user?.role === "inventory_manager" || user?.role === "admin";
   const { data: products = [] } = useProducts();
   const { data: warehouses = [] } = useWarehouses();
 
@@ -233,7 +236,7 @@ export default function WarehouseInventoryWorkbench({
             />
           </div>
           <div className="flex items-end">
-            <Button disabled={createAllocation.isPending} type="submit" className="w-full">
+            <Button disabled={createAllocation.isPending || !isInventoryManager} type="submit" className="w-full">
               Save Allocation
             </Button>
           </div>
@@ -311,7 +314,7 @@ export default function WarehouseInventoryWorkbench({
             />
           </div>
           <div className="md:col-span-4">
-            <Button disabled={createTransfer.isPending} type="submit" className="w-full md:w-auto">
+            <Button disabled={createTransfer.isPending || !isInventoryManager} type="submit" className="w-full md:w-auto">
               Create Transfer (Pending)
             </Button>
           </div>
@@ -347,7 +350,7 @@ export default function WarehouseInventoryWorkbench({
                             <Button
                               size="sm"
                               variant="outline"
-                              disabled={completeTransfer.isPending}
+                              disabled={completeTransfer.isPending || !isInventoryManager}
                               onClick={() => completeTransfer.mutate(transfer.id)}
                             >
                               Complete
@@ -355,7 +358,7 @@ export default function WarehouseInventoryWorkbench({
                             <Button
                               size="sm"
                               variant="destructive"
-                              disabled={cancelTransfer.isPending}
+                              disabled={cancelTransfer.isPending || !isInventoryManager}
                               onClick={() => cancelTransfer.mutate(transfer.id)}
                             >
                               Cancel
@@ -366,7 +369,7 @@ export default function WarehouseInventoryWorkbench({
                           <Button
                             size="sm"
                             variant="outline"
-                            disabled={reverseTransfer.isPending}
+                            disabled={reverseTransfer.isPending || !isInventoryManager}
                             onClick={() =>
                               reverseTransfer.mutate({
                                 id: transfer.id,
@@ -441,7 +444,7 @@ export default function WarehouseInventoryWorkbench({
             />
           </div>
           <div className="md:col-span-4">
-            <Button disabled={createIssue.isPending} type="submit" className="w-full md:w-auto">
+            <Button disabled={createIssue.isPending || !isInventoryManager} type="submit" className="w-full md:w-auto">
               Post Stock Issue
             </Button>
           </div>
@@ -472,7 +475,7 @@ export default function WarehouseInventoryWorkbench({
                       <Button
                         size="sm"
                         variant="outline"
-                        disabled={reverseIssue.isPending}
+                        disabled={reverseIssue.isPending || !isInventoryManager}
                         onClick={() =>
                           reverseIssue.mutate({
                             id: issue.id,

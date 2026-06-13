@@ -10,8 +10,6 @@ const userRoleEnum = z.enum([
   "inventory_manager",
   "ar_analyst",
   "purchasing_manager",
-  "ap_analyst",
-  "accounting_manager",
   "warehouse_staff",
   "user",
   "admin",

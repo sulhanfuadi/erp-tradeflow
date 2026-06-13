@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { invalidateAllRelatedQueries } from "@/lib/react-query";
+import { useAuth } from "@/contexts";
 import {
   Card,
   CardContent,
@@ -122,6 +123,11 @@ async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
 export default function P2PWorkbench() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
+  
+  const isInventoryManager = user?.role === "inventory_manager" || user?.role === "admin";
+  const isArAnalyst = user?.role === "ar_analyst" || user?.role === "admin";
+  const isPurchasingManager = user?.role === "purchasing_manager" || user?.role === "admin";
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -814,7 +820,7 @@ export default function P2PWorkbench() {
                 />
               </div>
 
-              <Button disabled={isSubmitting} type="submit" className="w-full">
+              <Button disabled={isSubmitting || !isPurchasingManager} type="submit" className="w-full">
                 Create Purchase Order
               </Button>
             </form>
@@ -919,7 +925,7 @@ export default function P2PWorkbench() {
                 />
               </div>
 
-              <Button disabled={isSubmitting} type="submit" className="w-full">
+              <Button disabled={isSubmitting || !isInventoryManager} type="submit" className="w-full">
                 Post Item Receipt
               </Button>
             </form>
@@ -1056,7 +1062,7 @@ export default function P2PWorkbench() {
                 />
               </div>
 
-              <Button disabled={isSubmitting} type="submit" className="w-full">
+              <Button disabled={isSubmitting || !isArAnalyst} type="submit" className="w-full">
                 Create Vendor Bill
               </Button>
             </form>
@@ -1124,7 +1130,7 @@ export default function P2PWorkbench() {
             </div>
 
             <div className="md:col-span-4">
-              <Button disabled={isSubmitting} type="submit">
+              <Button disabled={isSubmitting || !isArAnalyst} type="submit">
                 Record Payment
               </Button>
             </div>
@@ -1173,7 +1179,7 @@ export default function P2PWorkbench() {
                     </td>
                     <td className="py-2">
                       <div className="flex gap-2">
-                        {purchaseOrder.status === "draft" && (
+                        {purchaseOrder.status === "draft" && isInventoryManager && (
                           <>
                             <Button
                               size="sm"
@@ -1265,7 +1271,7 @@ export default function P2PWorkbench() {
                           <Button
                             size="sm"
                             variant="outline"
-                            disabled={isSubmitting}
+                            disabled={isSubmitting || !isInventoryManager}
                             onClick={() => reverseGoodsReceipt(receipt.id)}
                           >
                             Reverse
@@ -1314,7 +1320,7 @@ export default function P2PWorkbench() {
                       <td className="py-2">${invoice.amountPaid.toFixed(2)}</td>
                       <td className="py-2">${invoice.amountDue.toFixed(2)}</td>
                       <td className="py-2">
-                        {invoice.status === "pending_approval" && (
+                        {invoice.status === "pending_approval" && isArAnalyst && (
                           <div className="flex gap-2">
                             <Button
                               size="sm"

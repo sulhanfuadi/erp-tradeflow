@@ -13,8 +13,8 @@ export async function POST(
     if (guard.errorResponse) return guard.errorResponse;
     const session = guard.session!;
 
-    if (session.role !== "accounting_manager" && session.role !== "admin") {
-      return NextResponse.json({ error: "Forbidden: Only Accounting Manager can reject vendor bills" }, { status: 403 });
+    if (session.role !== "ar_analyst" && session.role !== "admin") {
+      return NextResponse.json({ error: "Forbidden: Only A/R Analyst can reject vendor bills" }, { status: 403 });
     }
 
     const { id } = await params;
