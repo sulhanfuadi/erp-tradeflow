@@ -66,14 +66,14 @@ export type SupplierForHome = {
  * Uses the same cache key and transform as GET /api/products so Redis is shared.
  */
 export async function getProductsForUser(userId: string): Promise<ProductForHome[]> {
-  const cacheKey = cacheKeys.products.list({ userId });
+  const cacheKey = cacheKeys.products.list({ all: true });
   const cached = await getCache<ProductForHome[]>(cacheKey);
   if (cached) {
     return cached;
   }
 
   const products = await prisma.product.findMany({
-    where: mergeProductListWhere({ userId }),
+    where: mergeProductListWhere({}),
     orderBy: { createdAt: "desc" },
   });
 

@@ -70,7 +70,7 @@ export type OrderForPage = {
 export async function getOrdersForUser(
   userId: string
 ): Promise<OrderForPage[]> {
-  const cacheKey = cacheKeys.orders.list({ userId });
+  const cacheKey = cacheKeys.orders.list({ all: true });
   const cached = await getCache<OrderForPage[]>(cacheKey);
   if (cached) {
     return cached;

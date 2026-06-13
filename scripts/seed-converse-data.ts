@@ -114,7 +114,7 @@ async function main() {
   // --- 7. O2C: SALES ORDERS ---
   console.log("Creating O2C Sales Orders...");
   // Order 1: Pending Approval
-  const o1Prod = dbProducts[1]; // Chuck 70
+  const o1Prod = dbProducts[1]!; // Chuck 70
   const o1Qty = 5;
   const order1 = await prisma.order.create({
     data: {
@@ -141,7 +141,7 @@ async function main() {
   });
 
   // Order 2: Completed
-  const o2Prod = dbProducts[0]; // Chuck Taylor
+  const o2Prod = dbProducts[0]!; // Chuck Taylor
   const o2Qty = 2;
   const order2 = await prisma.order.create({
     data: {
@@ -201,7 +201,7 @@ async function main() {
 
   // --- 8. P2P: PURCHASE ORDERS ---
   console.log("Creating P2P Purchase Orders...");
-  const poProd = dbProducts[2]; // Run Star Hike
+  const poProd = dbProducts[2]!; // Run Star Hike
   await prisma.purchaseOrder.create({
     data: {
       poNumber: "PO-CONV-001",
@@ -218,7 +218,7 @@ async function main() {
           productId: poProd.id,
           productName: poProd.name,
           sku: poProd.sku,
-          quantity: 20n,
+          quantity: BigInt(20),
           unitCost: poProd.price * 0.5, // vendor cost is half of selling price
           subtotal: (poProd.price * 0.5) * 20
         }
