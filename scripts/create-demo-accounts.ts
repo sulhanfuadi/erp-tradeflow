@@ -38,6 +38,14 @@ const DEMO_USERS = [
     role: "supplier",
     googleId: "demo-supplier",
   },
+  { email: "salesrep@demo.com", name: "Sales Representative", username: "salesrep", role: "sales_representative", googleId: "demo-salesrep" },
+  { email: "salesmgr@demo.com", name: "Sales Manager", username: "salesmgr", role: "sales_manager", googleId: "demo-salesmgr" },
+  { email: "invmgr@demo.com", name: "Inventory Manager", username: "invmgr", role: "inventory_manager", googleId: "demo-invmgr" },
+  { email: "aranalyst@demo.com", name: "A/R Analyst", username: "aranalyst", role: "ar_analyst", googleId: "demo-aranalyst" },
+  { email: "purchmgr@demo.com", name: "Purchasing Manager", username: "purchmgr", role: "purchasing_manager", googleId: "demo-purchmgr" },
+  { email: "apanalyst@demo.com", name: "A/P Analyst", username: "apanalyst", role: "ap_analyst", googleId: "demo-apanalyst" },
+  { email: "acctmgr@demo.com", name: "Accounting Manager", username: "acctmgr", role: "accounting_manager", googleId: "demo-acctmgr" },
+  { email: "whstaff@demo.com", name: "Warehouse Staff", username: "whstaff", role: "warehouse_staff", googleId: "demo-whstaff" },
 ] as const;
 
 async function main() {

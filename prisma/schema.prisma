@@ -68,7 +68,7 @@ model Order {
   orderNumber       String      @unique // Unique order number (e.g., ORD-2024-001)
   userId            String      @db.ObjectId // User who created the order (admin/warehouse user)
   clientId          String?     @db.ObjectId // Client who placed the order (optional for now, will be used when client portal is implemented)
-  status            String      @default("pending") // Order status: pending, confirmed, processing, shipped, delivered, cancelled
+  status            String      @default("pending_approval") // Order status: pending_approval, approved, rejected, pending, confirmed, processing, shipped, delivered, cancelled
   paymentStatus     String      @default("unpaid") // Payment status: unpaid, paid, refunded, partial
   subtotal          Float       @default(0) // Order subtotal (before tax and shipping)
   tax               Float? // Tax amount (optional)
@@ -119,7 +119,7 @@ model PurchaseOrder {
   supplierId     String              @db.ObjectId // Supplier reference (master supplier entity)
   warehouseId    String              @db.ObjectId // Target warehouse for receipt
   userId         String              @db.ObjectId // User who created the PO
-  status         String              @default("draft") // draft, posted, completed, cancelled
+  status         String              @default("draft") // draft, reviewed, posted, completed, cancelled
   subtotal       Float               @default(0)
   tax            Float? // Optional tax amount
   total          Float               @default(0)
@@ -208,7 +208,7 @@ model APInvoice {
   goodsReceiptId  String?        @db.ObjectId
   supplierId      String         @db.ObjectId
   userId          String         @db.ObjectId // User who created AP invoice
-  status          String         @default("unpaid") // draft, unpaid, partial, paid, cancelled
+  status          String         @default("pending_approval") // pending_approval, approved, draft, unpaid, partial, paid, cancelled
   subtotal        Float          @default(0)
   tax             Float?
   total           Float          @default(0)
@@ -237,7 +237,7 @@ model ItemFulfillment {
   fulfillmentNumber String              @unique // IF-YYYYMMDD-HHMMSS-XXXX
   orderId         String                @db.ObjectId
   userId          String                @db.ObjectId
-  status          String                @default("fulfilled") // fulfilled, reversed
+  status          String                @default("picked") // picked, packed, shipped, fulfilled, reversed
   fulfilledAt     DateTime              @default(now()) @db.Date
   notes           String?
   createdAt       DateTime              @default(now()) @db.Date
@@ -454,8 +454,8 @@ model User {
   username         String?   @unique
   googleId         String? // Google OAuth ID (uniqueness enforced in app logic; @unique removed to avoid non-sparse index blocking null values)
   image            String? // User profile image URL (from Google OAuth or other sources)
-  // Role for access control: user, admin, supplier, client, retailer. Optional for backward compatibility; treat null as "user".
-  role             String? // user | admin | supplier | client | retailer
+  // Role for access control: sales_representative, sales_manager, inventory_manager, ar_analyst, purchasing_manager, ap_analyst, accounting_manager, warehouse_staff, admin, user, supplier, client, retailer. Optional for backward compatibility; treat null as "user".
+  role             String? // sales_representative | sales_manager | inventory_manager | ar_analyst | purchasing_manager | ap_analyst | accounting_manager | warehouse_staff | admin | user | supplier | client | retailer
   // Email notification preferences
   emailPreferences Json? // Email notification preferences stored as JSON
   // Structure: {
