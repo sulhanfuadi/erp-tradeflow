@@ -156,16 +156,8 @@ export async function createOrder(data: CreateOrderInput, userId: string) {
   return order;
 }
 
-/**
- * Get orders by user ID
- * Fetches all orders created by a specific user
- *
- * @param userId - User ID
- * @returns Promise<Order[]> - Array of orders
- */
 export async function getOrdersByUser(userId: string) {
   return prisma.order.findMany({
-    where: { userId },
     include: {
       items: {
         include: {

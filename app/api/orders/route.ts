@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
       ? cacheKeys.orders.list({ userId, byClient: true })
       : isSupplier
         ? cacheKeys.orders.list({ supplierId: supplier!.id })
-        : cacheKeys.orders.list({ userId });
+        : cacheKeys.orders.list({ all: true });
 
     // Check cache first
     const cachedOrders = await getCache<unknown[]>(cacheKey);

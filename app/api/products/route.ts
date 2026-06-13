@@ -69,8 +69,9 @@ export async function GET(request: NextRequest) {
       });
       productWhere = { supplierId: supplier.id };
     } else {
-      cacheKey = cacheKeys.products.list({ userId: session.id });
-      productWhere = { userId: session.id };
+      // For internal roles (admin, sales rep, etc.), show all products in the ERP
+      cacheKey = cacheKeys.products.list({ all: true });
+      productWhere = {};
     }
 
     // Try to get from cache first
