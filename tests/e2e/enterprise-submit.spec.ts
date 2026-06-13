@@ -152,12 +152,20 @@ async function captureScreenshot(
   const relativePath = `docs/evidence/auto/${scenarioId}.png`;
   const fullPath = path.join(process.cwd(), relativePath);
 
+  // Navigate and wait for the initial HTML to be parsed
   await page.goto(route, { waitUntil: "domcontentloaded" });
-  
-  // Wait for React to finish rendering and data to load
+
+  // Wait for all in-flight network requests to settle (forms, tables, charts)
   await page.waitForLoadState("networkidle").catch(() => {});
-  await page.waitForSelector(".animate-pulse", { state: "hidden", timeout: 15000 }).catch(() => {});
-  await page.waitForTimeout(1000); // Give chart animations a second to settle
+
+  // Aggressively wait for ALL skeleton loaders to disappear (up to 20s)
+  await page.waitForFunction(
+    () => document.querySelectorAll(".animate-pulse").length === 0,
+    { timeout: 20000 },
+  ).catch(() => {});
+
+  // Extra settle time for animations and chart renders
+  await page.waitForTimeout(1500);
 
   await page.screenshot({ path: fullPath, fullPage: true });
 
@@ -320,6 +328,7 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       throw error;
     } finally {
       try {
+        // TS-01: Sales Order List — shows created Sales Orders (O2C: Receive & Create SO)
         evidence.artifactPath = await captureScreenshot(page, "TS-01", "/orders");
       } catch (error) {
         evidence.notes = [
@@ -402,6 +411,7 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       throw error;
     } finally {
       try {
+        // TS-02: Sales Order Detail — shows fulfillment status (O2C: Fulfill)
         evidence.artifactPath = await captureScreenshot(
           page,
           "TS-02",
@@ -473,6 +483,7 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       throw error;
     } finally {
       try {
+        // TS-03: Invoice Detail — shows generated Customer Invoice (O2C: Invoice Customer)
         evidence.artifactPath = await captureScreenshot(
           page,
           "TS-03",
@@ -557,6 +568,7 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       throw error;
     } finally {
       try {
+        // TS-04: Invoice Detail after Payment — shows paid status (O2C: Receive Customer Payment)
         evidence.artifactPath = await captureScreenshot(
           page,
           "TS-04",
@@ -637,6 +649,7 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       throw error;
     } finally {
       try {
+        // TS-05: Procurement Workbench — shows P2P form with Purchase Order flow
         evidence.artifactPath = await captureScreenshot(page, "TS-05", "/procurement");
       } catch (error) {
         evidence.notes = [
@@ -704,6 +717,7 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       throw error;
     } finally {
       try {
+        // TS-06: Procurement Workbench after Item Receipt — P2P: Receive Items
         evidence.artifactPath = await captureScreenshot(page, "TS-06", "/procurement");
       } catch (error) {
         evidence.notes = [
@@ -774,6 +788,7 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       throw error;
     } finally {
       try {
+        // TS-07: Procurement Workbench after Vendor Bill — P2P: Enter Vendor Bill
         evidence.artifactPath = await captureScreenshot(page, "TS-07", "/procurement");
       } catch (error) {
         evidence.notes = [
@@ -845,6 +860,7 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       throw error;
     } finally {
       try {
+        // TS-08: Procurement Workbench after Bill Payment — P2P: Pay Bill
         evidence.artifactPath = await captureScreenshot(page, "TS-08", "/procurement");
       } catch (error) {
         evidence.notes = [
@@ -938,6 +954,7 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       throw error;
     } finally {
       try {
+        // TS-09: Warehouse Detail — Inventory Transfer (from → to warehouse)
         evidence.artifactPath = await captureScreenshot(
           page,
           "TS-09",
@@ -1012,6 +1029,7 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       throw error;
     } finally {
       try {
+        // TS-10: Warehouse Detail — Inventory Issue / Adjust (reverse issue)
         evidence.artifactPath = await captureScreenshot(
           page,
           "TS-10",
