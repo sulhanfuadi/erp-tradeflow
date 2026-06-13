@@ -25,16 +25,21 @@ Untuk menjamin alur bisnis yang sesuai spesifikasi, sistem hanya mengakomodasi E
 
 Alur **O2C** telah dipecah secara ketat agar mencerminkan proses riil di lapangan.
 
-1. **Create Sales Order (Oleh Sales Rep)**
-2. **Approve Sales Order (Oleh Sales Manager)**
-3. **Item Fulfillment (Oleh Inventory Manager)**
+1. **Create Sales Order (Oleh Sales Rep) & Approve (Oleh Sales Manager)**
+   Sistem memastikan *oversell prevention* dan otorisasi *approval* ketat sebelum barang bisa diproses.
+   > ![Create Sales Order](docs/evidence/auto/TS-01.png)
+
+2. **Item Fulfillment (Oleh Inventory Manager)**
    Proses fulfillment dilakukan dalam 3 tahap presisi (Pick -> Pack -> Ship).
-4. **Invoice & Payment (Oleh A/R Analyst)**
+   > ![Item Fulfillment](docs/evidence/auto/TS-02.png)
 
-### O2C Screenshots
+3. **Customer Invoice (Oleh A/R Analyst)**
+   Penagihan hanya digenerate dari *quantity* yang sudah di-*fulfill*.
+   > ![Customer Invoice](docs/evidence/auto/TS-03.png)
 
-> **Create Sales Order**
-> ![Create Sales Order](/docs/screenshots/o2c_create_sales_order.png)
+4. **Customer Payment (Oleh A/R Analyst)**
+   Mencatat pembayaran *partial* maupun *full*.
+   > ![Customer Payment](docs/evidence/auto/TS-04.png)
 
 ---
 
@@ -43,13 +48,20 @@ Alur **O2C** telah dipecah secara ketat agar mencerminkan proses riil di lapanga
 Alur **P2P** mengikat otorisasi *Role-Based Access Control* (RBAC) pada antarmuka *Procurement Workbench*.
 
 1. **Purchase Order (Oleh Purchasing Manager)**
+   Proses pembuatan PO untuk vendor.
+   > ![Purchase Order](docs/evidence/auto/TS-05.png)
+
 2. **Item Receipt (Oleh Inventory Manager)**
-3. **Vendor Bill & Payment (Oleh A/R Analyst)**
+   Penerimaan barang dari vendor yang secara otomatis menambah stok gudang.
+   > ![Item Receipt](docs/evidence/auto/TS-06.png)
 
-### P2P Screenshots
+3. **Vendor Bill (Oleh A/R Analyst)**
+   Pembuatan *Vendor Bill* berdasarkan PO dan *Item Receipt* yang disahkan.
+   > ![Vendor Bill](docs/evidence/auto/TS-07.png)
 
-> **P2P Workbench (Role-Based Form)**
-> ![P2P Workbench](/docs/screenshots/p2p_workbench.png)
+4. **Bill Payment (Oleh A/R Analyst)**
+   Pembayaran ke vendor berdasarkan *Vendor Bill*.
+   > ![Bill Payment](docs/evidence/auto/TS-08.png)
 
 ---
 
@@ -57,13 +69,21 @@ Alur **P2P** mengikat otorisasi *Role-Based Access Control* (RBAC) pada antarmuk
 
 Pengaturan *Inventory* juga dilimitasi secara ketat.
 
-1. **Stock Allocation / Transfer (Oleh Inventory Manager)**
-2. **Stock Issue / Adjustment (Oleh Inventory Manager)**
+1. **Inventory Transfer (Oleh Inventory Manager)**
+   Mentransfer stok antar gudang dari *pending* ke *completed*.
+   > ![Inventory Transfer](docs/evidence/auto/TS-09.png)
 
-### Inventory Screenshots
+2. **Inventory Issue (Oleh Inventory Manager)**
+   Pengeluaran barang secara manual dengan mekanisme pembatalan (*reverse issue*).
+   > ![Inventory Issue](docs/evidence/auto/TS-10.png)
 
-> **Warehouse Inventory Workbench**
-> ![Warehouse Inventory Workbench](/docs/screenshots/inventory_workbench.png)
+3. **Inventory Ledger Integrity**
+   Memastikan pencatatan jurnal mutasi inventori tetap sinkron dan utuh.
+   > ![Inventory Ledger Integrity](docs/evidence/auto/TS-11.png)
+
+4. **Legacy Compatibility Regression**
+   Menjaga sistem agar tidak regresi terhadap kompabilitas API terdahulu.
+   > ![Legacy Compatibility Regression](docs/evidence/auto/TS-12.png)
 
 ---
 
@@ -74,7 +94,7 @@ Aplikasi dibangun menggunakan infrastruktur modern dengan kualitas setara produk
 - **Stack:** `Next.js 16`, `React 19`, `Prisma`, `MongoDB`, `Tailwind CSS`.
 - **Testing Coverage:**
   - **Unit Testing:** `Vitest` (324 test lolos sempurna, menguji validasi, limitasi PO, dll).
-  - **E2E Testing:** `Playwright` (Simulasi login multi-peran dan navigasi flow otomatis).
+  - **E2E Testing:** `Playwright` (Simulasi login multi-peran dan navigasi flow otomatis untuk 12 *Test Scenarios* O2C, P2P, dan Inventory).
 - **Code Quality:** Terverifikasi bebas *type error* (TypeScript ketat) dan lulus *Linting*.
 
 ---
