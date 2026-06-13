@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
 
     const isSupplier = session.role === "supplier";
     let cacheKey: string;
-    let productWhere: { userId: string } | { supplierId: string };
+    let productWhere: any;
 
     if (isSupplier) {
       const supplier = await getSupplierByUserId(session.id);
