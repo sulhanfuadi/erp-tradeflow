@@ -24,7 +24,7 @@ export const createInvoiceSchema = z.object({
  */
 export const updateInvoiceSchema = z.object({
   id: z.string().min(1, "Invoice ID is required"),
-  status: z.enum(["draft", "sent", "paid", "overdue", "cancelled"]).optional(),
+  status: z.enum(["pending_approval", "draft", "sent", "paid", "overdue", "cancelled"]).optional(),
   amountPaid: z.number().min(0, "Amount paid cannot be negative").optional(),
   tax: z.number().min(0, "Tax cannot be negative").optional(),
   shipping: z.number().min(0, "Shipping cannot be negative").optional(),

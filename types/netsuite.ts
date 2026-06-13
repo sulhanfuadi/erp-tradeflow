@@ -1,4 +1,6 @@
 export type NetSuiteSalesOrderStatus =
+  | "Pending Approval"
+  | "Rejected"
   | "Pending Fulfillment"
   | "Partially Fulfilled"
   | "Pending Billing"
@@ -12,7 +14,7 @@ export type NetSuiteVendorBillStatus =
   | "Paid In Full"
   | "Voided";
 
-export type NetSuiteFulfillmentStatus = "Fulfilled" | "Partially Fulfilled";
+export type NetSuiteFulfillmentStatus = "Picked" | "Packed" | "Shipped" | "Fulfilled" | "Partially Fulfilled";
 
 export interface ItemFulfillmentItem {
   id: string;
@@ -30,7 +32,7 @@ export interface ItemFulfillment {
   fulfillmentNumber: string;
   orderId: string;
   userId: string;
-  status: "fulfilled" | "reversed";
+  status: "picked" | "packed" | "shipped" | "fulfilled" | "reversed";
   fulfilledAt: string;
   notes?: string | null;
   createdAt: string;

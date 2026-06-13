@@ -6,12 +6,14 @@
  * Order status types
  */
 export type OrderStatus =
+  | "pending_approval"
   | "pending"
   | "confirmed"
   | "processing"
   | "shipped"
   | "delivered"
-  | "cancelled";
+  | "cancelled"
+  | "rejected";
 
 /**
  * Payment status types

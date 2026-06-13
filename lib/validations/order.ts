@@ -71,12 +71,14 @@ export const createOrderSchema = z.object({
 export const updateOrderSchema = z.object({
   status: z
     .enum([
+      "pending_approval",
       "pending",
       "confirmed",
       "processing",
       "shipped",
       "delivered",
       "cancelled",
+      "rejected",
     ])
     .optional(),
   paymentStatus: z.enum(["unpaid", "paid", "refunded", "partial"]).optional(),

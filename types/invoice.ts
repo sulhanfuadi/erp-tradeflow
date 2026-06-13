@@ -8,6 +8,7 @@ import type { BillingAddress } from "./order";
  * Invoice status types
  */
 export type InvoiceStatus =
+  | "pending_approval"
   | "draft"
   | "sent"
   | "paid"
