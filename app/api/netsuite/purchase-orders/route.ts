@@ -35,6 +35,11 @@ export async function POST(request: NextRequest) {
   try {
     const guard = await requireNetSuiteSession(request);
     if (guard.errorResponse) return guard.errorResponse;
+    const session = guard.session!;
+
+    if (session.role !== "purchasing_manager" && session.role !== "admin") {
+      return NextResponse.json({ error: "Forbidden: Only Purchasing Manager can create purchase orders" }, { status: 403 });
+    }
 
     const payload = await request.json();
     const validation = createPurchaseOrderSchema.safeParse(payload);

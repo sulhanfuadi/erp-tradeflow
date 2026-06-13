@@ -49,6 +49,8 @@ export function mapOrderToNetSuiteStatus(order: {
   invoice?: { id: string } | null;
 }): NetSuiteSalesOrderStatus {
   if (order.status === "cancelled") return "Cancelled";
+  if (order.status === "pending_approval") return "Pending Approval";
+  if (order.status === "rejected") return "Rejected";
 
   const totalQty = (order.items ?? []).reduce(
     (sum, item) => sum + Number(item.quantity ?? 0),
@@ -209,7 +211,7 @@ export async function createItemFulfillment(
         fulfillmentNumber,
         orderId: order.id,
         userId,
-        status: "fulfilled",
+        status: "picked",
         fulfilledAt: new Date(),
         notes: input.notes?.trim() || null,
         createdAt: new Date(),

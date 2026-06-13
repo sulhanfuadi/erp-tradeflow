@@ -676,7 +676,7 @@ export async function createAPInvoice(
         goodsReceiptId: data.goodsReceiptId?.trim() || null,
         supplierId: data.supplierId,
         userId,
-        status: "unpaid",
+        status: "pending_approval",
         subtotal: data.subtotal,
         tax: tax > 0 ? tax : null,
         total,

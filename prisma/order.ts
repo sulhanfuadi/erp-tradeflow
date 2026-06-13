@@ -106,7 +106,7 @@ export async function createOrder(data: CreateOrderInput, userId: string) {
       orderNumber,
       userId,
       clientId: data.clientId || null,
-      status: "pending",
+      status: "pending_approval",
       paymentStatus: "unpaid",
       subtotal,
       tax: tax > 0 ? tax : null,
@@ -460,10 +460,11 @@ export async function updateOrder(
   orderId: string,
   data: UpdateOrderInput,
   userId: string,
+  options?: { bypassAuth?: boolean }
 ) {
   // Check if order exists and belongs to user
   const existingOrder = await prisma.order.findFirst({
-    where: {
+    where: options?.bypassAuth ? { id: orderId } : {
       id: orderId,
       userId,
     },
@@ -532,7 +533,7 @@ export async function updateOrder(
   const newPaymentStatus = updateData.paymentStatus || previousPaymentStatus;
 
   // Determine status categories
-  const wasPending = previousStatus === "pending";
+  const wasPending = previousStatus === "pending" || previousStatus === "pending_approval";
   const wasConfirmedOrPaid =
     previousStatus === "confirmed" ||
     previousStatus === "processing" ||
@@ -736,7 +737,7 @@ export async function cancelOrder(orderId: string, userId: string) {
   }
 
   // Handle stock based on previous order status
-  const wasPending = orderWithItems.status === "pending";
+  const wasPending = orderWithItems.status === "pending" || orderWithItems.status === "pending_approval";
   const wasConfirmedOrPaid =
     orderWithItems.status === "confirmed" ||
     orderWithItems.status === "processing" ||
