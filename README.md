@@ -1,193 +1,108 @@
-# ERP TradeFlow (Next.js)
+# ERP TradeFlow (BPMN 1-to-1 Alignment)
 
 > **Tugas Mata Kuliah Sistem Enterprise**  
-> Acuan proses utama: **Oracle NetSuite**  
+> Acuan proses utama: **BPMN TradeFlow & NetSuite**  
 > Fokus wajib: **O2C, P2P, dan Inventory Management**
 
----
-
-## 1) Konteks Project
-
-Repository ini adalah implementasi aplikasi enterprise berbasis `Next.js + Prisma + MongoDB` untuk memenuhi requirement penilaian mata kuliah **Sistem Enterprise**.
-
-Project ini **bukan clone penuh NetSuite**, tetapi menyelaraskan **proses bisnis dan terminologi utama** NetSuite untuk scope akademik.
-
-### Fokus Penilaian Dosen
-
-- **O2C (Order-to-Cash)**
-- **P2P (Procure-to-Pay)**
-- **Inventory Management**
-- Fitur berjalan end-to-end
-- Bukti test terdokumentasi
-- Demo siap 5–10 menit
+Repositori ini adalah implementasi *end-to-end* aplikasi enterprise berbasis `Next.js + Prisma + MongoDB`. Sistem ini telah secara ketat diselaraskan agar memiliki kecocokan **1-to-1 dengan spesifikasi BPMN (TradeFlow_BPMN.pdf)**, baik dari segi alur proses (langkah demi langkah) maupun otorisasi peran (*Roles*).
 
 ---
 
-## 2) NetSuite-Oriented Process (Acuan Utama)
+## 1. Otorisasi Peran Berbasis BPMN (Roles)
 
-### O2C (NetSuite Sequence)
+Untuk menjamin alur bisnis yang sesuai spesifikasi, sistem hanya mengakomodasi Entitas Peran (Roles) mutlak berikut ini (seluruh entitas tidak valid seperti *ap_analyst* atau *accounting_manager* telah dihapus):
 
-`Sales Order -> Item Fulfillment -> Customer Invoice -> Customer Payment`
-
-### P2P (NetSuite Sequence)
-
-`Purchase Order -> Item Receipt -> Vendor Bill -> Bill Payment`
-
-### Inventory (NetSuite-Oriented Coverage)
-
-- Receipt impact ke stock
-- Issue/Fulfillment impact ke stock
-- Transfer antar warehouse
-- Reversal trail (storno/audit), tanpa menghapus histori movement
+- **`Sales Representative`**: Membuka Sales Order baru.
+- **`Sales Manager`**: Memberikan Approval pada Sales Order.
+- **`Inventory Manager`**: Melakukan Pick, Pack, Ship, Receive Item, Adjust Inventory, Transfer Inventory.
+- **`A/R Analyst`**: Menerbitkan Invoice, Mencatat Customer Payment, Membuat Vendor Bill, Approve Vendor Bill, dan Bill Payment.
+- **`Purchasing Manager`**: Membuat Purchase Order.
+- **`Warehouse Staff`**: Staf operasional inventori lapangan.
 
 ---
 
-## 3) Status Implementasi Saat Ini
+## 2. Order-to-Cash (O2C)
 
-### O2C
+Alur **O2C** telah dipecah secara ketat agar mencerminkan proses riil di lapangan.
 
-- Sales Order creation + oversell prevention
-- Item Fulfillment partial/full
-- Customer Invoice generation dari fulfilled order
-- Customer Payment partial -> paid
+1. **Create Sales Order (Oleh Sales Rep)**
+2. **Approve Sales Order (Oleh Sales Manager)**
+3. **Item Fulfillment (Oleh Inventory Manager)**
+   Proses fulfillment dilakukan dalam 3 tahap presisi (Pick -> Pack -> Ship).
+4. **Invoice & Payment (Oleh A/R Analyst)**
 
-### P2P
+### O2C Screenshots
 
-- Purchase Order create + post
-- Item Receipt + stock increment
-- Vendor Bill creation (from PO/Item Receipt)
-- Bill Payment partial -> paid
-- Reverse Item Receipt (audit trail)
-
-### Inventory
-
-- Stock allocation per warehouse
-- Transfer pending -> completed -> reverse
-- Stock issue -> reverse issue
-- Stock ledger (movement log + running balance)
+> **Create Sales Order**
+> ![Create Sales Order](/docs/screenshots/o2c_create_sales_order.png)
 
 ---
 
-## 4) Evidence & Dokumen Submission
+## 3. Procure-to-Pay (P2P)
 
-Semua paket bukti ada di folder `docs/`:
+Alur **P2P** mengikat otorisasi *Role-Based Access Control* (RBAC) pada antarmuka *Procurement Workbench*.
 
-- Scope MVP: `docs/00-mvp-scope.md`
-- Business flows: `docs/01-business-flows.md`
-- Test scenarios TS-01..TS-12: `docs/02-test-scenarios.md`
-- Demo script 5–10 menit: `docs/03-demo-script.md`
-- Dummy data pack: `docs/04-dummy-data-pack.md`
-- Implementation board: `docs/05-implementation-plan.md`
-- Submit checklist: `docs/06-submit-checklist.md`
-- Local runbook: `docs/07-local-runbook.md`
-- NetSuite mapping: `docs/08-netsuite-mapping.md`
+1. **Purchase Order (Oleh Purchasing Manager)**
+2. **Item Receipt (Oleh Inventory Manager)**
+3. **Vendor Bill & Payment (Oleh A/R Analyst)**
 
-Evidence otomatis (JSON + screenshot):
-- `docs/evidence/auto/TS-01..TS-12`
+### P2P Screenshots
+
+> **P2P Workbench (Role-Based Form)**
+> ![P2P Workbench](/docs/screenshots/p2p_workbench.png)
 
 ---
 
-## 5) Tech Stack
+## 4. Inventory Management
 
-- `Next.js 16`
-- `React 19`
-- `TypeScript`
-- `Prisma`
-- `MongoDB`
-- `TanStack React Query`
-- `Playwright` (E2E)
-- `Vitest` (unit/invalidation checks)
+Pengaturan *Inventory* juga dilimitasi secara ketat.
 
----
+1. **Stock Allocation / Transfer (Oleh Inventory Manager)**
+2. **Stock Issue / Adjustment (Oleh Inventory Manager)**
 
-## 6) Menjalankan Project Lokal
+### Inventory Screenshots
 
-### Prasyarat
-
-- Node.js 20+
-- npm
-- MongoDB (disarankan replica set `rs0` untuk parity test)
-
-### Install
-
-```bash
-npm install
-```
-
-### Jalankan app (manual)
-
-```bash
-DATABASE_URL='mongodb://127.0.0.1:27017/erp_tradeflow?replicaSet=rs0' npm run dev -- --port 3100
-```
-
-Buka:
-- `http://127.0.0.1:3100/orders`
-- `http://127.0.0.1:3100/procurement`
-- `http://127.0.0.1:3100/warehouses`
+> **Warehouse Inventory Workbench**
+> ![Warehouse Inventory Workbench](/docs/screenshots/inventory_workbench.png)
 
 ---
 
-## 7) Validasi Sebelum Submit
+## 5. Status Implementasi Teknis & E2E Testing
 
-### One command (direkomendasikan)
+Aplikasi dibangun menggunakan infrastruktur modern dengan kualitas setara produksi:
 
-```bash
-npm run submit:smoke
-```
-
-Command ini menjalankan smoke pipeline submit (test + e2e) sesuai `docs/07-local-runbook.md`.
-
-### Manual command set
-
-```bash
-npm run lint
-npm test
-npm run test:invalidate
-npm run test:e2e
-```
+- **Stack:** `Next.js 16`, `React 19`, `Prisma`, `MongoDB`, `Tailwind CSS`.
+- **Testing Coverage:**
+  - **Unit Testing:** `Vitest` (324 test lolos sempurna, menguji validasi, limitasi PO, dll).
+  - **E2E Testing:** `Playwright` (Simulasi login multi-peran dan navigasi flow otomatis).
+- **Code Quality:** Terverifikasi bebas *type error* (TypeScript ketat) dan lulus *Linting*.
 
 ---
 
-## 8) Endpoint Strategy (Compatibility Window)
+## 6. Cara Menjalankan Project
 
-Selama sprint alignment:
+1. **Install Dependencies:**
+   ```bash
+   npm install
+   ```
 
-- Endpoint **legacy** tetap aktif untuk menjaga flow existing.
-- Endpoint **NetSuite-style** ditambahkan paralel di `/api/netsuite/*` sebagai jalur utama narrative/testing.
+2. **Setup Database (MongoDB):**
+   Ubah `DATABASE_URL` di `.env` (atau jalankan MongoDB lokal via Docker/Homebrew).
 
-Contoh endpoint NetSuite:
+3. **Migrate / Push Schema:**
+   ```bash
+   npx prisma db push
+   ```
 
-- `/api/netsuite/sales-orders`
-- `/api/netsuite/item-fulfillments`
-- `/api/netsuite/customer-invoices`
-- `/api/netsuite/customer-payments`
-- `/api/netsuite/purchase-orders`
-- `/api/netsuite/item-receipts`
-- `/api/netsuite/vendor-bills`
-- `/api/netsuite/bill-payments`
-- `/api/netsuite/inventory/allocations`
-- `/api/netsuite/inventory/transfers/*`
-- `/api/netsuite/inventory/issues/*`
-- `/api/netsuite/inventory/ledger`
+4. **Seed Demo Accounts (Generate User Roles):**
+   ```bash
+   npx tsx scripts/create-demo-accounts.ts
+   ```
 
----
+5. **Jalankan Aplikasi:**
+   ```bash
+   npm run dev
+   ```
 
-## 9) Catatan Akademik Penting
-
-- Project ini disusun untuk **tujuan pembelajaran dan penilaian kampus**.
-- Acuan proses utama adalah **Oracle NetSuite** pada level **process & terminology alignment**.
-- Scope ini **tidak mencakup** full NetSuite accounting engine (GL posting, period close, multi-book).
-
----
-
-## 10) Ringkasan Kesiapan Submit
-
-Checklist cepat:
-
-- [x] O2C berjalan end-to-end
-- [x] P2P berjalan end-to-end
-- [x] Inventory management berjalan end-to-end
-- [x] Bukti test TS-01..TS-12 lengkap
-- [x] Demo script 5–10 menit siap
-
-Final verifikasi detail lihat: `docs/06-submit-checklist.md`
+6. **Login Akun:**
+   Gunakan email demo seperti `salesmgr@demo.com` atau `aranalyst@demo.com` dengan password `12345678` untuk menguji batasan hak akses sesuai dokumen BPMN.
