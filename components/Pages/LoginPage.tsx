@@ -22,18 +22,15 @@ import { Shield, Loader2, Store, ShoppingBag, Users } from "lucide-react";
  * Main account: test@admin.com (full privileges). Run scripts/update-demo-user.ts --to admin once to migrate existing test@user.com to test@admin.com. Client/supplier for later.
  */
 const testAccounts = {
-  "guest-user": {
-    email: "test@admin.com",
-    password: "12345678",
-  },
-  "guest-supplier": {
-    email: "test@supplier.com",
-    password: "12345678",
-  },
-  "guest-client": {
-    email: "test@client.com",
-    password: "12345678",
-  },
+  "guest-user": { email: "test@admin.com", password: "12345678" },
+  "sales-rep": { email: "salesrep@demo.com", password: "12345678" },
+  "sales-mgr": { email: "salesmgr@demo.com", password: "12345678" },
+  "inv-mgr": { email: "invmgr@demo.com", password: "12345678" },
+  "ar-analyst": { email: "aranalyst@demo.com", password: "12345678" },
+  "purchasing-mgr": { email: "purchasingmgr@demo.com", password: "12345678" },
+  "warehouse": { email: "warehouse@demo.com", password: "12345678" },
+  "guest-supplier": { email: "test@supplier.com", password: "12345678" },
+  "guest-client": { email: "test@client.com", password: "12345678" },
 };
 
 /**
@@ -255,61 +252,62 @@ export default function LoginPage() {
                       <Shield className="h-5 w-5 text-sky-600 dark:text-sky-400" />
                     </div>
                     <h3 className="text-md font-semibold text-gray-900 dark:text-white">
-                      Admin
+                      System Admin
                     </h3>
                   </div>
                   <p className="text-sm text-gray-600 dark:text-white/70 leading-relaxed">
-                    Full access: products, orders, invoices, warehouses, admin
-                    panel. New user registration creates an admin account.
+                    Full access to all modules. Monitor system health, user roles, and global configurations.
                   </p>
                 </div>
 
-                {/* Client */}
+                {/* Sales */}
                 <div className="rounded-[20px] border border-emerald-400/30 dark:border-white/10 bg-gradient-to-br from-emerald-500/25 via-emerald-500/10 to-emerald-500/5 dark:from-white/5 dark:via-white/5 dark:to-white/5 backdrop-blur-sm shadow-[0_20px_60px_rgba(16,185,129,0.3)] dark:shadow-lg p-4 transition-all hover:shadow-[0_25px_70px_rgba(16,185,129,0.4)] hover:border-emerald-300/50 dark:hover:border-emerald-300/40">
                   <div className="flex items-center gap-3 mb-2">
                     <div className="rounded-xl border border-emerald-400/30 dark:border-emerald-400/20 bg-emerald-500/20 dark:bg-emerald-500/10 backdrop-blur-sm p-2">
                       <ShoppingBag className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
                     </div>
                     <h3 className="text-md font-semibold text-gray-900 dark:text-white">
-                      Client
+                      Order-to-Cash (O2C)
                     </h3>
                   </div>
                   <p className="text-sm text-gray-600 dark:text-white/70 leading-relaxed">
-                    Client portal: catalog, your orders, invoices, place order,
-                    pay with Stripe. Role set via script for showcase only.
+                    <b>Sales Rep:</b> Creates Sales Orders.
+                    <br />
+                    <b>Sales Manager:</b> Reviews & Approves Orders.
                   </p>
                 </div>
 
-                {/* Supplier */}
+                {/* Procurement */}
                 <div className="rounded-[20px] border border-amber-400/30 dark:border-white/10 bg-gradient-to-br from-amber-500/30 via-amber-500/15 to-amber-500/5 dark:from-white/5 dark:via-white/5 dark:to-white/5 backdrop-blur-sm shadow-[0_20px_60px_rgba(245,158,11,0.25)] dark:shadow-lg p-4 transition-all hover:shadow-[0_25px_70px_rgba(245,158,11,0.35)] hover:border-amber-300/60 dark:hover:border-amber-300/40">
                   <div className="flex items-center gap-3 mb-2">
                     <div className="rounded-xl border border-amber-400/30 dark:border-amber-400/20 bg-amber-500/20 dark:bg-amber-500/10 backdrop-blur-sm p-2">
                       <Store className="h-5 w-5 text-amber-600 dark:text-amber-400" />
                     </div>
                     <h3 className="text-md font-semibold text-gray-900 dark:text-white">
-                      Supplier
+                      Procure-to-Pay (P2P)
                     </h3>
                   </div>
                   <p className="text-sm text-gray-600 dark:text-white/70 leading-relaxed">
-                    Supplier portal: your products, orders, revenue, low stock.
-                    Role and supplier link set via script for showcase only.
+                    <b>Purchasing Manager:</b> Creates Purchase Orders.
+                    <br />
+                    <b>A/R Analyst:</b> Invoices, Bills, and Payments.
                   </p>
                 </div>
 
-                {/* New accounts & roles */}
+                {/* Inventory */}
                 <div className="rounded-[20px] border border-violet-400/30 dark:border-white/10 bg-gradient-to-br from-violet-500/25 via-violet-500/10 to-violet-500/5 dark:from-white/5 dark:via-white/5 dark:to-white/5 backdrop-blur-sm shadow-[0_20px_60px_rgba(139,92,246,0.35)] dark:shadow-lg p-4 transition-all hover:shadow-[0_25px_70px_rgba(139,92,246,0.45)] hover:border-violet-300/50 dark:hover:border-violet-300/40">
                   <div className="flex items-center gap-3 mb-2">
                     <div className="rounded-xl border border-violet-400/30 dark:border-violet-400/20 bg-violet-500/20 dark:bg-violet-500/10 backdrop-blur-sm p-2">
                       <Users className="h-5 w-5 text-violet-600 dark:text-violet-400" />
                     </div>
                     <h3 className="text-md font-semibold text-gray-900 dark:text-white">
-                      Accounts & Roles
+                      Inventory Management
                     </h3>
                   </div>
                   <p className="text-sm text-gray-600 dark:text-white/70 leading-relaxed">
-                    You cannot create client or supplier accounts at sign-up;
-                    those roles are applied in the DB via script for demo. As
-                    admin, use User Management to view or change user roles.
+                    <b>Inventory Manager:</b> Fulfillments & Adjustments.
+                    <br />
+                    <b>Warehouse Staff:</b> Receives & Reviews Items.
                   </p>
                 </div>
               </div>
@@ -360,19 +358,55 @@ export default function LoginPage() {
                           value="guest-user"
                           className="cursor-pointer text-gray-900 dark:text-white focus:bg-sky-100 dark:focus:bg-white/10 focus:text-gray-900 dark:focus:text-white"
                         >
-                          Guest User / Admin (test@admin.com)
+                          System Admin (test@admin.com)
                         </SelectItem>
                         <SelectItem
-                          value="guest-supplier"
+                          value="sales-rep"
                           className="cursor-pointer text-gray-900 dark:text-white focus:bg-sky-100 dark:focus:bg-white/10 focus:text-gray-900 dark:focus:text-white"
                         >
-                          Supplier (test@supplier.com)
+                          Sales Representative (O2C)
+                        </SelectItem>
+                        <SelectItem
+                          value="sales-mgr"
+                          className="cursor-pointer text-gray-900 dark:text-white focus:bg-sky-100 dark:focus:bg-white/10 focus:text-gray-900 dark:focus:text-white"
+                        >
+                          Sales Manager (O2C)
+                        </SelectItem>
+                        <SelectItem
+                          value="inv-mgr"
+                          className="cursor-pointer text-gray-900 dark:text-white focus:bg-sky-100 dark:focus:bg-white/10 focus:text-gray-900 dark:focus:text-white"
+                        >
+                          Inventory Manager (IM)
+                        </SelectItem>
+                        <SelectItem
+                          value="warehouse"
+                          className="cursor-pointer text-gray-900 dark:text-white focus:bg-sky-100 dark:focus:bg-white/10 focus:text-gray-900 dark:focus:text-white"
+                        >
+                          Warehouse Staff (IM)
+                        </SelectItem>
+                        <SelectItem
+                          value="purchasing-mgr"
+                          className="cursor-pointer text-gray-900 dark:text-white focus:bg-sky-100 dark:focus:bg-white/10 focus:text-gray-900 dark:focus:text-white"
+                        >
+                          Purchasing Manager (P2P)
+                        </SelectItem>
+                        <SelectItem
+                          value="ar-analyst"
+                          className="cursor-pointer text-gray-900 dark:text-white focus:bg-sky-100 dark:focus:bg-white/10 focus:text-gray-900 dark:focus:text-white"
+                        >
+                          A/R Analyst (O2C / P2P)
                         </SelectItem>
                         <SelectItem
                           value="guest-client"
                           className="cursor-pointer text-gray-900 dark:text-white focus:bg-sky-100 dark:focus:bg-white/10 focus:text-gray-900 dark:focus:text-white"
                         >
-                          Client (test@client.com)
+                          Client / Customer Portal
+                        </SelectItem>
+                        <SelectItem
+                          value="guest-supplier"
+                          className="cursor-pointer text-gray-900 dark:text-white focus:bg-sky-100 dark:focus:bg-white/10 focus:text-gray-900 dark:focus:text-white"
+                        >
+                          Supplier / Vendor Portal
                         </SelectItem>
                         {selectedRole && (
                           <SelectItem
