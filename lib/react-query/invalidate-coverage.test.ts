@@ -26,6 +26,7 @@ const COMPONENT_FETCH_CRUD_ALLOWLIST = new Set([
   "components/admin/AdminAnalyticsContent.tsx",
   "components/Pages/ApiStatusPage.tsx",
   "components/Pages/ApiDocsPage.tsx",
+  "components/Pages/OrderDetailPage.tsx",
 ]);
 
 /** Domains with query sub-keys beyond list/detail — invalidate-all must use *.all */
@@ -59,12 +60,19 @@ const API_WRITE_ROUTE_INVALIDATION_SPEC: Record<string, readonly string[]> = {
   "app/api/p2p/ap-invoices/route.ts": ["invalidateAllServerCaches"],
   "app/api/p2p/ap-invoices/[id]/payment/route.ts": ["invalidateAllServerCaches"],
   "app/api/netsuite/sales-orders/route.ts": ["invalidateAllServerCaches"],
+  "app/api/netsuite/sales-orders/[id]/approve/route.ts": ["invalidateCache(", "invalidateAllServerCaches"],
+  "app/api/netsuite/sales-orders/[id]/reject/route.ts": ["invalidateCache(", "invalidateAllServerCaches"],
   "app/api/netsuite/item-fulfillments/route.ts": ["invalidateAllServerCaches"],
+  "app/api/netsuite/item-fulfillments/[id]/pack/route.ts": ["invalidateAllServerCaches"],
+  "app/api/netsuite/item-fulfillments/[id]/ship/route.ts": ["invalidateAllServerCaches"],
   "app/api/netsuite/customer-invoices/route.ts": ["invalidateAllServerCaches"],
   "app/api/netsuite/customer-payments/route.ts": ["invalidateAllServerCaches"],
   "app/api/netsuite/purchase-orders/route.ts": ["invalidateAllServerCaches"],
+  "app/api/netsuite/purchase-orders/[id]/review/route.ts": ["invalidateAllServerCaches"],
   "app/api/netsuite/item-receipts/route.ts": ["invalidateAllServerCaches"],
   "app/api/netsuite/vendor-bills/route.ts": ["invalidateAllServerCaches"],
+  "app/api/netsuite/vendor-bills/[id]/approve/route.ts": ["invalidateAllServerCaches"],
+  "app/api/netsuite/vendor-bills/[id]/reject/route.ts": ["invalidateAllServerCaches"],
   "app/api/netsuite/bill-payments/route.ts": ["invalidateAllServerCaches"],
   "app/api/netsuite/inventory/allocations/route.ts": ["invalidateAllServerCaches"],
   "app/api/netsuite/inventory/transfers/route.ts": ["invalidateAllServerCaches"],
