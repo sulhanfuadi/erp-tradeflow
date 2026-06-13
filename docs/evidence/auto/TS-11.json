@@ -2,7 +2,7 @@
   "scenarioId": "TS-11",
   "title": "Inventory ledger integrity (order + running balance)",
   "status": "PASS",
-  "startedAt": "2026-05-24T02:37:52.602Z",
+  "startedAt": "2026-06-13T07:07:00.703Z",
   "assertions": {
     "rowCount": 8,
     "movementTypes": [
@@ -15,8 +15,8 @@
     "runningBalanceIsNumeric": true
   },
   "ids": {
-    "warehouseId": "6a12646bcc8e863be5546913",
-    "productId": "6a12646bcc8e863be5546917"
+    "warehouseId": "6a2d00dc7a27305f1f634652",
+    "productId": "6a2d00dc7a27305f1f634656"
   },
   "notes": [
     "Ledger berisi movement utama receipt/issue/transfer/reversal.",
@@ -24,5 +24,5 @@
     "Running balance tersedia di setiap baris."
   ],
   "artifactPath": "docs/evidence/auto/TS-11.png",
-  "finishedAt": "2026-05-24T02:37:53.539Z"
+  "finishedAt": "2026-06-13T07:07:18.013Z"
 }

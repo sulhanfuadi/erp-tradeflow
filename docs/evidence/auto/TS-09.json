@@ -2,19 +2,19 @@
   "scenarioId": "TS-09",
   "title": "Inventory transfer pending to completed to reverse",
   "status": "PASS",
-  "startedAt": "2026-05-24T02:37:47.667Z",
+  "startedAt": "2026-06-13T07:06:20.899Z",
   "assertions": {
     "transferPendingStatus": "pending",
     "transferCompletedStatus": "completed",
     "transferStatusAfterReverse": "completed"
   },
   "ids": {
-    "transferId": "6a12647bcc8e863be554692f",
-    "transferReversalId": "6a12647dcc8e863be5546933"
+    "transferId": "6a2d016d7a27305f1f63466e",
+    "transferReversalId": "6a2d016f7a27305f1f634672"
   },
   "notes": [
     "Transfer berhasil pending → completed → reversed."
   ],
   "artifactPath": "docs/evidence/auto/TS-09.png",
-  "finishedAt": "2026-05-24T02:37:50.608Z"
+  "finishedAt": "2026-06-13T07:06:42.136Z"
 }
