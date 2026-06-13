@@ -153,7 +153,12 @@ async function captureScreenshot(
   const fullPath = path.join(process.cwd(), relativePath);
 
   await page.goto(route, { waitUntil: "domcontentloaded" });
+  
+  // Wait for React to finish rendering and data to load
   await page.waitForLoadState("networkidle").catch(() => {});
+  await page.waitForSelector(".animate-pulse", { state: "hidden", timeout: 15000 }).catch(() => {});
+  await page.waitForTimeout(1000); // Give chart animations a second to settle
+
   await page.screenshot({ path: fullPath, fullPage: true });
 
   return relativePath;
@@ -354,7 +359,7 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       });
       expect(partialRes.status).toBe(201);
       const partialBody = asObject(partialRes.body);
-      expect(asString(partialBody.status)).toBe("fulfilled");
+      expect(asString(partialBody.status)).toBe("picked");
 
       const fullRes = await apiCall(api, "POST", "/api/netsuite/item-fulfillments", {
         orderId: state.salesOrderId,
@@ -738,7 +743,14 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       const vendorBillBody = asObject(vendorBillRes.body);
       state.vendorBillId = asString(vendorBillBody.id);
       expect(state.vendorBillId).not.toBe("");
-      expect(asString(vendorBillBody.status)).toBe("unpaid");
+      expect(asString(vendorBillBody.status)).toBe("pending_approval");
+
+      const vendorBillApproveRes = await apiCall(api, "POST", `/api/netsuite/vendor-bills/${state.vendorBillId}/approve`, {
+        notes: "TS-07 approve vendor bill",
+      });
+      expect(vendorBillApproveRes.status).toBe(200);
+      const approvedBody = asObject(vendorBillApproveRes.body);
+      expect(asString(approvedBody.status)).toBe("unpaid");
 
       const vendorBillListRes = await apiCall(api, "GET", "/api/netsuite/vendor-bills");
       expect(vendorBillListRes.status).toBe(200);

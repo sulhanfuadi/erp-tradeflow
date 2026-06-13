@@ -14,6 +14,8 @@ test.describe('BPMN Screenshots Generator', () => {
     // 1. O2C: Create Sales Order
     await page.goto('/orders');
     await page.waitForLoadState('networkidle');
+    await page.waitForSelector('.animate-pulse', { state: 'hidden', timeout: 10000 }).catch(() => {});
+    await page.waitForTimeout(1000);
     await page.screenshot({ path: `${SCREENSHOT_DIR}/o2c_create_sales_order.png`, fullPage: true });
 
     // Wait, let's create a sales order first to get an ID.
@@ -23,6 +25,8 @@ test.describe('BPMN Screenshots Generator', () => {
     // 2. P2P Workbench
     await page.goto('/procurement');
     await page.waitForLoadState('networkidle');
+    await page.waitForSelector('.animate-pulse', { state: 'hidden', timeout: 10000 }).catch(() => {});
+    await page.waitForTimeout(1000);
     await page.screenshot({ path: `${SCREENSHOT_DIR}/p2p_workbench.png`, fullPage: true });
 
     // 3. Warehouse Workbench
@@ -34,6 +38,8 @@ test.describe('BPMN Screenshots Generator', () => {
     if (await viewLink.isVisible()) {
         await viewLink.click();
         await page.waitForLoadState('networkidle');
+        await page.waitForSelector('.animate-pulse', { state: 'hidden', timeout: 10000 }).catch(() => {});
+        await page.waitForTimeout(1000);
         await page.screenshot({ path: `${SCREENSHOT_DIR}/inventory_workbench.png`, fullPage: true });
     } else {
         // Fallback
