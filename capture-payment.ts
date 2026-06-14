@@ -24,17 +24,23 @@ async function main() {
 
     await page.goto("http://localhost:3000/login");
     await page.click('button[role="combobox"]');
-    await page.click(`div[role="option"]:has-text("A/R Analyst")`);
+    await page.click(`div[role="option"]:has-text("Inventory Manager")`);
     await page.click('button:has-text("Sign In")');
     await page.waitForTimeout(2000);
     
+    // Go directly to the invoice detail page as the client!
     await page.goto(`http://localhost:3000/invoices/${invoice.id}`);
     await page.waitForTimeout(2000);
     
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
     await page.waitForTimeout(1000);
     
-    await page.click(`button:has-text("Pay")`);
+    // Specifically target the Pay button in the dialog trigger
+    await page.evaluate(() => {
+      const btns = Array.from(document.querySelectorAll('button'));
+      const payBtn = btns.find(b => b.textContent && b.textContent.includes('Pay $'));
+      if (payBtn) payBtn.click();
+    });
     await page.waitForTimeout(1000);
     
     await capture(page, "O2C-05_payment-modal");
