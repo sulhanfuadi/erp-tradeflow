@@ -81,11 +81,11 @@ export function generateInvoicePDF(data: InvoicePDFData): string {
   const doc = new jsPDF();
 
   // Company defaults
-  const companyName = data.companyName || "Stock Inventory Store";
+  const companyName = data.companyName || "TradeFlow";
   const companyAddress =
     data.companyAddress || "123 Main St, New York, NY 10001";
   const companyPhone = data.companyPhone || "+1 (555) 123-4567";
-  const companyEmail = data.companyEmail || "billing@stockinventory.com";
+  const companyEmail = data.companyEmail || "billing@tradeflow.com";
 
   // Colors
   const primaryColor = [59, 130, 246] as [number, number, number]; // Blue

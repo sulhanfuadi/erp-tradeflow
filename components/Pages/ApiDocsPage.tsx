@@ -1207,7 +1207,7 @@ export default function ApiDocsPage() {
               Stock API Documentation
             </h1>
             <p className="text-sm sm:text-base text-gray-600 dark:text-white/70 max-w-2xl mx-auto">
-              Comprehensive API documentation for the Stock inventory management
+              Comprehensive API documentation for the TradeFlow
               system. All endpoints require authentication via JWT token.
             </p>
           </div>

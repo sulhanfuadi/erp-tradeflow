@@ -225,7 +225,7 @@ export default function LoginPage() {
             <div className="absolute inset-0 opacity-25 dark:opacity-20">
               <Image
                 src="/stock_inventory.svg"
-                alt="Stock Inventory Illustration"
+                alt="TradeFlow Illustration"
                 fill
                 className="object-contain"
                 priority

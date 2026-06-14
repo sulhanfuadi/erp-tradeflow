@@ -44,7 +44,7 @@ export const DEFAULT_CONFIGS: Omit<
 >[] = [
   {
     key: "company_name",
-    value: "Stock Inventory Store",
+    value: "TradeFlow",
     type: "string",
     label: "Company Name",
     description: "Your company or store name",
@@ -53,7 +53,7 @@ export const DEFAULT_CONFIGS: Omit<
   },
   {
     key: "company_email",
-    value: "support@stockinventory.com",
+    value: "support@tradeflow.com",
     type: "string",
     label: "Company Email",
     description: "Primary contact email",
