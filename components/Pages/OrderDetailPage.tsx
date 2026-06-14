@@ -1043,8 +1043,8 @@ export default function OrderDetailPage() {
                       disabled={disableOrderActions}
                       className="w-full sm:w-auto gap-2 rounded-xl border border-violet-400/30 bg-gradient-to-r from-violet-500/70 via-violet-500/50 to-violet-500/30 text-white shadow-[0_10px_25px_rgba(139,92,246,0.35)] backdrop-blur-sm hover:border-violet-300/50 hover:from-violet-500/80 hover:via-violet-500/60 hover:to-violet-500/40 transition-all duration-300 disabled:opacity-50"
                     >
-                      <Truck className="h-4 w-4 shrink-0" />
-                      Ship Order
+                      <Package className="h-4 w-4 shrink-0" />
+                      Manage Fulfillment
                     </Button>
                   }
                 />

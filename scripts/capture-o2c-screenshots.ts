@@ -208,8 +208,8 @@ async function main() {
     if (approvedOrder) {
       await loginAndCapture(page, "Inventory Manager", `/orders/${approvedOrder.id}`, "O2C-03_item-fulfillment", async (p) => {
         // Open the 'Ship Order' modal to show fulfillment actions
-        console.log("Clicking 'Ship Order' button to show Shipping Management modal...");
-        await p.click('button:has-text("Ship Order")').catch(() => console.log("Failed to find Ship Order button"));
+        console.log("Clicking 'Manage Fulfillment' button to show Shipping Management modal...");
+        await p.click('button:has-text("Manage Fulfillment")').catch(() => console.log("Failed to find Manage Fulfillment button"));
       });
     } else {
       await loginAndCapture(page, "Inventory Manager", "/orders", "O2C-03_item-fulfillment");
