@@ -204,11 +204,15 @@ async function main() {
       await loginAndCapture(page, "Sales Manager", "/admin/orders", "O2C-02_approve-sales-order-details");
     }
     
-    // 3. O2C-03 Fulfill Sales Order (Inventory Manager) -> /admin/client-orders/[id]
+    // 3. O2C-03 Fulfill Sales Order (Inventory Manager) -> /orders/[id]
     if (approvedOrder) {
-      await loginAndCapture(page, "Inventory Manager", `/admin/client-orders/${approvedOrder.id}`, "O2C-03_item-fulfillment");
+      await loginAndCapture(page, "Inventory Manager", `/orders/${approvedOrder.id}`, "O2C-03_item-fulfillment", async (p) => {
+        // Open the 'Ship Order' modal to show fulfillment actions
+        console.log("Clicking 'Ship Order' button to show Shipping Management modal...");
+        await p.click('button:has-text("Ship Order")').catch(() => console.log("Failed to find Ship Order button"));
+      });
     } else {
-      await loginAndCapture(page, "Inventory Manager", "/admin/client-orders", "O2C-03_item-fulfillment");
+      await loginAndCapture(page, "Inventory Manager", "/orders", "O2C-03_item-fulfillment");
     }
     
     // 4. O2C-04 Invoice Customer (A/R Analyst) -> /invoices/[id]
