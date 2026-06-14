@@ -44,6 +44,9 @@ Diagram swimlane di bawah menunjukkan **alur lengkap O2C** per peran sesuai spes
 ---
 
 ### Step 1 — Creates a Sales Order
+> [!IMPORTANT]
+> **Role-Switching Required:** Anda harus login sebagai **Sales Representative** terlebih dahulu.
+>
 > **Actor:** Sales Representative  
 > Menerima Purchase Order dari pelanggan (trigger: *Order Received*) dan memasukkan data pesanan ke dalam sistem sebagai *Sales Order*. Sistem mencegah *oversell* secara otomatis.
 
@@ -55,6 +58,9 @@ Diagram swimlane di bawah menunjukkan **alur lengkap O2C** per peran sesuai spes
 ---
 
 ### Step 2 — Review & Approve the Sales Order
+> [!IMPORTANT]
+> **Role-Switching Required:** Logout dari Sales Representative, kemudian login kembali sebagai **Sales Manager**.
+>
 > **Actor:** Sales Manager  
 > Memvalidasi detail pesanan (stok tersedia, harga, kuantitas). Jika disetujui → lanjut ke fulfillment. Jika ditolak → *Order Rejected* (End Event).
 
@@ -63,6 +69,9 @@ Diagram swimlane di bawah menunjukkan **alur lengkap O2C** per peran sesuai spes
 ---
 
 ### Step 3 — Pick → Pack → Ship a Sales Order
+> [!IMPORTANT]
+> **Role-Switching Required:** Logout dari Sales Manager, kemudian login kembali sebagai **Inventory Manager**.
+>
 > **Actor:** Inventory Manager  
 > Melakukan pemenuhan pesanan secara bertahap: **Pick → Pack → Ship**. Status inventori otomatis teralokasi dan berkurang saat setiap tahap diselesaikan.
 
@@ -71,6 +80,9 @@ Diagram swimlane di bawah menunjukkan **alur lengkap O2C** per peran sesuai spes
 ---
 
 ### Step 4 — Invoice a Sales Order
+> [!IMPORTANT]
+> **Role-Switching Required:** Logout dari Inventory Manager, kemudian login kembali sebagai **A/R Analyst**.
+>
 > **Actor:** A/R Analyst  
 > Menerbitkan *Customer Invoice* berdasarkan kuantitas yang telah di-ship. Invoice dikirim ke Customer (dokumen dashed line ke Customer lane).
 
@@ -79,6 +91,9 @@ Diagram swimlane di bawah menunjukkan **alur lengkap O2C** per peran sesuai spes
 ---
 
 ### Step 5 — Accept Customer Payment
+> [!IMPORTANT]
+> **Role-Switching Required:** Masih login sebagai **A/R Analyst**.
+>
 > **Actor:** A/R Analyst  
 > Mencatat penerimaan pembayaran dari pelanggan. Mendukung partial maupun full payment. Proses selesai: *Order Fulfilled and Paid* (End Event).
 
@@ -98,6 +113,9 @@ Diagram swimlane di bawah menunjukkan **alur lengkap P2P** per peran sesuai spes
 ---
 
 ### Step 1 — Creates Purchase Order
+> [!IMPORTANT]
+> **Role-Switching Required:** Logout dari A/R Analyst, kemudian login kembali sebagai **Purchasing Manager**.
+>
 > **Actor:** Purchasing Manager  
 > Membuat *Purchase Order* atas dasar *Purchase Request* internal dan mengirimkannya ke vendor (dokumen Purchase dashed ke Vendor lane).
 
@@ -106,6 +124,9 @@ Diagram swimlane di bawah menunjukkan **alur lengkap P2P** per peran sesuai spes
 ---
 
 ### Step 2 — Review Item on Purchase Order
+> [!IMPORTANT]
+> **Role-Switching Required:** Logout dari Purchasing Manager, kemudian login kembali sebagai **Inventory Manager**.
+>
 > **Actor:** Inventory Manager  
 > Menerima barang fisik di gudang (*Item Receipt / Good Receipt ASN*) dan memvalidasi item sesuai PO. Stok produk otomatis meningkat.
 
@@ -114,6 +135,9 @@ Diagram swimlane di bawah menunjukkan **alur lengkap P2P** per peran sesuai spes
 ---
 
 ### Step 3 — Bill Purchase Order (Enter Vendor Bill)
+> [!IMPORTANT]
+> **Role-Switching Required:** Logout dari Inventory Manager, kemudian login kembali sebagai **A/R Analyst**.
+>
 > **Actor:** A/R Analyst  
 > Memasukkan tagihan vendor (*Vendor Bill / Invoice*) ke dalam sistem, menghubungkannya ke PO dan Good Receipt. Dokumen Vendor Bill dikirim ke Vendor.
 
@@ -122,6 +146,9 @@ Diagram swimlane di bawah menunjukkan **alur lengkap P2P** per peran sesuai spes
 ---
 
 ### Step 4 — Pay Vendor Bill
+> [!IMPORTANT]
+> **Role-Switching Required:** Masih login sebagai **A/R Analyst**.
+>
 > **Actor:** A/R Analyst  
 > Melakukan pembayaran tagihan ke vendor. Mendukung pembayaran parsial maupun penuh. Proses selesai saat *Payment Received* (End Event).
 
@@ -141,6 +168,9 @@ Diagram swimlane di bawah menunjukkan **alur lengkap Inventory Management** per 
 ---
 
 ### Step 1 — Creates Purchase Order (Item Master)
+> [!IMPORTANT]
+> **Role-Switching Required:** Logout dari A/R Analyst, kemudian login kembali sebagai **Purchasing Manager**.
+>
 > **Actor:** Purchasing Manager  
 > Membuat Purchase Order berdasarkan *Item Master Created*. Data Item Master tersimpan di sistem inventori.
 
@@ -149,6 +179,9 @@ Diagram swimlane di bawah menunjukkan **alur lengkap Inventory Management** per 
 ---
 
 ### Step 2 — Review Item & Update Inventory Receipt
+> [!IMPORTANT]
+> **Role-Switching Required:** Logout dari Purchasing Manager, kemudian login kembali sebagai **Warehouse Staff**.
+>
 > **Actor:** Warehouse Staff  
 > Menerima barang, me-*review item* sesuai PO, lalu mengupdate *Inventory Receipt*. Stok sistem diperbarui secara otomatis.
 
@@ -157,6 +190,9 @@ Diagram swimlane di bawah menunjukkan **alur lengkap Inventory Management** per 
 ---
 
 ### Step 3 — Perform Inventory Adjustment
+> [!IMPORTANT]
+> **Role-Switching Required:** Logout dari Warehouse Staff, kemudian login kembali sebagai **Inventory Manager**.
+>
 > **Actor:** Inventory Manager  
 > Melakukan penyesuaian stok manual (*Inventory Adjustment*) untuk pengeluaran barang, koreksi stok, atau transfer antar gudang. Mendukung *Reverse* untuk koreksi.
 
@@ -165,6 +201,9 @@ Diagram swimlane di bawah menunjukkan **alur lengkap Inventory Management** per 
 ---
 
 ### Step 4 — Review & Approved Adjustment
+> [!IMPORTANT]
+> **Role-Switching Required:** Masih login sebagai **Inventory Manager**.
+>
 > **Actor:** Inventory Manager  
 > Memvalidasi dan menyetujui hasil adjustment inventori.
 
@@ -173,6 +212,9 @@ Diagram swimlane di bawah menunjukkan **alur lengkap Inventory Management** per 
 ---
 
 ### Step 5 — Monitoring & Analyze Inventory
+> [!IMPORTANT]
+> **Role-Switching Required:** Masih login sebagai **Inventory Manager**.
+>
 > **Actor:** Inventory Manager  
 > Memantau seluruh pergerakan stok melalui *Inventory Ledger* dan laporan inventori. Proses selesai: *Inventory Managed Effectively* (End Event).
 

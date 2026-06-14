@@ -6,7 +6,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 const SCREENSHOT_DIR = path.join(process.cwd(), "docs/evidence/bpmn");
 
-async function loginAndCapture(page: any, role: string, url: string, screenshotName: string) {
+async function loginAndCapture(page: any, role: string, url: string, screenshotName: string, customAction?: (page: any) => Promise<void>) {
   console.log(`\n======================================`);
   console.log(`Starting capture for ${screenshotName}`);
   console.log(`Role: ${role}, URL: ${url}`);
@@ -44,6 +44,12 @@ async function loginAndCapture(page: any, role: string, url: string, screenshotN
   
   await page.waitForTimeout(2000); // extra wait for charts/data
   
+  if (customAction) {
+    console.log(`Executing custom action...`);
+    await customAction(page);
+    await page.waitForTimeout(1500); // wait for modal to animate
+  }
+
   const filePath = path.join(SCREENSHOT_DIR, `${screenshotName}.png`);
   await page.screenshot({ path: filePath, fullPage: true });
   console.log(`Saved screenshot: ${filePath}`);
@@ -57,7 +63,6 @@ async function main() {
     fs.mkdirSync(SCREENSHOT_DIR, { recursive: true });
   }
 
-  // Fetch some dynamic IDs from DB
   const pendingOrder = await prisma.order.findFirst({ where: { status: 'pending_approval' } });
   const approvedOrder = await prisma.order.findFirst({ where: { status: 'pending' } });
   const invoice = await prisma.invoice.findFirst();
@@ -70,7 +75,11 @@ async function main() {
 
   try {
     // 1. O2C-01 Create Sales Order (Sales Rep) -> /orders
-    await loginAndCapture(page, "Sales Representative", "/orders", "O2C-01_create-sales-order");
+    await loginAndCapture(page, "Sales Representative", "/orders", "O2C-01_create-sales-order", async (p) => {
+        // Open the 'Create Order' modal
+        await p.click('button:has-text("Create Order")').catch(() => {});
+    });
+    
     if (pendingOrder) {
       await loginAndCapture(page, "Sales Representative", `/orders/${pendingOrder.id}`, "O2C-01_sales-order-detail");
     }
@@ -96,7 +105,7 @@ async function main() {
       await loginAndCapture(page, "A/R Analyst", "/invoices", "O2C-04_customer-invoice");
     }
     
-    // 5. O2C-05 Receive Customer Payment (A/R Analyst) -> /admin/client-invoices
+    // 5. O2C-05 Receive Customer Payment (A/R Analyst) -> /admin/client-invoices/[id]
     if (invoice) {
       await loginAndCapture(page, "A/R Analyst", `/admin/client-invoices/${invoice.id}`, "O2C-05_customer-payment");
     } else {
