@@ -44,6 +44,24 @@ async function loginAndCapture(page: any, role: string, url: string, screenshotN
   
   await page.waitForTimeout(2000); // extra wait for charts/data
   
+  // Hide TanStack devtools and Next.js overlay elements before capture
+  await page.evaluate(() => {
+    const style = document.createElement('style');
+    style.innerHTML = `
+      [id*="react-query-devtools"], 
+      .tsqd-parent, 
+      button[aria-label*="Query Devtools"],
+      button[aria-label*="React Query"],
+      [class*="react-query-devtools"],
+      nextjs-portal,
+      #nextjs-placeholder,
+      [id*="nextjs-portal"] {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(style);
+  }).catch(() => {});
+
   if (customAction) {
     console.log(`Executing custom action...`);
     await customAction(page);
@@ -63,7 +81,17 @@ async function main() {
     fs.mkdirSync(SCREENSHOT_DIR, { recursive: true });
   }
 
-  const pendingOrder = await prisma.order.findFirst({ where: { status: 'pending_approval' } });
+  let pendingOrder = await prisma.order.findFirst({ where: { status: 'pending_approval' } });
+  if (!pendingOrder) {
+    const anyOrder = await prisma.order.findFirst();
+    if (anyOrder) {
+      pendingOrder = await prisma.order.update({
+        where: { id: anyOrder.id },
+        data: { status: 'pending_approval' }
+      });
+      console.log(`Temporarily updated order ${pendingOrder.orderNumber} to pending_approval for screenshot flow.`);
+    }
+  }
   const approvedOrder = await prisma.order.findFirst({ where: { status: 'pending' } });
   const invoice = await prisma.invoice.findFirst();
 
@@ -84,11 +112,90 @@ async function main() {
       await loginAndCapture(page, "Sales Representative", `/orders/${pendingOrder.id}`, "O2C-01_sales-order-detail");
     }
     
-    // 2. O2C-02 Approve Sales Order (Sales Manager) -> /admin/orders/[id]
+    // 2. O2C-02 Approve Sales Order (Sales Manager) -> /orders/[id]
     if (pendingOrder) {
-      await loginAndCapture(page, "Sales Manager", `/admin/orders/${pendingOrder.id}`, "O2C-02_approve-sales-order");
+      // Login as Sales Manager
+      await page.goto("http://localhost:3000/login");
+      await page.waitForLoadState("networkidle");
+      await page.click('button[role="combobox"]');
+      await page.waitForTimeout(1000);
+      await page.click(`div[role="option"]:has-text("Sales Manager")`);
+      await page.waitForTimeout(1000);
+      await Promise.all([
+        page.waitForNavigation({ waitUntil: "networkidle", timeout: 10000 }).catch(() => {}),
+        page.click('button:has-text("Sign In")')
+      ]);
+
+      // Navigate to the client order details page
+      const targetUrl = `/orders/${pendingOrder.id}`;
+      console.log(`Navigating to target: ${targetUrl}`);
+      await page.goto(`http://localhost:3000${targetUrl}`, { waitUntil: "networkidle" });
+      await page.waitForTimeout(2000);
+      
+      // Hide dev widgets
+      await page.evaluate(() => {
+        const style = document.createElement('style');
+        style.innerHTML = `
+          [id*="react-query-devtools"], 
+          .tsqd-parent, 
+          button[aria-label*="Query Devtools"],
+          button[aria-label*="React Query"],
+          [class*="react-query-devtools"],
+          nextjs-portal,
+          #nextjs-placeholder,
+          [id*="nextjs-portal"] {
+            display: none !important;
+          }
+        `;
+        document.head.appendChild(style);
+      }).catch(() => {});
+
+      // A: Details top viewport screenshot
+      console.log("Capturing O2C-02_approve-sales-order-details (Top of page)");
+      await page.screenshot({ path: path.join(SCREENSHOT_DIR, "O2C-02_approve-sales-order-details.png"), fullPage: false });
+
+      // B: Bottom viewport screenshot showing Approve / Reject buttons
+      console.log("Scrolling to bottom...");
+      await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+      await page.waitForTimeout(1000);
+      console.log("Capturing O2C-02_approve-sales-order-bottom (Bottom of page)");
+      await page.screenshot({ path: path.join(SCREENSHOT_DIR, "O2C-02_approve-sales-order-bottom.png"), fullPage: false });
+
+      // C: Perform approval and capture validation
+      console.log("Clicking Approve Order button...");
+      await page.click('button:has-text("Approve Order")');
+      await page.waitForTimeout(2000); // wait for update & refresh
+      
+      // Scroll back up to show the new status badge
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.waitForTimeout(1000);
+
+      // Re-apply dev widget hiding style since the page refreshed/navigated
+      await page.evaluate(() => {
+        const style = document.createElement('style');
+        style.innerHTML = `
+          [id*="react-query-devtools"], 
+          .tsqd-parent, 
+          button[aria-label*="Query Devtools"],
+          button[aria-label*="React Query"],
+          [class*="react-query-devtools"],
+          nextjs-portal,
+          #nextjs-placeholder,
+          [id*="nextjs-portal"] {
+            display: none !important;
+          }
+        `;
+        document.head.appendChild(style);
+      }).catch(() => {});
+
+      console.log("Capturing O2C-02_approve-sales-order-validation (Approved validation)");
+      await page.screenshot({ path: path.join(SCREENSHOT_DIR, "O2C-02_approve-sales-order-validation.png"), fullPage: false });
+
+      // Clean cookies/session
+      await page.context().clearCookies();
     } else {
-      await loginAndCapture(page, "Sales Manager", "/admin/orders", "O2C-02_approve-sales-order");
+      console.log("No pending_approval order found. Reverting to fallback list view.");
+      await loginAndCapture(page, "Sales Manager", "/admin/orders", "O2C-02_approve-sales-order-details");
     }
     
     // 3. O2C-03 Fulfill Sales Order (Inventory Manager) -> /admin/client-orders/[id]

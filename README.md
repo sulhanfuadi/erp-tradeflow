@@ -64,7 +64,14 @@ Diagram swimlane di bawah menunjukkan **alur lengkap O2C** per peran sesuai spes
 > **Actor:** Sales Manager  
 > Memvalidasi detail pesanan (stok tersedia, harga, kuantitas). Jika disetujui → lanjut ke fulfillment. Jika ditolak → *Order Rejected* (End Event).
 
-![O2C Step 2 — Approve Sales Order](docs/evidence/bpmn/O2C-02_approve-sales-order.png)
+*Order Details (Top View):*  
+![O2C Step 2 — Sales Order Details (Top)](docs/evidence/bpmn/O2C-02_approve-sales-order-details.png)
+
+*Approval Action (Bottom View):*  
+![O2C Step 2 — Sales Order Details (Bottom - Approve Action)](docs/evidence/bpmn/O2C-02_approve-sales-order-bottom.png)
+
+*Validation of Approval:*  
+![O2C Step 2 — Approved Validation](docs/evidence/bpmn/O2C-02_approve-sales-order-validation.png)
 
 ---
 
