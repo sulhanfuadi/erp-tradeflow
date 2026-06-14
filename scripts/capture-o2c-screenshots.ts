@@ -9,23 +9,24 @@ async function loginAndCapture(page: any, role: string, url: string, screenshotN
   console.log(`Starting capture for ${screenshotName}`);
   console.log(`Role: ${role}, URL: ${url}`);
   
-  await page.goto("http://localhost:3100/login");
+  await page.goto("http://localhost:3000/login");
   await page.waitForLoadState("networkidle");
   
   // Select role from dropdown
   await page.click('button[role="combobox"]');
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(1000);
   await page.click(`div[role="option"]:has-text("${role}")`);
+  await page.waitForTimeout(1000);
   
   // Click Sign In
-  await page.click('button:has-text("Sign In")');
+  await Promise.all([
+    page.waitForNavigation({ waitUntil: "networkidle", timeout: 10000 }).catch(() => {}),
+    page.click('button:has-text("Sign In")')
+  ]);
   
-  // Wait for redirect to happen
-  await page.waitForTimeout(4000); 
-  
-  // Navigate to target URL just in case
+  // Navigate to target URL
   console.log(`Navigating to target: ${url}`);
-  await page.goto(`http://localhost:3100${url}`, { waitUntil: "domcontentloaded" });
+  await page.goto(`http://localhost:3000${url}`, { waitUntil: "networkidle" });
   await page.waitForTimeout(2000);
   
   // Wait for skeletons to disappear
