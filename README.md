@@ -121,7 +121,7 @@ Diagram swimlane di bawah menunjukkan **alur lengkap O2C** per peran sesuai spes
 ![O2C Step 5 — Payment Modal](docs/evidence/bpmn/O2C-05_payment-modal.png)
 
 *Invoice Paid (Detail After Pay):*
-![O2C Step 5 — Customer Payment](docs/evidence/bpmn/O2C-05_customer-payment.png)
+![O2C Step 5 — Customer Payment](docs/evidence/bpmn/O2C-05_payment-success.png)
 
 ---
 
