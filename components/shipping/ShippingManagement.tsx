@@ -384,10 +384,16 @@ export default function ShippingManagement({
                             orderItemId: i.id,
                             quantity: i.quantity,
                           }));
-                          await fetch("/api/netsuite/item-fulfillments", {
+                          const response = await fetch("/api/netsuite/item-fulfillments", {
                             method: "POST",
+                            headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ orderId: order.id, items }),
                           });
+                          if (!response.ok) {
+                            const errData = await response.json().catch(() => ({}));
+                            alert("Failed to pick: " + (errData.error || response.statusText));
+                            return;
+                          }
                           await invalidateAllRelatedQueries(queryClient);
                           // Refresh
                           const res = await fetch("/api/netsuite/item-fulfillments");
@@ -421,7 +427,12 @@ export default function ShippingManagement({
                               onClick={async () => {
                                 setIsFulfilling(true);
                                 try {
-                                  await fetch(`/api/netsuite/item-fulfillments/${f.id}/pack`, { method: "POST" });
+                                  const response = await fetch(`/api/netsuite/item-fulfillments/${f.id}/pack`, { method: "POST" });
+                                  if (!response.ok) {
+                                    const errData = await response.json().catch(() => ({}));
+                                    alert("Failed to pack: " + (errData.error || response.statusText));
+                                    return;
+                                  }
                                   await invalidateAllRelatedQueries(queryClient);
                                   const res = await fetch("/api/netsuite/item-fulfillments");
                                   const data = await res.json();
@@ -445,7 +456,12 @@ export default function ShippingManagement({
                               onClick={async () => {
                                 setIsFulfilling(true);
                                 try {
-                                  await fetch(`/api/netsuite/item-fulfillments/${f.id}/ship`, { method: "POST" });
+                                  const response = await fetch(`/api/netsuite/item-fulfillments/${f.id}/ship`, { method: "POST" });
+                                  if (!response.ok) {
+                                    const errData = await response.json().catch(() => ({}));
+                                    alert("Failed to ship: " + (errData.error || response.statusText));
+                                    return;
+                                  }
                                   await invalidateAllRelatedQueries(queryClient);
                                   const res = await fetch("/api/netsuite/item-fulfillments");
                                   const data = await res.json();
