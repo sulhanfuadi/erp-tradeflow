@@ -51,22 +51,18 @@ export async function GET(
     const isClient = session.role === "client";
     const isSupplier = session.role === "supplier";
 
-    const isAdmin = session.role === "admin";
+    const isInternal = !isClient && !isSupplier;
     let order: Awaited<ReturnType<typeof getOrderById>> | null;
-    if (isAdmin) {
-      order = await getOrderByIdForAdmin(id);
-    } else if (isClient) {
+
+    if (isClient) {
       order = await getOrderByIdForClient(id, userId);
     } else if (isSupplier) {
       const supplier = await getSupplierByUserId(userId);
       order =
         supplier ? await getOrderByIdForSupplier(id, supplier.id) : null;
     } else {
-      order = await getOrderById(id, userId);
-      // Allow product owner to view order (admin "Client Orders" detail)
-      if (!order) {
-        order = await getOrderByIdForProductOwner(id, userId);
-      }
+      // Internal users (admin, sales rep, AR analyst, etc) see all orders
+      order = await getOrderByIdForAdmin(id);
     }
 
     if (!order) {

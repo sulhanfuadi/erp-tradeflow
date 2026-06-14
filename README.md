@@ -47,7 +47,10 @@ Diagram swimlane di bawah menunjukkan **alur lengkap O2C** per peran sesuai spes
 > **Actor:** Sales Representative  
 > Menerima Purchase Order dari pelanggan (trigger: *Order Received*) dan memasukkan data pesanan ke dalam sistem sebagai *Sales Order*. Sistem mencegah *oversell* secara otomatis.
 
-![O2C Step 1 — Create Sales Order](docs/evidence/bpmn/O2C-01_create-sales-order.png)
+![O2C Step 1 — Create Sales Order (List)](docs/evidence/bpmn/O2C-01_create-sales-order.png)
+
+*Order Details View:*  
+![O2C Step 1 — Sales Order Detail](docs/evidence/bpmn/O2C-01_sales-order-detail.png)
 
 ---
 
