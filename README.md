@@ -70,9 +70,6 @@ Diagram swimlane di bawah menunjukkan **alur lengkap O2C** per peran sesuai spes
 *Approval Action (Bottom View):*  
 ![O2C Step 2 — Sales Order Details (Bottom - Approve Action)](docs/evidence/bpmn/O2C-02_approve-sales-order-bottom.png)
 
-*Validation of Approval:*  
-![O2C Step 2 — Approved Validation](docs/evidence/bpmn/O2C-02_approve-sales-order-validation.png)
-
 ---
 
 ### Step 3 — Pick → Pack → Ship a Sales Order
