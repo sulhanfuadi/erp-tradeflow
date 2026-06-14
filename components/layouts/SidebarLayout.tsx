@@ -64,7 +64,7 @@ export interface SidebarLayoutProps {
 
 export default function SidebarLayout({
   children,
-  sidebarTitle = "Stock Inventory",
+  sidebarTitle = "TradeFlow",
 }: SidebarLayoutProps) {
   const pathname = usePathname();
   const router = useRouter();

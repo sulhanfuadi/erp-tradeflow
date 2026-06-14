@@ -27,7 +27,7 @@ export default function Footer() {
           {/* Left Section - Copyright and Brand */}
           <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 text-sm text-gray-700 dark:text-muted-foreground">
             <span className="font-medium text-gray-900 dark:text-foreground text-center sm:text-left">
-              Stock Inventory Management
+              Enterprise Trade Engine
             </span>
             <span className="hidden sm:inline">•</span>
             <span className="text-center sm:text-left">© {currentYear}</span>

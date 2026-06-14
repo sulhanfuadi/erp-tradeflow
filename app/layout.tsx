@@ -37,23 +37,24 @@ export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: {
-    default: "Stockly — Warehouse & Stock Inventory Management System",
-    template: "%s | Stockly — Warehouse & Stock Inventory Management System",
+    default: "TradeFlow — Enterprise Trade Engine",
+    template: "%s | TradeFlow — Enterprise Trade Engine",
   },
   description:
-    "Stockly is a full-stack warehouse and stock inventory management system built with Next.js. Manage products, categories, suppliers, orders, invoices, and warehouses. Role-based access for admin, client, and supplier. Analytics dashboard, QR codes, export, and secure JWT authentication. By Arnob Mahmud.",
+    "TradeFlow is a full-stack enterprise trade engine built with Next.js. Manage products, categories, suppliers, orders, invoices, and warehouses. Role-based access for admin, client, and supplier.",
   authors: [
     {
-      name: "Arnob Mahmud",
-      url: "https://www.arnobmahmud.com",
-      email: "contact@arnobmahmud.com",
+      name: "TradeFlow Team",
+      url: "https://example.com",
+      email: "contact@example.com",
     },
   ],
-  creator: "Arnob Mahmud",
-  publisher: "Arnob Mahmud",
-  applicationName: "Stockly",
+  creator: "TradeFlow Team",
+  publisher: "TradeFlow Team",
+  applicationName: "TradeFlow",
   keywords: [
-    "stock inventory",
+    "trade engine",
+    "erp",
     "inventory management",
     "warehouse management",
     "stock management system",
@@ -65,10 +66,6 @@ export const metadata = {
     "invoices",
     "suppliers",
     "categories",
-    "JWT authentication",
-    "responsive web app",
-    "business dashboard",
-    "Arnob Mahmud",
   ],
   icons: {
     icon: "/favicon.ico",
@@ -76,30 +73,30 @@ export const metadata = {
     other: [{ rel: "icon", url: "/favicon.ico" }],
   },
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL ?? "https://stockly-inventory.vercel.app",
+    process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
   ),
   openGraph: {
     type: "website",
     locale: "en_US",
-    title: "Stockly — Warehouse & Stock Inventory Management System",
+    title: "TradeFlow — Enterprise Trade Engine",
     description:
-      "Efficiently manage products, orders, invoices, and warehouses with Stockly. Secure, responsive, role-based inventory system. By Arnob Mahmud.",
-    url: "https://stockly-inventory.vercel.app",
-    siteName: "Stockly",
+      "Efficiently manage products, orders, invoices, and warehouses with TradeFlow. Secure, responsive, role-based inventory system.",
+    url: "http://localhost:3000",
+    siteName: "TradeFlow",
     images: [
       {
         url: "/favicon.ico",
         width: 32,
         height: 32,
-        alt: "Stockly — Stock Inventory Management",
+        alt: "TradeFlow",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Stockly — Warehouse & Stock Inventory Management System",
+    title: "TradeFlow — Enterprise Trade Engine",
     description:
-      "Efficiently manage products, orders, invoices, and warehouses. Secure, responsive inventory system. By Arnob Mahmud.",
+      "Efficiently manage products, orders, invoices, and warehouses. Secure, responsive inventory system.",
     images: ["/favicon.ico"],
   },
   robots: {
