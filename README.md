@@ -82,7 +82,13 @@ Diagram swimlane di bawah menunjukkan **alur lengkap O2C** per peran sesuai spes
 > **Actor:** Inventory Manager  
 > Melakukan pemenuhan pesanan secara bertahap: **Pick → Pack → Ship**. Status inventori otomatis teralokasi dan berkurang saat setiap tahap diselesaikan.
 
-![O2C Step 3 — Item Fulfillment (Pick, Pack, Ship)](docs/evidence/bpmn/O2C-03_item-fulfillment.png)
+![O2C Step 3 — Pick](docs/evidence/bpmn/O2C-03_fulfillment-pick.png)
+
+*Pack Item:*
+![O2C Step 3 — Pack](docs/evidence/bpmn/O2C-03_fulfillment-pack.png)
+
+*Ship Item:*
+![O2C Step 3 — Ship](docs/evidence/bpmn/O2C-03_fulfillment-ship.png)
 
 ---
 
@@ -93,7 +99,11 @@ Diagram swimlane di bawah menunjukkan **alur lengkap O2C** per peran sesuai spes
 > **Actor:** A/R Analyst  
 > Menerbitkan *Customer Invoice* berdasarkan kuantitas yang telah di-ship. Invoice dikirim ke Customer (dokumen dashed line ke Customer lane).
 
-![O2C Step 4 — Customer Invoice](docs/evidence/bpmn/O2C-04_customer-invoice.png)
+*Generate Invoice Modal:*
+![O2C Step 4 — Generate Invoice](docs/evidence/bpmn/O2C-04_generate-invoice-modal.png)
+
+*Invoice Detail:*
+![O2C Step 4 — Customer Invoice](docs/evidence/bpmn/O2C-04_invoice-detail.png)
 
 ---
 
@@ -104,6 +114,13 @@ Diagram swimlane di bawah menunjukkan **alur lengkap O2C** per peran sesuai spes
 > **Actor:** A/R Analyst  
 > Mencatat penerimaan pembayaran dari pelanggan. Mendukung partial maupun full payment. Proses selesai: *Order Fulfilled and Paid* (End Event).
 
+*Invoice Detail (Bottom):*
+![O2C Step 5 — Invoice Bottom](docs/evidence/bpmn/O2C-05_invoice-bottom.png)
+
+*Payment Modal:*
+![O2C Step 5 — Payment Modal](docs/evidence/bpmn/O2C-05_payment-modal.png)
+
+*Invoice Paid (Detail After Pay):*
 ![O2C Step 5 — Customer Payment](docs/evidence/bpmn/O2C-05_customer-payment.png)
 
 ---
