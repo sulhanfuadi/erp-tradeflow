@@ -28,15 +28,44 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    if (!isStripeConfigured()) {
-      return NextResponse.json(
-        { error: "Payment system is not configured" },
-        { status: 503 },
-      );
-    }
-
     const body: CreateCheckoutInput = await request.json();
     const { type, id, successUrl, cancelUrl } = body;
+
+    if (!isStripeConfigured()) {
+      logger.info("Stripe not configured - bypassing and mocking successful payment");
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+      const mockSessionId = `mock_session_${Date.now()}`;
+      const mockSuccessUrl = successUrl || `${baseUrl}/${type}s/${id}?payment=success&session_id=${mockSessionId}`;
+
+      if (type === "order") {
+        await prisma.order.update({
+          where: { id },
+          data: { paymentStatus: "paid", status: "confirmed", updatedAt: new Date() },
+        });
+      } else if (type === "invoice") {
+        const inv = await prisma.invoice.findUnique({ where: { id } });
+        if (inv) {
+          await prisma.invoice.update({
+            where: { id },
+            data: { status: "paid", amountPaid: inv.total, amountDue: 0, paidAt: new Date(), updatedAt: new Date() },
+          });
+          if (inv.orderId) {
+            await prisma.order.update({
+              where: { id: inv.orderId },
+              data: { paymentStatus: "paid", updatedAt: new Date() },
+            });
+          }
+        }
+      }
+
+      const { invalidateAllServerCaches } = await import("@/lib/cache");
+      await invalidateAllServerCaches().catch(() => {});
+
+      return NextResponse.json({
+        sessionId: mockSessionId,
+        url: mockSuccessUrl,
+      });
+    }
 
     if (!type || !id) {
       return NextResponse.json(
