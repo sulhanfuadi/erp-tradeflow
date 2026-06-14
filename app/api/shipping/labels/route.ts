@@ -37,12 +37,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    if (!isShippoConfigured()) {
-      return NextResponse.json(
-        { error: "Shipping service is not configured" },
-        { status: 503 },
-      );
-    }
+    // Removed 503 error; if not configured, we use mock logic below
 
     const body: GenerateLabelInput = await request.json();
     const {
@@ -101,205 +96,213 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const shippo = getShippo();
-    let trackingNumber: string;
+    let trackingNumber: string = "";
     let labelUrl: string | undefined;
     let trackingCarrier: string = carrier || "usps";
 
-    // If rateObjectId provided, purchase that specific rate
-    if (rateObjectId) {
-      const transaction = await shippo.transactions.create({
-        rate: rateObjectId,
-        labelFileType: "PDF",
-        async: false,
-      });
-
-      if (transaction.status !== "SUCCESS") {
-        const errorMessage =
-          transaction.messages?.map((m) => m.text).join(", ") ||
-          "Failed to create shipping label";
-        return NextResponse.json({ error: errorMessage }, { status: 400 });
-      }
-
-      trackingNumber = transaction.trackingNumber || "";
-      labelUrl = transaction.labelUrl;
-      // Rate can be a string (rate ID) or a CoreRate object
-      const rateObj =
-        typeof transaction.rate === "object" ? transaction.rate : null;
-      trackingCarrier = rateObj?.provider || carrier || "usps";
+    if (!isShippoConfigured()) {
+      // Mock generation if Shippo is not configured (demo/local mode)
+      trackingNumber = `MOCK-${Date.now()}-${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
+      labelUrl = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
+      trackingCarrier = carrier || "usps";
     } else {
-      // Create shipment and get cheapest rate
-      // Cast shippingAddress from Prisma Json to our expected shape
-      const shippingAddr = order.shippingAddress as {
-        name?: string;
-        street?: string;
-        city?: string;
-        state?: string;
-        zipCode?: string;
-        country?: string;
-        phone?: string;
-      } | null;
+      const shippo = getShippo();
 
-      const shipmentToAddress = toAddress || {
-        name: shippingAddr?.name || "Customer",
-        street1: shippingAddr?.street || "123 Test St",
-        city: shippingAddr?.city || "Test City",
-        state: shippingAddr?.state || "NY",
-        zip: shippingAddr?.zipCode || "10001",
-        country: shippingAddr?.country || "US",
-        phone: shippingAddr?.phone || "",
-        email: "",
-      };
+      // If rateObjectId provided, purchase that specific rate
+      if (rateObjectId) {
+        const transaction = await shippo.transactions.create({
+          rate: rateObjectId,
+          labelFileType: "PDF",
+          async: false,
+        });
 
-      const toCountry = (shipmentToAddress.country || "US").toUpperCase();
-      const isInternational = toCountry !== "US";
+        if (transaction.status !== "SUCCESS") {
+          const errorMessage =
+            transaction.messages?.map((m) => m.text).join(", ") ||
+            "Failed to create shipping label";
+          return NextResponse.json({ error: errorMessage }, { status: 400 });
+        }
 
-      // For international shipments, USPS (and others) require a customs declaration.
-      // We use DEFAULT_FROM_ADDRESS / .env for certify signer and origin.
-      // Shippo requires: combined weight of all customs items <= parcel weight.
-      const baseParcelWeight = parcel?.weight || "2";
-      const totalQty =
-        order.items.reduce((sum, i) => sum + i.quantity, 0) || 1;
-      const parcelWeightNum = parseFloat(baseParcelWeight) || 2;
+        trackingNumber = transaction.trackingNumber || "";
+        labelUrl = transaction.labelUrl;
+        // Rate can be a string (rate ID) or a CoreRate object
+        const rateObj =
+          typeof transaction.rate === "object" ? transaction.rate : null;
+        trackingCarrier = rateObj?.provider || carrier || "usps";
+      } else {
+        // Create shipment and get cheapest rate
+        // Cast shippingAddress from Prisma Json to our expected shape
+        const shippingAddr = order.shippingAddress as {
+          name?: string;
+          street?: string;
+          city?: string;
+          state?: string;
+          zipCode?: string;
+          country?: string;
+          phone?: string;
+        } | null;
 
-      let customsDeclarationId: string | undefined;
-      let parcelWeightForShipment = baseParcelWeight;
+        const shipmentToAddress = toAddress || {
+          name: shippingAddr?.name || "Customer",
+          street1: shippingAddr?.street || "123 Test St",
+          city: shippingAddr?.city || "Test City",
+          state: shippingAddr?.state || "NY",
+          zip: shippingAddr?.zipCode || "10001",
+          country: shippingAddr?.country || "US",
+          phone: shippingAddr?.phone || "",
+          email: "",
+        };
 
-      if (isInternational) {
-        // Assign weight per unit so that sum(quantity * weightPerUnit) <= parcel weight.
-        // Use floor to avoid rounding over: e.g. 2/3 = 0.66 so 3*0.66 = 1.98 <= 2.
-        const weightPerUnit =
-          totalQty > 0
-            ? Math.floor((parcelWeightNum / totalQty) * 100) / 100
-            : parcelWeightNum;
-        const weightPerItemStr =
-          weightPerUnit > 0 ? weightPerUnit.toFixed(2) : "0.01";
+        const toCountry = (shipmentToAddress.country || "US").toUpperCase();
+        const isInternational = toCountry !== "US";
 
-        const customsItems =
-          order.items.length > 0
-            ? order.items.map((item) => ({
-                description: item.productName.slice(0, 256),
-                quantity: item.quantity,
-                netWeight: weightPerItemStr,
-                massUnit: "lb" as const,
-                valueAmount: item.subtotal.toFixed(2),
-                valueCurrency: "USD" as const,
-                originCountry: "US" as const,
-              }))
-            : [
-                {
-                  description: "Merchandise",
-                  quantity: 1,
-                  netWeight: baseParcelWeight,
+        // For international shipments, USPS (and others) require a customs declaration.
+        // We use DEFAULT_FROM_ADDRESS / .env for certify signer and origin.
+        // Shippo requires: combined weight of all customs items <= parcel weight.
+        const baseParcelWeight = parcel?.weight || "2";
+        const totalQty =
+          order.items.reduce((sum, i) => sum + i.quantity, 0) || 1;
+        const parcelWeightNum = parseFloat(baseParcelWeight) || 2;
+
+        let customsDeclarationId: string | undefined;
+        let parcelWeightForShipment = baseParcelWeight;
+
+        if (isInternational) {
+          // Assign weight per unit so that sum(quantity * weightPerUnit) <= parcel weight.
+          // Use floor to avoid rounding over: e.g. 2/3 = 0.66 so 3*0.66 = 1.98 <= 2.
+          const weightPerUnit =
+            totalQty > 0
+              ? Math.floor((parcelWeightNum / totalQty) * 100) / 100
+              : parcelWeightNum;
+          const weightPerItemStr =
+            weightPerUnit > 0 ? weightPerUnit.toFixed(2) : "0.01";
+
+          const customsItems =
+            order.items.length > 0
+              ? order.items.map((item) => ({
+                  description: item.productName.slice(0, 256),
+                  quantity: item.quantity,
+                  netWeight: weightPerItemStr,
                   massUnit: "lb" as const,
-                  valueAmount: order.subtotal.toFixed(2),
+                  valueAmount: item.subtotal.toFixed(2),
                   valueCurrency: "USD" as const,
                   originCountry: "US" as const,
-                },
-              ];
+                }))
+              : [
+                  {
+                    description: "Merchandise",
+                    quantity: 1,
+                    netWeight: baseParcelWeight,
+                    massUnit: "lb" as const,
+                    valueAmount: order.subtotal.toFixed(2),
+                    valueCurrency: "USD" as const,
+                    originCountry: "US" as const,
+                  },
+                ];
 
-        const combinedCustomsWeight = order.items.length
-          ? order.items.reduce(
-              (sum, item) => sum + item.quantity * weightPerUnit,
-              0,
-            )
-          : parcelWeightNum;
-        // Ensure parcel weight is at least the combined customs weight (Shippo validation).
-        const minParcelWeight = Math.ceil(combinedCustomsWeight * 100) / 100;
-        parcelWeightForShipment =
-          parcelWeightNum >= minParcelWeight
-            ? baseParcelWeight
-            : minParcelWeight.toFixed(2);
+          const combinedCustomsWeight = order.items.length
+            ? order.items.reduce(
+                (sum, item) => sum + item.quantity * weightPerUnit,
+                0,
+              )
+            : parcelWeightNum;
+          // Ensure parcel weight is at least the combined customs weight (Shippo validation).
+          const minParcelWeight = Math.ceil(combinedCustomsWeight * 100) / 100;
+          parcelWeightForShipment =
+            parcelWeightNum >= minParcelWeight
+              ? baseParcelWeight
+              : minParcelWeight.toFixed(2);
 
-        const declaration = await shippo.customsDeclarations.create({
-          contentsType: "MERCHANDISE",
-          nonDeliveryOption: "RETURN",
-          certify: true,
-          certifySigner: fromAddress?.name || DEFAULT_FROM_ADDRESS.name,
-          incoterm: "DDU",
-          eelPfc: "NOEEI_30_37_a",
-          items: customsItems,
-        });
-        customsDeclarationId = declaration.objectId;
-      }
+          const declaration = await shippo.customsDeclarations.create({
+            contentsType: "MERCHANDISE",
+            nonDeliveryOption: "RETURN",
+            certify: true,
+            certifySigner: fromAddress?.name || DEFAULT_FROM_ADDRESS.name,
+            incoterm: "DDU",
+            eelPfc: "NOEEI_30_37_a",
+            items: customsItems,
+          });
+          customsDeclarationId = declaration.objectId;
+        }
 
-      const shipmentPayload: Parameters<typeof shippo.shipments.create>[0] = {
-        addressFrom: {
-          name: fromAddress?.name || DEFAULT_FROM_ADDRESS.name,
-          street1: fromAddress?.street1 || DEFAULT_FROM_ADDRESS.street1,
-          city: fromAddress?.city || DEFAULT_FROM_ADDRESS.city,
-          state: fromAddress?.state || DEFAULT_FROM_ADDRESS.state,
-          zip: fromAddress?.zip || DEFAULT_FROM_ADDRESS.zip,
-          country: fromAddress?.country || DEFAULT_FROM_ADDRESS.country,
-          phone: fromAddress?.phone || DEFAULT_FROM_ADDRESS.phone,
-          email: fromAddress?.email || DEFAULT_FROM_ADDRESS.email,
-        },
-        addressTo: shipmentToAddress,
-        parcels: [
-          {
-            length: parcel?.length || "10",
-            width: parcel?.width || "8",
-            height: parcel?.height || "4",
-            distanceUnit: "in",
-            weight: parcelWeightForShipment,
-            massUnit: "lb",
+        const shipmentPayload: Parameters<typeof shippo.shipments.create>[0] = {
+          addressFrom: {
+            name: fromAddress?.name || DEFAULT_FROM_ADDRESS.name,
+            street1: fromAddress?.street1 || DEFAULT_FROM_ADDRESS.street1,
+            city: fromAddress?.city || DEFAULT_FROM_ADDRESS.city,
+            state: fromAddress?.state || DEFAULT_FROM_ADDRESS.state,
+            zip: fromAddress?.zip || DEFAULT_FROM_ADDRESS.zip,
+            country: fromAddress?.country || DEFAULT_FROM_ADDRESS.country,
+            phone: fromAddress?.phone || DEFAULT_FROM_ADDRESS.phone,
+            email: fromAddress?.email || DEFAULT_FROM_ADDRESS.email,
           },
-        ],
-      };
-      if (customsDeclarationId) {
-        shipmentPayload.customsDeclaration = customsDeclarationId;
-      }
+          addressTo: shipmentToAddress,
+          parcels: [
+            {
+              length: parcel?.length || "10",
+              width: parcel?.width || "8",
+              height: parcel?.height || "4",
+              distanceUnit: "in",
+              weight: parcelWeightForShipment,
+              massUnit: "lb",
+            },
+          ],
+        };
+        if (customsDeclarationId) {
+          shipmentPayload.customsDeclaration = customsDeclarationId;
+        }
 
-      const shipment = await shippo.shipments.create(shipmentPayload);
+        const shipment = await shippo.shipments.create(shipmentPayload);
 
-      // Find rate for specified carrier or get cheapest
-      let selectedRate = shipment.rates?.find(
-        (r) =>
-          r.provider?.toLowerCase() === carrier?.toLowerCase() &&
-          (!service || r.servicelevel?.token === service),
-      );
+        // Find rate for specified carrier or get cheapest
+        let selectedRate = shipment.rates?.find(
+          (r) =>
+            r.provider?.toLowerCase() === carrier?.toLowerCase() &&
+            (!service || r.servicelevel?.token === service),
+        );
 
-      if (!selectedRate && shipment.rates && shipment.rates.length > 0) {
-        // Get cheapest rate
-        const firstRate = shipment.rates[0];
-        if (firstRate) {
-          selectedRate = shipment.rates.reduce(
-            (min, r) =>
-              parseFloat(r.amount || "0") < parseFloat(min?.amount || "0")
-                ? r
-                : min,
-            firstRate,
+        if (!selectedRate && shipment.rates && shipment.rates.length > 0) {
+          // Get cheapest rate
+          const firstRate = shipment.rates[0];
+          if (firstRate) {
+            selectedRate = shipment.rates.reduce(
+              (min, r) =>
+                parseFloat(r.amount || "0") < parseFloat(min?.amount || "0")
+                  ? r
+                  : min,
+              firstRate,
+            );
+          }
+        }
+
+        if (!selectedRate) {
+          return NextResponse.json(
+            { error: "No shipping rates available" },
+            { status: 400 },
           );
         }
+
+        // Purchase label
+        const transaction = await shippo.transactions.create({
+          rate: selectedRate.objectId || "",
+          labelFileType: "PDF",
+          async: false,
+        });
+
+        if (transaction.status !== "SUCCESS") {
+          const errorMessage =
+            transaction.messages?.map((m) => m.text).join(", ") ||
+            "Failed to create shipping label";
+          return NextResponse.json({ error: errorMessage }, { status: 400 });
+        }
+
+        trackingNumber = transaction.trackingNumber || "";
+        labelUrl = transaction.labelUrl;
+        // Rate can be a string (rate ID) or a CoreRate object
+        const rateObj2 =
+          typeof transaction.rate === "object" ? transaction.rate : null;
+        trackingCarrier = rateObj2?.provider || selectedRate.provider || "usps";
       }
-
-      if (!selectedRate) {
-        return NextResponse.json(
-          { error: "No shipping rates available" },
-          { status: 400 },
-        );
-      }
-
-      // Purchase label
-      const transaction = await shippo.transactions.create({
-        rate: selectedRate.objectId || "",
-        labelFileType: "PDF",
-        async: false,
-      });
-
-      if (transaction.status !== "SUCCESS") {
-        const errorMessage =
-          transaction.messages?.map((m) => m.text).join(", ") ||
-          "Failed to create shipping label";
-        return NextResponse.json({ error: errorMessage }, { status: 400 });
-      }
-
-      trackingNumber = transaction.trackingNumber || "";
-      labelUrl = transaction.labelUrl;
-      // Rate can be a string (rate ID) or a CoreRate object
-      const rateObj2 =
-        typeof transaction.rate === "object" ? transaction.rate : null;
-      trackingCarrier = rateObj2?.provider || selectedRate.provider || "usps";
     }
 
     // In test mode, generate a test tracking number if none provided

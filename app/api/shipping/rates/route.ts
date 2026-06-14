@@ -31,12 +31,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    if (!isShippoConfigured()) {
-      return NextResponse.json(
-        { error: "Shipping service is not configured" },
-        { status: 503 },
-      );
-    }
+    // Removed 503 error; if not configured, we use mock logic below
 
     const body: GetRatesInput = await request.json();
     const { toAddress, fromAddress, parcel } = body;
@@ -52,6 +47,44 @@ export async function POST(request: NextRequest) {
         { error: "Missing required address fields" },
         { status: 400 },
       );
+    }
+
+    if (!isShippoConfigured()) {
+      // Mock rates if Shippo is not configured (demo/local mode)
+      const mockResponse: GetRatesResponse = {
+        rates: [
+          {
+            objectId: `mock_rate_${Date.now()}`,
+            carrier: "USPS",
+            carrierAccount: "mock_account",
+            servicelevel: {
+              name: "Priority Mail",
+              token: "usps_priority",
+              terms: "",
+            },
+            amount: "15.00",
+            currency: "USD",
+            estimatedDays: 2,
+            durationTerms: "Delivery in 2 days",
+          },
+          {
+            objectId: `mock_rate_${Date.now() + 1}`,
+            carrier: "UPS",
+            carrierAccount: "mock_account",
+            servicelevel: {
+              name: "UPS Ground",
+              token: "ups_ground",
+              terms: "",
+            },
+            amount: "12.50",
+            currency: "USD",
+            estimatedDays: 5,
+            durationTerms: "Delivery in 5 days",
+          }
+        ],
+        shipmentId: `mock_shipment_${Date.now()}`,
+      };
+      return NextResponse.json(mockResponse);
     }
 
     const shippo = getShippo();
