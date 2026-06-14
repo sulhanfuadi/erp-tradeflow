@@ -44,11 +44,12 @@ export async function GET(
     }
 
     const userId = session.id;
-    const isAdmin = session.role === "admin";
     const isClient = session.role === "client";
+    const isSupplier = session.role === "supplier";
+    const isInternal = !isClient && !isSupplier;
 
     let invoice: Awaited<ReturnType<typeof getInvoiceById>> | null;
-    if (isAdmin) {
+    if (isInternal) {
       invoice = await prisma.invoice.findUnique({ where: { id: invoiceId } });
     } else if (isClient) {
       // Client can view invoices where they are the customer (clientId)
