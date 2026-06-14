@@ -73,8 +73,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Order not found" }, { status: 404 });
     }
 
-    // Allow: admin, order creator, client, or supplier on this order
+    // Allow: admin, inventory_manager, order creator, client, or supplier on this order
     const isAdmin = session.role === "admin";
+    const isInventoryManager = session.role === "inventory_manager";
     const isCreator = order.userId === session.id;
     const isClient = order.clientId === session.id;
     let isSupplierOnOrder = false;
@@ -84,7 +85,7 @@ export async function POST(request: NextRequest) {
         !!supplier &&
         order.items.some((item) => item.product.supplierId === supplier.id);
     }
-    if (!isAdmin && !isCreator && !isClient && !isSupplierOnOrder) {
+    if (!isAdmin && !isInventoryManager && !isCreator && !isClient && !isSupplierOnOrder) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
