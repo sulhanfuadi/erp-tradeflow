@@ -156,7 +156,10 @@ async function main() {
 
       // B: Bottom viewport screenshot showing Approve / Reject buttons
       console.log("Scrolling to bottom...");
-      await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+      await page.evaluate(() => {
+        const el = document.querySelector('#main-content');
+        if (el) el.scrollTop = el.scrollHeight;
+      });
       await page.waitForTimeout(1000);
       console.log("Capturing O2C-02_approve-sales-order-bottom (Bottom of page)");
       await page.screenshot({ path: path.join(SCREENSHOT_DIR, "O2C-02_approve-sales-order-bottom.png"), fullPage: false });
@@ -167,7 +170,10 @@ async function main() {
       await page.waitForTimeout(2000); // wait for update & refresh
       
       // Scroll back up to show the new status badge
-      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.evaluate(() => {
+        const el = document.querySelector('#main-content');
+        if (el) el.scrollTop = 0;
+      });
       await page.waitForTimeout(1000);
 
       // Re-apply dev widget hiding style since the page refreshed/navigated
