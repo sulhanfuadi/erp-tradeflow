@@ -35,6 +35,11 @@ export async function POST(
   try {
     const guard = await requireNetSuiteSession(request);
     if (guard.errorResponse) return guard.errorResponse;
+    const session = guard.session!;
+
+    if (session.role !== "inventory_manager" && session.role !== "admin") {
+      return NextResponse.json({ error: "Forbidden: Only Inventory Manager can complete transfer" }, { status: 403 });
+    }
 
     const { id } = await params;
     const saved = await completeStockTransfer(id, guard.session!.id);

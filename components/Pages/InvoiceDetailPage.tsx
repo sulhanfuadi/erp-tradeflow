@@ -35,6 +35,7 @@ import {
   invalidateAfterOrderGraphChange,
 } from "@/lib/react-query";
 import { useAuth } from "@/contexts";
+import { isClient, isArAnalyst as isArMgr } from "@/lib/role-helpers";
 import Navbar from "@/components/layouts/Navbar";
 import {
   ClientDateTime,
@@ -305,7 +306,8 @@ export default function InvoiceDetailPage({
   const sendInvoiceMutation = useSendInvoice();
   const isDeleting = deleteInvoiceMutation.isPending;
   const isSending = sendInvoiceMutation.isPending;
-  const isClientRole = user?.role === "client";
+  const isClientRole = isClient(user);
+  const isArAnalyst = isArMgr(user);
 
   // Edit Invoice: open InvoiceDialog in edit mode (same as InvoiceList/InvoiceActions)
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -933,14 +935,18 @@ export default function InvoiceDetailPage({
               <ArrowLeft className="h-4 w-4 shrink-0" />
               Back
             </Button>
-            <Button
-              onClick={handleEditInvoice}
-              disabled={isClientRole}
-              className="w-full sm:w-auto gap-2 rounded-xl border border-blue-400/30 bg-gradient-to-r from-blue-500/70 via-blue-500/50 to-blue-500/30 text-white shadow-[0_10px_25px_rgba(59,130,246,0.35)] backdrop-blur-sm hover:border-blue-300/50 hover:from-blue-500/80 hover:via-blue-500/60 hover:to-blue-500/40 transition-all duration-300 disabled:opacity-50"
-            >
-              <Edit className="h-4 w-4 shrink-0" />
-              Edit Invoice
-            </Button>
+            <div className="flex flex-col gap-1 w-full sm:w-auto">
+              <Button
+                onClick={handleEditInvoice}
+                disabled={isClientRole || !isArAnalyst}
+                title={!isArAnalyst ? "Requires A/R Analyst" : ""}
+                className="w-full sm:w-auto gap-2 rounded-xl border border-blue-400/30 bg-gradient-to-r from-blue-500/70 via-blue-500/50 to-blue-500/30 text-white shadow-[0_10px_25px_rgba(59,130,246,0.35)] backdrop-blur-sm hover:border-blue-300/50 hover:from-blue-500/80 hover:via-blue-500/60 hover:to-blue-500/40 transition-all duration-300 disabled:opacity-50"
+              >
+                <Edit className="h-4 w-4 shrink-0" />
+                Edit Invoice
+              </Button>
+              {!isArAnalyst && <span className="text-[10px] text-muted-foreground text-center">Requires A/R Analyst</span>}
+            </div>
             <Button
               asChild
               className="w-full sm:w-auto gap-2 rounded-xl border border-teal-400/30 bg-gradient-to-r from-teal-500/70 via-teal-500/50 to-teal-500/30 text-white shadow-[0_10px_25px_rgba(20,184,166,0.35)] backdrop-blur-sm hover:border-teal-300/50 hover:from-teal-500/80 hover:via-teal-500/60 hover:to-teal-500/40 transition-all duration-300"
@@ -954,24 +960,32 @@ export default function InvoiceDetailPage({
               </a>
             </Button>
             {invoice.status === "draft" && (
-              <Button
-                onClick={() => setSendDialogOpen(true)}
-                disabled={isSending}
-                className="w-full sm:w-auto gap-2 rounded-xl border border-sky-400/30 bg-gradient-to-r from-sky-500/70 via-sky-500/50 to-sky-500/30 text-white shadow-[0_10px_25px_rgba(2,132,199,0.35)] backdrop-blur-sm hover:border-sky-300/50 hover:from-sky-500/80 hover:via-sky-500/60 hover:to-sky-500/40 transition-all duration-300 disabled:opacity-50"
-              >
-                <Send className="h-4 w-4 shrink-0" />
-                {isSending ? "Sending..." : "Send Invoice"}
-              </Button>
+              <div className="flex flex-col gap-1 w-full sm:w-auto">
+                <Button
+                  onClick={() => setSendDialogOpen(true)}
+                  disabled={isSending || !isArAnalyst}
+                  title={!isArAnalyst ? "Requires A/R Analyst" : ""}
+                  className="w-full sm:w-auto gap-2 rounded-xl border border-sky-400/30 bg-gradient-to-r from-sky-500/70 via-sky-500/50 to-sky-500/30 text-white shadow-[0_10px_25px_rgba(2,132,199,0.35)] backdrop-blur-sm hover:border-sky-300/50 hover:from-sky-500/80 hover:via-sky-500/60 hover:to-sky-500/40 transition-all duration-300 disabled:opacity-50"
+                >
+                  <Send className="h-4 w-4 shrink-0" />
+                  {isSending ? "Sending..." : "Send Invoice"}
+                </Button>
+                {!isArAnalyst && <span className="text-[10px] text-muted-foreground text-center">Requires A/R Analyst</span>}
+              </div>
             )}
             {invoice.status !== "cancelled" && (
-              <Button
-                onClick={() => setDeleteDialogOpen(true)}
-                disabled={isDeleting}
-                className="w-full sm:w-auto gap-2 rounded-xl border border-rose-400/30 bg-gradient-to-r from-rose-500/70 via-rose-500/50 to-rose-500/30 text-white shadow-[0_10px_25px_rgba(225,29,72,0.35)] backdrop-blur-sm hover:border-rose-300/50 hover:from-rose-500/80 hover:via-rose-500/60 hover:to-rose-500/40 transition-all duration-300 disabled:opacity-50"
-              >
-                <Trash2 className="h-4 w-4 shrink-0" />
-                {isDeleting ? "Deleting..." : "Delete Invoice"}
-              </Button>
+              <div className="flex flex-col gap-1 w-full sm:w-auto">
+                <Button
+                  onClick={() => setDeleteDialogOpen(true)}
+                  disabled={isDeleting || !isArAnalyst}
+                  title={!isArAnalyst ? "Requires A/R Analyst" : ""}
+                  className="w-full sm:w-auto gap-2 rounded-xl border border-rose-400/30 bg-gradient-to-r from-rose-500/70 via-rose-500/50 to-rose-500/30 text-white shadow-[0_10px_25px_rgba(225,29,72,0.35)] backdrop-blur-sm hover:border-rose-300/50 hover:from-rose-500/80 hover:via-rose-500/60 hover:to-rose-500/40 transition-all duration-300 disabled:opacity-50"
+                >
+                  <Trash2 className="h-4 w-4 shrink-0" />
+                  {isDeleting ? "Deleting..." : "Delete Invoice"}
+                </Button>
+                {!isArAnalyst && <span className="text-[10px] text-muted-foreground text-center">Requires A/R Analyst</span>}
+              </div>
             )}
             {invoice.orderId && (
               <Button

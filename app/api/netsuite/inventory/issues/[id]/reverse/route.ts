@@ -30,6 +30,11 @@ export async function POST(
   try {
     const guard = await requireNetSuiteSession(request);
     if (guard.errorResponse) return guard.errorResponse;
+    const session = guard.session!;
+
+    if (session.role !== "inventory_manager" && session.role !== "admin") {
+      return NextResponse.json({ error: "Forbidden: Only Inventory Manager can reverse stock issue" }, { status: 403 });
+    }
 
     const payload = await request.json().catch(() => ({}));
     const validation = reverseStockIssueSchema.safeParse(payload);

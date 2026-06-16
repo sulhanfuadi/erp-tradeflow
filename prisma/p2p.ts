@@ -264,7 +264,7 @@ export async function createGoodsReceipt(
 ) {
   return prisma.$transaction(async (tx) => {
     const purchaseOrder = await tx.purchaseOrder.findFirst({
-      where: { id: data.purchaseOrderId, userId },
+      where: { id: data.purchaseOrderId },
       include: { items: true },
     });
 
@@ -440,7 +440,7 @@ export async function reverseGoodsReceipt(
 ) {
   return prisma.$transaction(async (tx) => {
     const receipt = await tx.goodsReceipt.findFirst({
-      where: { id, userId },
+      where: { id },
       include: {
         items: true,
         purchaseOrder: {
@@ -639,7 +639,7 @@ export async function createAPInvoice(
 
   if (data.purchaseOrderId != null && data.purchaseOrderId !== "") {
     const po = await prisma.purchaseOrder.findFirst({
-      where: { id: data.purchaseOrderId, userId },
+      where: { id: data.purchaseOrderId },
       select: { id: true, supplierId: true },
     });
     if (po == null) {
@@ -652,7 +652,7 @@ export async function createAPInvoice(
 
   if (data.goodsReceiptId != null && data.goodsReceiptId !== "") {
     const gr = await prisma.goodsReceipt.findFirst({
-      where: { id: data.goodsReceiptId, userId },
+      where: { id: data.goodsReceiptId },
       select: { id: true, supplierId: true },
     });
     if (gr == null) {
@@ -705,7 +705,7 @@ export async function recordAPInvoicePayment(
   userId: string,
 ) {
   const invoice = await prisma.aPInvoice.findFirst({
-    where: { id, userId },
+      where: { id },
   });
 
   if (invoice == null) {

@@ -113,27 +113,30 @@ async function main() {
         categoryId: p.cat,
         supplierId: p.sup,
         userId: uid,
-        createdBy: uid
+        createdBy: uid,
+        deletedAt: null
       }
     });
     dbProducts.push(prod);
 
-    // Stock Allocation (split across central and regional)
+    const centralQty = Math.floor(p.qty * 0.7);
+    const regionalQty = p.qty - centralQty;
+
     await prisma.stockAllocation.create({
       data: {
         productId: prod.id,
         warehouseId: whCentral.id,
-        quantity: Math.floor(p.qty * 0.7), // 70% in central
+        quantity: centralQty,
         userId: uid
       }
     });
     
-    if (p.qty > 10) {
+    if (regionalQty > 0) {
       await prisma.stockAllocation.create({
         data: {
           productId: prod.id,
           warehouseId: whRegional.id,
-          quantity: Math.ceil(p.qty * 0.3), // 30% in regional
+          quantity: regionalQty,
           userId: uid
         }
       });

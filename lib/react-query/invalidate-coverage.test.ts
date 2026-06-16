@@ -243,7 +243,8 @@ describe("mutation invalidation coverage (inline fetch CRUD components)", () => 
   );
 
   for (const absPath of componentFiles) {
-    const rel = relative(ROOT, absPath);
+    // Normalize to forward slashes so allowlist lookups work on Windows
+    const rel = relative(ROOT, absPath).replaceAll("\\", "/");
     const content = readFileSync(absPath, "utf8");
     if (!DIRECT_FETCH_WRITE.test(content)) continue;
 
@@ -342,7 +343,8 @@ describe("API write routes — spec/exempt completeness", () => {
   const routeFiles = walkFiles(API_DIR, (n) => n === "route.ts");
 
   for (const absPath of routeFiles) {
-    const rel = relative(ROOT, absPath);
+    // Normalize to forward slashes so lookups work on Windows (relative() uses backslashes)
+    const rel = relative(ROOT, absPath).replaceAll("\\", "/");
     const content = readFileSync(absPath, "utf8");
     if (!hasWriteHandler(content)) continue;
 
@@ -356,7 +358,8 @@ describe("API write routes server cache invalidation", () => {
   const routeFiles = walkFiles(API_DIR, (n) => n === "route.ts");
 
   for (const absPath of routeFiles) {
-    const rel = relative(ROOT, absPath);
+    // Normalize to forward slashes so exempt lookups work on Windows
+    const rel = relative(ROOT, absPath).replaceAll("\\", "/");
     const content = readFileSync(absPath, "utf8");
     if (!hasWriteHandler(content)) continue;
 

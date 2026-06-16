@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useQueryClient } from "@tanstack/react-query";
+import { isSupplier, isClient, isSalesManager as isSalesMgr } from "@/lib/role-helpers";
 import { useOrder, useDeleteOrder } from "@/hooks/queries";
 import { useBackWithRefresh } from "@/hooks/use-back-with-refresh";
 import {
@@ -292,9 +293,9 @@ export default function OrderDetailPage() {
   }, [orderId, queryClient, router]);
   const deleteOrderMutation = useDeleteOrder();
   const isCancelling = deleteOrderMutation.isPending;
-  const isSupplierRole = user?.role === "supplier";
-  const isClientRole = user?.role === "client";
-  const isSalesManager = user?.role === "sales_manager" || user?.role === "admin";
+  const isSupplierRole = isSupplier(user);
+  const isClientRole = isClient(user);
+  const isSalesManager = isSalesMgr(user);
   const disableOrderActions = isSupplierRole || isClientRole;
 
   const [isApproving, setIsApproving] = useState(false);
@@ -974,22 +975,30 @@ export default function OrderDetailPage() {
               </TooltipContent>
             </Tooltip>
 
-            {order.status === "pending_approval" && isSalesManager && (
+            {order.status === "pending_approval" && (
               <>
-                <Button
-                  onClick={handleApprove}
-                  disabled={isApproving}
-                  className="w-full sm:w-auto gap-2 rounded-xl border border-emerald-400/30 bg-gradient-to-r from-emerald-500/70 via-emerald-500/50 to-emerald-500/30 text-white shadow-[0_10px_25px_rgba(16,185,129,0.35)] backdrop-blur-sm hover:border-emerald-300/50 hover:from-emerald-500/80 hover:via-emerald-500/60 hover:to-emerald-500/40 transition-all duration-300 disabled:opacity-50"
-                >
-                  {isApproving ? "Approving..." : "Approve Order"}
-                </Button>
-                <Button
-                  onClick={handleReject}
-                  disabled={isRejecting}
-                  className="w-full sm:w-auto gap-2 rounded-xl border border-rose-400/30 bg-gradient-to-r from-rose-500/70 via-rose-500/50 to-rose-500/30 text-white shadow-[0_10px_25px_rgba(225,29,72,0.35)] backdrop-blur-sm hover:border-rose-300/50 hover:from-rose-500/80 hover:via-rose-500/60 hover:to-rose-500/40 transition-all duration-300 disabled:opacity-50"
-                >
-                  {isRejecting ? "Rejecting..." : "Reject Order"}
-                </Button>
+                <div className="flex flex-col gap-1 w-full sm:w-auto">
+                  <Button
+                    onClick={handleApprove}
+                    disabled={isApproving || !isSalesManager}
+                    title={!isSalesManager ? "Requires Sales Manager" : ""}
+                    className="w-full sm:w-auto gap-2 rounded-xl border border-emerald-400/30 bg-gradient-to-r from-emerald-500/70 via-emerald-500/50 to-emerald-500/30 text-white shadow-[0_10px_25px_rgba(16,185,129,0.35)] backdrop-blur-sm hover:border-emerald-300/50 hover:from-emerald-500/80 hover:via-emerald-500/60 hover:to-emerald-500/40 transition-all duration-300 disabled:opacity-50"
+                  >
+                    {isApproving ? "Approving..." : "Approve Order"}
+                  </Button>
+                  {!isSalesManager && <span className="text-[10px] text-muted-foreground text-center">Requires Sales Manager</span>}
+                </div>
+                <div className="flex flex-col gap-1 w-full sm:w-auto">
+                  <Button
+                    onClick={handleReject}
+                    disabled={isRejecting || !isSalesManager}
+                    title={!isSalesManager ? "Requires Sales Manager" : ""}
+                    className="w-full sm:w-auto gap-2 rounded-xl border border-rose-400/30 bg-gradient-to-r from-rose-500/70 via-rose-500/50 to-rose-500/30 text-white shadow-[0_10px_25px_rgba(225,29,72,0.35)] backdrop-blur-sm hover:border-rose-300/50 hover:from-rose-500/80 hover:via-rose-500/60 hover:to-rose-500/40 transition-all duration-300 disabled:opacity-50"
+                  >
+                    {isRejecting ? "Rejecting..." : "Reject Order"}
+                  </Button>
+                  {!isSalesManager && <span className="text-[10px] text-muted-foreground text-center">Requires Sales Manager</span>}
+                </div>
               </>
             )}
 

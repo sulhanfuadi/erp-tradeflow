@@ -22,6 +22,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import type { StockAllocation } from "@/types";
 import { useAuth } from "@/contexts";
+import { isInventoryManager as isInvMgr } from "@/lib/role-helpers";
 
 interface WarehouseInventoryWorkbenchProps {
   warehouseId: string;
@@ -34,7 +35,7 @@ export default function WarehouseInventoryWorkbench({
 }: WarehouseInventoryWorkbenchProps) {
   const { toast } = useToast();
   const { user } = useAuth();
-  const isInventoryManager = user?.role === "inventory_manager" || user?.role === "admin";
+  const isInventoryManager = isInvMgr(user);
   const { data: products = [] } = useProducts();
   const { data: warehouses = [] } = useWarehouses();
 
@@ -235,10 +236,16 @@ export default function WarehouseInventoryWorkbench({
               }
             />
           </div>
-          <div className="flex items-end">
-            <Button disabled={createAllocation.isPending || !isInventoryManager} type="submit" className="w-full">
+          <div className="flex flex-col items-start justify-end gap-1">
+            <Button 
+              disabled={createAllocation.isPending || !isInventoryManager} 
+              title={!isInventoryManager ? "Requires Inventory Manager" : ""}
+              type="submit" 
+              className="w-full"
+            >
               Save Allocation
             </Button>
+            {!isInventoryManager && <span className="text-[10px] text-muted-foreground mt-1">Requires Inventory Manager</span>}
           </div>
         </form>
       </section>
@@ -314,9 +321,15 @@ export default function WarehouseInventoryWorkbench({
             />
           </div>
           <div className="md:col-span-4">
-            <Button disabled={createTransfer.isPending || !isInventoryManager} type="submit" className="w-full md:w-auto">
+            <Button 
+              disabled={createTransfer.isPending || !isInventoryManager} 
+              title={!isInventoryManager ? "Requires Inventory Manager" : ""}
+              type="submit" 
+              className="w-full md:w-auto"
+            >
               Create Transfer (Pending)
             </Button>
+            {!isInventoryManager && <p className="text-xs text-muted-foreground mt-1">Requires Inventory Manager</p>}
           </div>
         </form>
 
@@ -351,6 +364,7 @@ export default function WarehouseInventoryWorkbench({
                               size="sm"
                               variant="outline"
                               disabled={completeTransfer.isPending || !isInventoryManager}
+                              title={!isInventoryManager ? "Requires Inventory Manager" : ""}
                               onClick={() => completeTransfer.mutate(transfer.id)}
                             >
                               Complete
@@ -359,6 +373,7 @@ export default function WarehouseInventoryWorkbench({
                               size="sm"
                               variant="destructive"
                               disabled={cancelTransfer.isPending || !isInventoryManager}
+                              title={!isInventoryManager ? "Requires Inventory Manager" : ""}
                               onClick={() => cancelTransfer.mutate(transfer.id)}
                             >
                               Cancel
@@ -370,6 +385,7 @@ export default function WarehouseInventoryWorkbench({
                             size="sm"
                             variant="outline"
                             disabled={reverseTransfer.isPending || !isInventoryManager}
+                            title={!isInventoryManager ? "Requires Inventory Manager" : ""}
                             onClick={() =>
                               reverseTransfer.mutate({
                                 id: transfer.id,
@@ -444,9 +460,15 @@ export default function WarehouseInventoryWorkbench({
             />
           </div>
           <div className="md:col-span-4">
-            <Button disabled={createIssue.isPending || !isInventoryManager} type="submit" className="w-full md:w-auto">
+            <Button 
+              disabled={createIssue.isPending || !isInventoryManager} 
+              title={!isInventoryManager ? "Requires Inventory Manager" : ""}
+              type="submit" 
+              className="w-full md:w-auto"
+            >
               Post Stock Issue
             </Button>
+            {!isInventoryManager && <p className="text-xs text-muted-foreground mt-1">Requires Inventory Manager</p>}
           </div>
         </form>
 
@@ -476,6 +498,7 @@ export default function WarehouseInventoryWorkbench({
                         size="sm"
                         variant="outline"
                         disabled={reverseIssue.isPending || !isInventoryManager}
+                        title={!isInventoryManager ? "Requires Inventory Manager" : ""}
                         onClick={() =>
                           reverseIssue.mutate({
                             id: issue.id,

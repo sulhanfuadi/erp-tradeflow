@@ -1,6 +1,12 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Plus, Search, FileText, CheckCircle, Package } from "lucide-react";
+import {
+  isInventoryManager as isInvMgr,
+  isPurchasingManager as isPurMgr,
+  isApAnalyst as isApAnl,
+} from "@/lib/role-helpers";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -125,9 +131,9 @@ export default function P2PWorkbench() {
   const queryClient = useQueryClient();
   const { user } = useAuth();
   
-  const isInventoryManager = user?.role === "inventory_manager" || user?.role === "admin";
-  const isArAnalyst = user?.role === "ar_analyst" || user?.role === "admin";
-  const isPurchasingManager = user?.role === "purchasing_manager" || user?.role === "admin";
+  const isInventoryManager = isInvMgr(user);
+  const isApAnalyst = isApAnl(user);
+  const isPurchasingManager = isPurMgr(user);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -319,7 +325,7 @@ export default function P2PWorkbench() {
 
     setIsSubmitting(true);
     try {
-      await apiFetch("/api/p2p/purchase-orders", {
+      await apiFetch("/api/netsuite/purchase-orders", {
         method: "POST",
         body: JSON.stringify({
           supplierId: poForm.supplierId,
@@ -441,7 +447,7 @@ export default function P2PWorkbench() {
 
     setIsSubmitting(true);
     try {
-      await apiFetch("/api/p2p/goods-receipts", {
+      await apiFetch("/api/netsuite/item-receipts", {
         method: "POST",
         body: JSON.stringify({
           purchaseOrderId: selectedPoForReceipt.id,
@@ -499,7 +505,7 @@ export default function P2PWorkbench() {
 
     setIsSubmitting(true);
     try {
-      await apiFetch("/api/p2p/ap-invoices", {
+      await apiFetch("/api/netsuite/vendor-bills", {
         method: "POST",
         body: JSON.stringify({
           supplierId: apForm.supplierId,
@@ -565,9 +571,10 @@ export default function P2PWorkbench() {
 
     setIsSubmitting(true);
     try {
-      await apiFetch(`/api/p2p/ap-invoices/${paymentForm.apInvoiceId}/payment`, {
+      await apiFetch(`/api/netsuite/bill-payments`, {
         method: "POST",
         body: JSON.stringify({
+          apInvoiceId: paymentForm.apInvoiceId,
           paymentAmount,
           notes: paymentForm.notes,
         }),
@@ -820,9 +827,15 @@ export default function P2PWorkbench() {
                 />
               </div>
 
-              <Button disabled={isSubmitting || !isPurchasingManager} type="submit" className="w-full">
+              <Button 
+                disabled={isSubmitting || !isPurchasingManager} 
+                title={!isPurchasingManager ? "Requires Purchasing Manager" : ""}
+                type="submit" 
+                className="w-full"
+              >
                 Create Purchase Order
               </Button>
+              {!isPurchasingManager && <p className="text-xs text-muted-foreground mt-2">Requires Purchasing Manager</p>}
             </form>
           </CardContent>
         </Card>
@@ -925,9 +938,15 @@ export default function P2PWorkbench() {
                 />
               </div>
 
-              <Button disabled={isSubmitting || !isInventoryManager} type="submit" className="w-full">
+              <Button 
+                disabled={isSubmitting || !isInventoryManager} 
+                title={!isInventoryManager ? "Requires Inventory Manager" : ""}
+                type="submit" 
+                className="w-full"
+              >
                 Post Item Receipt
               </Button>
+              {!isInventoryManager && <p className="text-xs text-muted-foreground mt-2">Requires Inventory Manager</p>}
             </form>
           </CardContent>
         </Card>
@@ -1062,10 +1081,16 @@ export default function P2PWorkbench() {
                 />
               </div>
 
-              <Button disabled={isSubmitting || !isArAnalyst} type="submit" className="w-full">
-                Create Vendor Bill
-              </Button>
-            </form>
+          <Button 
+            disabled={isSubmitting || !isApAnalyst} 
+            title={!isApAnalyst ? "Requires A/P Analyst" : ""}
+            type="submit" 
+            className="w-full"
+          >
+            Create Vendor Bill
+          </Button>
+          {!isApAnalyst && <p className="text-xs text-muted-foreground mt-2">Requires A/P Analyst</p>}
+        </form>
           </CardContent>
         </Card>
       </div>
@@ -1130,9 +1155,14 @@ export default function P2PWorkbench() {
             </div>
 
             <div className="md:col-span-4">
-              <Button disabled={isSubmitting || !isArAnalyst} type="submit">
+              <Button 
+                disabled={isSubmitting || !isApAnalyst} 
+                title={!isApAnalyst ? "Requires A/P Analyst" : ""}
+                type="submit"
+              >
                 Record Payment
               </Button>
+              {!isApAnalyst && <p className="text-xs text-muted-foreground mt-2">Requires A/P Analyst</p>}
             </div>
           </form>
         </CardContent>
@@ -1179,12 +1209,13 @@ export default function P2PWorkbench() {
                     </td>
                     <td className="py-2">
                       <div className="flex gap-2">
-                        {purchaseOrder.status === "draft" && isInventoryManager && (
+                        {purchaseOrder.status === "draft" && (
                           <>
                             <Button
                               size="sm"
                               variant="outline"
-                              disabled={isSubmitting}
+                              disabled={isSubmitting || !isPurchasingManager}
+                              title={!isPurchasingManager ? "Requires Purchasing Manager" : ""}
                               onClick={async () => {
                                 setIsSubmitting(true);
                                 try {
@@ -1203,7 +1234,8 @@ export default function P2PWorkbench() {
                             <Button
                               size="sm"
                               variant="outline"
-                              disabled={isSubmitting}
+                              disabled={isSubmitting || !isPurchasingManager}
+                              title={!isPurchasingManager ? "Requires Purchasing Manager" : ""}
                               onClick={() => updatePoStatus(purchaseOrder.id, "posted")}
                             >
                               Post
@@ -1215,7 +1247,8 @@ export default function P2PWorkbench() {
                           <Button
                             size="sm"
                             variant="destructive"
-                            disabled={isSubmitting}
+                            disabled={isSubmitting || !isPurchasingManager}
+                            title={!isPurchasingManager ? "Requires Purchasing Manager" : ""}
                             onClick={() =>
                               updatePoStatus(purchaseOrder.id, "cancelled")
                             }
@@ -1272,6 +1305,7 @@ export default function P2PWorkbench() {
                             size="sm"
                             variant="outline"
                             disabled={isSubmitting || !isInventoryManager}
+                            title={!isInventoryManager ? "Requires Inventory Manager" : ""}
                             onClick={() => reverseGoodsReceipt(receipt.id)}
                           >
                             Reverse
@@ -1320,12 +1354,13 @@ export default function P2PWorkbench() {
                       <td className="py-2">${invoice.amountPaid.toFixed(2)}</td>
                       <td className="py-2">${invoice.amountDue.toFixed(2)}</td>
                       <td className="py-2">
-                        {invoice.status === "pending_approval" && isArAnalyst && (
+                        {invoice.status === "pending_approval" && (
                           <div className="flex gap-2">
                             <Button
                               size="sm"
                               variant="outline"
-                              disabled={isSubmitting}
+                              disabled={isSubmitting || !isApAnalyst}
+                              title={!isApAnalyst ? "Requires A/P Analyst" : ""}
                               onClick={async () => {
                                 setIsSubmitting(true);
                                 try {
@@ -1344,7 +1379,8 @@ export default function P2PWorkbench() {
                             <Button
                               size="sm"
                               variant="destructive"
-                              disabled={isSubmitting}
+                              disabled={isSubmitting || !isApAnalyst}
+                              title={!isApAnalyst ? "Requires A/P Analyst" : ""}
                               onClick={async () => {
                                 setIsSubmitting(true);
                                 try {

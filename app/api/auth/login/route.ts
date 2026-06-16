@@ -34,10 +34,13 @@ export async function POST(request: NextRequest) {
     // Validate with Zod schema
     const { email, password } = loginSchema.parse(body);
 
+    console.log(`[LOGIN API] Attempting login for ${email}`);
+
     // Find user
     const user = await prisma.user.findUnique({ where: { email } });
 
     if (!user) {
+      console.log(`[LOGIN API] User ${email} not found in database`);
       return NextResponse.json(
         { error: "Invalid email or password" },
         { status: 401, headers: responseHeaders },
@@ -55,6 +58,7 @@ export async function POST(request: NextRequest) {
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
+      console.log(`[LOGIN API] Password mismatch for ${email}`);
       return NextResponse.json(
         { error: "Invalid email or password" },
         { status: 401, headers: responseHeaders },

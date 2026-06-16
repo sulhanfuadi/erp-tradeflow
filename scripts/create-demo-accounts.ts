@@ -42,6 +42,7 @@ const DEMO_USERS = [
   { email: "salesmgr@demo.com", name: "Sales Manager", username: "salesmgr", role: "sales_manager", googleId: "demo-salesmgr" },
   { email: "invmgr@demo.com", name: "Inventory Manager", username: "invmgr", role: "inventory_manager", googleId: "demo-invmgr" },
   { email: "aranalyst@demo.com", name: "A/R Analyst", username: "aranalyst", role: "ar_analyst", googleId: "demo-aranalyst" },
+  { email: "apanalyst@demo.com", name: "A/P Analyst", username: "apanalyst", role: "ap_analyst", googleId: "demo-apanalyst" },
   { email: "purchasingmgr@demo.com", name: "Purchasing Manager", username: "purchasingmgr", role: "purchasing_manager", googleId: "demo-purchasingmgr" },
   { email: "warehouse@demo.com", name: "Warehouse Staff", username: "warehouse", role: "warehouse_staff", googleId: "demo-warehouse" },
 ] as const;
