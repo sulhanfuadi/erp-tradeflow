@@ -2,13 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { logger } from "@/lib/logger";
 import { requireNetSuiteSession } from "@/app/api/netsuite/_shared";
 import { listBillPayments, recordBillPayment } from "@/prisma/netsuite";
+import { canPayVendorBill } from "@/lib/role-helpers";
 
 export async function GET(request: NextRequest) {
   try {
     const guard = await requireNetSuiteSession(request);
     if (guard.errorResponse) return guard.errorResponse;
 
-    const rows = await listBillPayments(guard.session!.id);
+    const rows = await listBillPayments();
     return NextResponse.json(rows);
   } catch (error) {
     logger.error("Error fetching bill payments:", error);
@@ -25,8 +26,8 @@ export async function POST(request: NextRequest) {
     if (guard.errorResponse) return guard.errorResponse;
     const session = guard.session!;
 
-    if (session.role !== "ap_analyst" && session.role !== "admin") {
-      return NextResponse.json({ error: "Forbidden: Only A/P Analyst can record bill payments" }, { status: 403 });
+    if (!canPayVendorBill(session.role)) {
+      return NextResponse.json({ error: "Forbidden: Only A/R Analyst or A/P Analyst can record bill payments" }, { status: 403 });
     }
 
     const payload = (await request.json()) as {

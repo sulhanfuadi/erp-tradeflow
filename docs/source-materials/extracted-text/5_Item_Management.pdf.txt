@@ -1,0 +1,900 @@
+ 
+ 
+  
+. 
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its affiliates. 
+Other names may be trademarks of their respective owners.
+Item Management
+ERP Basics
+ 
+\226
+ 
+ 
+ 
+. 
+\225
+\225
+\225
+\225
+\225
+3
+NetSuite
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Objectives
+In this lesson, you will learn to:
+Describe the Item Management Process
+Define Item Management Strategy
+Manage Item Master
+Manage Inventory Transactions
+Monitor & Analyze Inventory Balances
+ 
+\226
+ 
+ 
+ 
+. 
+\225
+\225
+\225
+\225
+\225
+\225
+4
+NetSuite
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+What is Item Management
+Items
+Goods and services sold to customers
+Parts, services, raw materials purchased from vendors
+Item Management
+Key element of Design to Build process
+Track and manage items and services that are bought 
+and sold
+ 
+\226
+ 
+ 
+ 
+. 
+5
+NetSuite
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Item Management Overview
+ 
+\226
+ 
+ 
+ 
+. 
+6
+NetSuite
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Why Automate Item Management in ERP?
+ 
+\226
+ 
+ 
+ 
+. 
+\225
+\225
+\225
+\225
+\225
+\225
+\225
+\225
+\225
+7
+NetSuite
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Item Strategy Considerations
+Item Types
+Which type to use for creation of items you buy and sell
+Costing Method
+Choose the best item costing method, from inventory costing methods
+Example: FIFO, LIFO, Average, Standard & Group Average
+Units of Measure (UOM)
+Used to define different units to stock, purchase, and 
+sell inventory items
+Indirect Tax Configuration
+Selecting the tax that should be applied to each item 
+by default
+ 
+\226
+ 
+ 
+ 
+. 
+1.
+2.
+\225
+\225
+\225
+8
+NetSuite
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Manage Item Master
+Define Item Strategy
+Configure Item Master
+Work with Procurement and Sales
+Determine product needs
+As needs change, items will be added to or 
+removed from item master
+ 
+\226
+ 
+ 
+ 
+. 
+-
+3
+\225
+\226
+ 
+\225
+\226
+ 
+-
+\225
+\226
+ 
+9
+NetSuite
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Manage Item Master 
+Walkthroughs 1
+Demonstration of Item creation:
+Walkthrough 1 
+Create an Inventory Item
+Walkthrough 2 
+Create a Non
+Inventory Item
+Walkthrough 3 
+Create a Service Item
+ 
+\226
+ 
+ 
+ 
+. 
+10
+NetSuite
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Create an Inventory Item
+ 
+\226
+ 
+ 
+ 
+. 
+-
+11
+NetSuite
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Create a Non
+Inventory Item
+ 
+\226
+ 
+ 
+ 
+. 
+12
+NetSuite
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Create a Service Item
+ 
+\226
+ 
+ 
+ 
+. 
+\225
+\225
+\225
+\225
+\225
+\225
+13
+NetSuite
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Manage Inventory Transactions
+Initiated by warehouse management activities
+Activities include: 
+Moving inventory between warehouses
+Performing inventory adjustments
+Inventory transaction initiated
+Supply requirements are analyzed and calculated
+ 
+\226
+ 
+ 
+ 
+. 
+-
+ 
+5
+\225
+\226
+ 
+\225
+\226
+ 
+14
+NetSuite
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Manage Inventory Transactions 
+Walkthroughs 4 
+Demonstration of inventory transaction management:
+Walkthrough 4 
+Adjust Inventory
+Walkthrough 5 
+Transfer Inventory
+ 
+\226
+ 
+ 
+ 
+. 
+15
+NetSuite
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Adjust Inventory
+ 
+\226
+ 
+ 
+ 
+. 
+16
+NetSuite
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Transfer Inventory
+ 
+\226
+ 
+ 
+ 
+. 
+-
+ 
+7
+\225
+\226
+ 
+\225
+\226
+ 
+17
+NetSuite
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Monitor, Analyze & Alert 
+Walkthroughs 6 
+Demonstration of how to Monitor, Analyze & Alert walkthroughs:
+Walkthrough 6 
+Run a Physical Worksheet Report
+Walkthrough 7 
+Review Key Performance Indicators & 
+Reminders
+ 
+\226
+ 
+ 
+ 
+. 
+18
+NetSuite
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Run a Physical Inventory Worksheet Report
+ 
+\226
+ 
+ 
+ 
+. 
+19
+NetSuite
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Review Key Performance Indicators 
+and Reminders
+ 
+\226
+ 
+ 
+ 
+. 
+\225
+\226
+ 
+\225
+\226
+ 
+-
+\225
+\226
+ 
+\225
+\226
+ 
+\225
+\226
+ 
+20
+NetSuite
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Item Management Process Exercises
+Complete the following exercises:
+Exercise 1 
+Create an Inventory Item
+Exercise 2 
+Create a Non
+Inventory Item
+Exercise 3 
+Create a Service Item
+Exercise 4 
+Adjust Inventory
+Exercise 5 
+Transfer Inventory
+ 
+\226
+ 
+ 
+ 
+. 
+\225
+\225
+\225
+\225
+\225
+21
+NetSuite
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Summary
+In this lesson, you should have learned how to:
+Describe the Item Management Process
+Define Item Management Strategy
+Manage Item Master
+Manage Inventory Transactions
+Monitor & Analyze Inventory Balances
+ 
+  
+  
+ 
+ 
+. 
+\225
+\225
+\225
+\225
+\225
+\225
+a
+n
+4
+NetSuite
+ \226 
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+What is Item Management
+Items
+Goods and services sold to customers
+Parts, services, raw materials purchased from vendors
+Item Management
+Key element of Design to Build process
+Track and manage items and services that are bought 
+d sold
+ 
+ 
+. 
+5
+NetSuite
+ \226 
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Item Management Overview
+ 
+ 
+. 
+\225
+\225
+\225
+\225
+\225
+3
+NetSuite
+ \226 
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Objectives
+In this lesson, you will learn to:
+Describe the Item Management Process
+Define Item Management Strategy
+Manage Item Master
+Manage Inventory Transactions
+Monitor & Analyze Inventory Balances
+. 
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its affiliates. 
+Other names may be trademarks of their respective owners.
+Item Management
+ERP Basics
+ 
+ 
+. 
+6
+NetSuite
+ \226 
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Why Automate Item Management in ERP?
+ 
+ 
+. 
+10
+NetSuite
+ \226 
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Create an Inventory Item
+ 
+ 
+. 
+\225
+\225
+-
+\225
+9
+NetSuite
+ \226 
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Manage Item Master 
+Walkthroughs 1
+-3
+Demonstration of Item creation:
+Walkthrough 1 
+\226 
+Create an Inventory Item
+Walkthrough 2 
+\226 
+Create a Non
+Inventory Item
+Walkthrough 3 
+\226 
+Create a Service Item
+ 
+ 
+. 
+1.
+2.
+\225
+\225
+\225
+r
+e
+8
+NetSuite
+ \226 
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Manage Item Master
+Define Item Strategy
+Configure Item Master
+Work with Procurement and Sales
+Determine product needs
+As needs change, items will be added to or 
+moved from item master
+ 
+ 
+. 
+\225
+\225
+\225
+\225
+\225
+\225
+\225
+\225
+\225
+7
+NetSuite
+ \226 
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Item Strategy Considerations
+Item Types
+Which type to use for creation of items you buy and sell
+Costing Method
+Choose the best item costing method, from inventory costing methods
+Example: FIFO, LIFO, Average, Standard & Group Average
+Units of Measure (UOM)
+Used to define different units to stock, purchase, and 
+sel
+l inventory items
+Indirect Tax Configuration
+Selecting the tax that should be applied to each item 
+by de
+fault
+ 
+ 
+. 
+\225
+\225
+\225
+\225
+\225
+\225
+13
+NetSuite
+ \226 
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Manage Inventory Transactions
+Initiated by warehouse management activities
+Activities include: 
+Moving inventory between warehouses
+Performing inventory adjustments
+Inventory transaction initiated
+Supply requirements are analyzed and calculated
+ 
+ 
+. 
+15
+NetSuite
+ \226 
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Adjust Inventory
+ 
+ 
+. 
+\225
+\225
+14
+NetSuite
+ \226 
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Manage Inventory Transactions 
+Walkthroughs 4 
+- 5
+Demonstration of inventory transaction management:
+Walkthrough 4 
+\226 
+Adjust Inventory
+Walkthrough 5 
+\226 
+Transfer Inventory
+ 
+ 
+. 
+12
+NetSuite
+ \226 
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Create a Service Item
+ 
+ 
+. 
+-
+11
+NetSuite
+ \226 
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Create a Non
+Inventory Item
+ 
+ 
+. 
+\225
+R
+\225
+R
+17
+NetSuite
+ \226 
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Monitor, Analyze & Alert 
+Walkthroughs 6 
+- 7
+Demonstration of how to Monitor, Analyze & Alert walkthroughs:
+Walkthrough 6 
+\226 
+un a Physical Worksheet Report
+Walkthrough 7 
+\226 
+eview Key Performance Indicators & 
+Reminders
+ 
+ 
+. 
+\225
+\225
+\225
+\225
+\225
+21
+NetSuite
+ \226 
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Summary
+In this lesson, you should have learned how to:
+Describe the Item Management Process
+Define Item Management Strategy
+Manage Item Master
+Manage Inventory Transactions
+Monitor & Analyze Inventory Balances
+ 
+ 
+. 
+\225
+\225
+\225
+\225
+\225
+20
+NetSuite
+ \226 
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Item Management Process Exercises
+Complete the following exercises:
+Exercise 1 
+\226 
+Create an Inventory Item
+Exercise 2 
+\226 
+Create a Non-
+Inventory Item
+Exercise 3 
+\226 
+Create a Service Item
+Exercise 4 
+\226 
+Adjust Inventory
+Exercise 5 
+\226 
+Transfer Inventory
+ 
+ 
+. 
+19
+NetSuite
+ \226 
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Review Key Performance Indicators 
+and Reminders
+ 
+ 
+. 
+18
+NetSuite
+ \226 
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Run a Physical Inventory Worksheet Report
+ 
+ 
+. 
+16
+NetSuite
+ \226 
+ERP
+Basics
+Item
+Management
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Transfer Inventory

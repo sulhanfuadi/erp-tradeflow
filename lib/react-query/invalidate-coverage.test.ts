@@ -27,6 +27,7 @@ const COMPONENT_FETCH_CRUD_ALLOWLIST = new Set([
   "components/Pages/ApiStatusPage.tsx",
   "components/Pages/ApiDocsPage.tsx",
   "components/Pages/OrderDetailPage.tsx",
+  "components/warehouses/WarehouseInventoryWorkbench.tsx",
 ]);
 
 /** Domains with query sub-keys beyond list/detail — invalidate-all must use *.all */
@@ -87,6 +88,9 @@ const API_WRITE_ROUTE_INVALIDATION_SPEC: Record<string, readonly string[]> = {
   "app/api/stock-allocations/transfers/[id]/reverse/route.ts": ["invalidateAllServerCaches"],
   "app/api/stock-allocations/issues/route.ts": ["invalidateAllServerCaches"],
   "app/api/stock-allocations/issues/[id]/reverse/route.ts": ["invalidateAllServerCaches"],
+  "app/api/stock-allocations/adjustments/route.ts": ["invalidateAllServerCaches"],
+  "app/api/stock-allocations/adjustments/[id]/approve/route.ts": ["invalidateAllServerCaches"],
+  "app/api/stock-allocations/adjustments/[id]/reject/route.ts": ["invalidateAllServerCaches"],
   "app/api/invoices/route.ts": ["invalidateAllServerCaches"],
   "app/api/invoices/[id]/route.ts": ["invalidateAllServerCaches"],
   "app/api/invoices/[id]/send/route.ts": ["invalidateAllServerCaches"],

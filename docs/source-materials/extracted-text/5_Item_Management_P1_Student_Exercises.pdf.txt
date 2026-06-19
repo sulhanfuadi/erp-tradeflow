@@ -1,0 +1,551 @@
+ 
+5
+. 
+\256
+ 
+ 
+ 
+1
+ 
+\226
+ 
+ 
+\226
+ 
+ 
+ 
+\226
+ 
+ 
+\226
+ 
+ 
+1.
+ 
+ 
+ 
+ 
+ 
+2.
+ 
+ 
+ 
+3.
+ 
+ 
+.
+ 
+ 
+ 
+ Copyright \251 202
+, Oracle and/or its affiliates
+Oracle
+, Java, 
+MySQL 
+and 
+NetSuite
+are registered trademarks
+of Oracle and/or its affiliates. Other 
+names may be trademarks of their respective owners.
+NetSuite 
+ERP Basics
+Item Management 
+STUDENT EXERCISES
+Create an Inventory Item
+Note 
+Inventory Items can be purchased and held in a warehouse as an asset of the business 
+before being sold to a customer. Due to 
+this, on the Accounting Subtab you need to specify a COGS 
+Account, an Asset Account, an Income Account, and a Tax Schedule.
+Select 
+Inventory > Lists > Items > New
+in the 
+Purchasing Manager
+role and then click on 
+Inventory Item
+hyperlink.
+Create an Inventor
+y Item as follows.
+Save
+ 
+5
+. 
+\256
+ 
+ 
+ 
+2
+ 
+\226
+ 
+-
+ 
+\226
+ 
+-
+ 
+1.
+ 
+ 
+ 
+Non
+-
+ 
+ 
+2.
+ 
+-
+ 
+ 
+3.
+ 
+.
+ 
+ 
+ 
+ Copyright \251 202
+, Oracle and/or its affiliates
+Oracle
+, Java, 
+MySQL 
+and 
+NetSuite
+are registered trademarks
+of Oracle and/or its affiliates. Other 
+names may be trademarks of their respective owners.
+Create a Non
+Inventory Item
+Note 
+Non
+Inventory Items for Resale can be purchased and sold but NOT held in a warehouse as 
+an asset of the business. Due to this, on the Accounting Subtab you need to specify an Inc
+ome 
+Account, Expense Account, and a Tax Schedule.
+Remaining in the 
+Purchasing Manager
+role return to the Home Dashboard and then select 
+Inventory > Lists > Items > New
+and then click on 
+Inventory Item for Resale
+hyperlink.
+Create a 
+Non
+Inventory Item for Resale as follows.
+Save
+ 
+5
+. 
+\256
+ 
+ 
+ 
+3
+ 
+\226
+ 
+ 
+\226
+ 
+ 
+1.
+ 
+ 
+ 
+ 
+ 
+2.
+ 
+ 
+ 
+3.
+ 
+ 
+.
+ 
+ 
+ 
+ Copyright \251 202
+, Oracle and/or its affiliates
+Oracle
+, Java, 
+MySQL 
+and 
+NetSuite
+are registered trademarks
+of Oracle and/or its affiliates. Other 
+names may be trademarks of their respective owners.
+Create a Service Item
+Note 
+Service Items for Sale can only be sold. Due to this, on the Accounting Subtab you only need 
+to specify an Income Account and Tax Schedule.
+Remaining in the 
+Purch
+asing Manager
+role return to the Home Dashboard and then select 
+Inventory > Lists > Items > New
+and then click on 
+Service Item for Sale
+hyperlink.
+Create a Service Item for Sale as follows.
+Save
+ 
+5
+. 
+\256
+ 
+ 
+ 
+4
+ 
+\226
+ 
+ 
+1.
+ 
+er
+ 
+.
+ 
+2.
+ 
+ 
+ 
+3.
+ 
+ 
+.
+ 
+ 
+ 
+ 
+ 
+ Copyright \251 202
+, Oracle and/or its affiliates
+Oracle
+, Java, 
+MySQL 
+and 
+NetSuite
+are registered trademarks
+of Oracle and/or its affiliates. Other 
+names may be trademarks of their respective owners.
+Adjust Inventory
+Using the 
+Inventory Manag
+role select 
+Inventory > Inventory > Adjust Inventory
+Adjust the Inventory Quantity as follows.
+Add
+and 
+Save
+ 
+5
+. 
+\256
+ 
+ 
+ 
+5
+ 
+\226
+ 
+ 
+1.
+ 
+ 
+.
+ 
+2.
+ 
+ 
+ 
+3.
+ 
+ 
+ 
+.
+ 
+ Copyright \251 202
+, Oracle and/or its affiliates
+Oracle
+, Java, 
+MySQL 
+and 
+NetSuite
+are registered trademarks
+of Oracle and/or its affiliates. Other 
+names may be trademarks of their respective owners.
+Transfer Inventory
+Remaining in the 
+Inventory Manager
+role select 
+Inventory > Inventory > Transfer 
+Inventory
+Transfer Inventory as follows.
+Add
+and 
+Save
+ 
+5
+. 
+\256
+ 
+ 
+ 
+1
+ 
+ 
+ 
+ 
+ 
+\226 
+ 
+1.
+ 
+ 
+ 
+2.
+ 
+ 
+ 
+3.
+ 
+ 
+ 
+ 
+ Copyright \251 202
+, Oracle and/or its affiliates
+Oracle
+, Java, 
+MySQL 
+and 
+NetSuite
+are registered trademarks
+of Oracle and/or its affiliates. Other 
+names may be trademarks of their respective owners.
+NetSuite 
+\226 
+ERP Basics
+Item Management 
+\226 
+STUDENT EXERCISES
+\226 
+Create an Inventory Item
+Note 
+Inventory Items can be purchased and held in a warehouse as an asset of the business 
+before being sold to a customer. Due to 
+this, on the Accounting Subtab you need to specify a COGS 
+Account, an Asset Account, an Income Account, and a Tax Schedule.
+Select 
+Inventory > Lists > Items > New
+in the 
+Purchasing Manager
+role and then click on 
+Inventory Item
+ hyperlink. 
+Create an Inventor
+y Item as follows.
+Save
+. 
+ 
+5
+. 
+\256
+ 
+ 
+ 
+2
+ 
+-
+ 
+\226 
+-
+ 
+1.
+ 
+ 
+ 
+Non
+-
+ 
+2.
+ 
+-
+ 
+ 
+3.
+ 
+ 
+ 
+ Copyright \251 202
+, Oracle and/or its affiliates
+Oracle
+, Java, 
+MySQL 
+and 
+NetSuite
+are registered trademarks
+of Oracle and/or its affiliates. Other 
+names may be trademarks of their respective owners.
+\226 
+Create a Non
+Inventory Item
+Note 
+Non
+Inventory Items for Resale can be purchased and sold but NOT held in a warehouse as 
+an asset of the business. Due to this, on the Accounting Subtab you need to specify an Inc
+ome 
+Account, Expense Account, and a Tax Schedule.
+Remaining in the 
+Purchasing Manager
+role return to the Home Dashboard and then select 
+Inventory > Lists > Items > New
+and then click on 
+Inventory Item for Resale
+hyperlink. 
+Create a 
+Non
+Inventory Item for Resale as follows.
+Save
+. 
+ 
+5
+. 
+\256
+ 
+ 
+ 
+3
+ 
+ 
+\226 
+ 
+1.
+ 
+ 
+ 
+2.
+ 
+ 
+ 
+3.
+ 
+ 
+ 
+ 
+ Copyright \251 202
+, Oracle and/or its affiliates
+Oracle
+, Java, 
+MySQL 
+and 
+NetSuite
+are registered trademarks
+of Oracle and/or its affiliates. Other 
+names may be trademarks of their respective owners.
+\226 
+Create a Service Item
+Note 
+Service Items for Sale can only be sold. Due to this, on the Accounting Subtab you only need 
+to specify an Income Account and Tax Schedule.
+Remaining in the 
+Purch
+asing Manager
+role return to the Home Dashboard and then select 
+Inventory > Lists > Items > New
+and then click on 
+Service Item for Sale
+ hyperlink. 
+Create a Service Item for Sale as follows.
+Save
+. 
+ 
+5
+. 
+\256
+ 
+ 
+ 
+4
+ 
+ 
+1.
+ 
+er
+ 
+2.
+ 
+ 
+ 
+3.
+ 
+ 
+ 
+ 
+ Copyright \251 202
+, Oracle and/or its affiliates
+Oracle
+, Java, 
+MySQL 
+and 
+NetSuite
+are registered trademarks
+of Oracle and/or its affiliates. Other 
+names may be trademarks of their respective owners.
+\226 
+Adjust Inventory
+Using the 
+Inventory Manag
+role select 
+Inventory > Inventory > Adjust Inventory
+. 
+Adjust the Inventory Quantity as follows.
+Add
+and 
+Save
+. 
+  
+ 
+5
+. 
+\256
+ 
+ 
+ 
+5
+ 
+ 
+1.
+ 
+ 
+2.
+ 
+ 
+ 
+3.
+ 
+ 
+ 
+ Copyright \251 202
+, Oracle and/or its affiliates
+Oracle
+, Java, 
+MySQL 
+and 
+NetSuite
+are registered trademarks
+of Oracle and/or its affiliates. Other 
+names may be trademarks of their respective owners.
+\226 
+Transfer Inventory
+Remaining in the 
+Inventory Manager
+role select 
+Inventory > Inventory > Transfer 
+Inventory
+. 
+Transfer Inventory as follows.
+Add
+and 
+Save
+. 

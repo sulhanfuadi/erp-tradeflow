@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const purchaseOrders = await getPurchaseOrders(session.id);
+    const purchaseOrders = await getPurchaseOrders();
     return NextResponse.json(serializeP2PResult(purchaseOrders));
   } catch (error) {
     logger.error("Error fetching purchase orders:", error);

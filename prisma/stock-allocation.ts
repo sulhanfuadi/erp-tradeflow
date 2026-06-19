@@ -51,9 +51,10 @@ async function createStockMovement(
 /**
  * Get all stock allocations for a user's products
  */
-export async function getStockAllocations(userId: string) {
+export async function getStockAllocations(userId?: string) {
+  const productWhere = userId != null ? mergeProductListWhere({ userId }) : mergeProductListWhere({});
   const products = await prisma.product.findMany({
-    where: mergeProductListWhere({ userId }),
+    where: productWhere,
     select: { id: true },
   });
   const productIds = products.map((product) => product.id);
@@ -214,9 +215,9 @@ export async function deleteStockAllocation(id: string) {
 /**
  * Get all stock transfers for a user
  */
-export async function getStockTransfers(userId: string) {
+export async function getStockTransfers(userId?: string) {
   return prisma.stockTransfer.findMany({
-    where: { userId },
+    where: userId != null ? { userId } : {},
     orderBy: { createdAt: "desc" },
   });
 }
@@ -282,7 +283,7 @@ export async function createStockTransfer(
 export async function completeStockTransfer(id: string, userId: string) {
   return prisma.$transaction(async (tx) => {
     const transfer = await tx.stockTransfer.findFirst({
-      where: { id, userId },
+      where: { id },
     });
 
     if (!transfer) {
@@ -395,7 +396,7 @@ export async function completeStockTransfer(id: string, userId: string) {
  */
 export async function cancelStockTransfer(id: string, userId: string) {
   const transfer = await prisma.stockTransfer.findFirst({
-    where: { id, userId },
+    where: { id },
   });
 
   if (!transfer) {
@@ -424,7 +425,7 @@ export async function reverseStockTransfer(
 ) {
   return prisma.$transaction(async (tx) => {
     const original = await tx.stockTransfer.findFirst({
-      where: { id, userId },
+      where: { id },
     });
 
     if (!original) {
@@ -558,10 +559,10 @@ export async function reverseStockTransfer(
  * Get stock movement log for stock card.
  */
 export async function getStockMovements(
-  userId: string,
+  userId?: string,
   filters?: { warehouseId?: string; productId?: string; limit?: number },
 ) {
-  const where: Record<string, unknown> = { userId };
+  const where: Record<string, unknown> = userId != null ? { userId } : {};
 
   if (filters?.warehouseId) {
     where.warehouseId = filters.warehouseId;
@@ -584,11 +585,11 @@ export async function getStockMovements(
  * Get issue movements.
  */
 export async function getStockIssues(
-  userId: string,
+  userId?: string,
   filters?: { warehouseId?: string; productId?: string; limit?: number },
 ) {
   const where: Record<string, unknown> = {
-    userId,
+    ...(userId != null ? { userId } : {}),
     referenceType: "stock_issue",
     movementType: "issue",
   };
@@ -681,7 +682,6 @@ export async function reverseStockIssue(
     const issueMovement = await tx.stockMovement.findFirst({
       where: {
         id: issueMovementId,
-        userId,
         referenceType: "stock_issue",
         movementType: "issue",
       },
@@ -693,7 +693,6 @@ export async function reverseStockIssue(
 
     const existingReversal = await tx.stockMovement.findFirst({
       where: {
-        userId,
         referenceType: "reversal",
         referenceId: issueMovement.id,
       },
@@ -760,16 +759,17 @@ export async function reverseStockIssue(
 /**
  * Get warehouse stock summary (for analytics)
  */
-export async function getWarehouseStockSummary(userId: string) {
+export async function getWarehouseStockSummary(userId?: string) {
+  const productWhere = userId != null ? mergeProductListWhere({ userId }) : mergeProductListWhere({});
   const products = await prisma.product.findMany({
-    where: mergeProductListWhere({ userId }),
+    where: productWhere,
     select: { id: true, price: true },
   });
   const productIds = products.map((product) => product.id);
   const priceMap = new Map(products.map((product) => [product.id, Number(product.price)]));
 
   const warehouses = await prisma.warehouse.findMany({
-    where: { userId },
+    where: userId != null ? { userId } : {},
     select: { id: true, name: true },
   });
 

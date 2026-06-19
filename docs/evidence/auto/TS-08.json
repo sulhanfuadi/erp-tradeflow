@@ -2,19 +2,19 @@
   "scenarioId": "TS-08",
   "title": "Bill Payment partial to paid + payment doc",
   "status": "PASS",
-  "startedAt": "2026-06-13T07:06:02.803Z",
+  "startedAt": "2026-06-19T02:56:37.837Z",
   "assertions": {
     "partialVendorBillStatus": "partial",
     "finalVendorBillStatus": "paid",
-    "billPaymentDocs": 2
+    "billPaymentDocs": 13
   },
   "ids": {
-    "vendorBillId": "6a2d01477a27305f1f63466b"
+    "vendorBillId": "6a34afe13708df0fb31f832e"
   },
   "notes": [
     "Bill Payment partial berhasil.",
     "Bill Payment final berhasil dan Vendor Bill paid."
   ],
   "artifactPath": "docs/evidence/auto/TS-08.png",
-  "finishedAt": "2026-06-13T07:06:20.530Z"
+  "finishedAt": "2026-06-19T02:56:41.003Z"
 }

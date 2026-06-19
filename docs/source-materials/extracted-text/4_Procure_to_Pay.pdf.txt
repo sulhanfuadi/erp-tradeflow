@@ -1,0 +1,993 @@
+ 
+ 
+  
+. 
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its affiliates. 
+Other names may be trademarks of their respective owners.
+Procure to Pay (PTP)
+ERP Basics
+ 
+\226
+ 
+ 
+ 
+to
+ 
+. 
+\226
+ 
+\225
+\225
+\225
+\225
+\225
+\225
+3
+NetSuite
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+Oracle Internal
+Objectives
+In this lesson, you will learn to:
+Describe the Procure to Pay process
+Process a Purchase Order
+Receive a Purchase Order
+Bill a Purchase Order
+Make a Vendor Payment
+Monitor & Analyze Vendor Account Balances
+ 
+\226
+ 
+ 
+ 
+to
+ 
+. 
+\226
+ 
+\225
+\225
+\225
+\225
+\225
+4
+NetSuite
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+Oracle Internal
+What is Procure to Pay?
+Process of: 
+Purchasing goods and services
+Controlling expenses
+Finding the right suppliers
+Delivering goods at the right time
+Delivering goods and services at the right price
+ 
+\226
+ 
+ 
+ 
+to
+ 
+. 
+\226
+ 
+5
+NetSuite
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+Oracle Internal
+Procure to Pay Overview
+ 
+\226
+ 
+ 
+ 
+to
+ 
+. 
+\226
+ 
+6
+NetSuite
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+Oracle Internal
+Why Automate the Procure to Pay process 
+with a Modern ERP system?
+ 
+\226
+ 
+ 
+ 
+to
+ 
+. 
+\226
+ 
+-
+6
+-
+-
+\225
+\226
+ 
+\225
+\226
+ 
+\225
+\226
+ 
+\225
+\226
+ 
+\225
+\226
+ 
+\225
+\226
+ 
+7
+NetSuite
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+Oracle Internal
+Procure to Pay Process 
+Walkthroughs 1
+Demonstration of the end
+to
+end process for Procure to Pay:
+Walkthrough 1 
+Create a Purchase Order
+Walkthrough 2 
+Receive Item on a Purchase Order
+Walkthrough 3 
+Bill a Purchase Order
+Walkthrough 4 
+Pay a Bill
+Walkthrough 5 
+Enter a Standalone Bill
+Walkthrough 6 
+Approve a Bill
+ 
+\226
+ 
+ 
+ 
+to
+ 
+. 
+\226
+ 
+8
+NetSuite
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+Oracle Internal
+Create a Purchase Order
+ 
+\226
+ 
+ 
+ 
+to
+ 
+. 
+\226
+ 
+9
+NetSuite
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+Oracle Internal
+Receive Item on a Purchase Order
+ 
+\226
+ 
+ 
+ 
+to
+ 
+. 
+\226
+ 
+10
+NetSuite
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+Oracle Internal
+Bill a Purchase Order
+ 
+\226
+ 
+ 
+ 
+to
+ 
+. 
+\226
+ 
+11
+NetSuite
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+Oracle Internal
+Pay a Bill
+ 
+\226
+ 
+ 
+ 
+to
+ 
+. 
+\226
+ 
+12
+NetSuite
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+Oracle Internal
+Enter a Standalone Bill
+ 
+\226
+ 
+ 
+ 
+to
+ 
+. 
+\226
+ 
+13
+NetSuite
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+Oracle Internal
+Approve a Bill
+ 
+\226
+ 
+ 
+ 
+to
+ 
+. 
+\226
+ 
+-
+9
+\225
+\226
+ 
+\225
+\226
+ 
+\225
+\226
+14
+NetSuite
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+Oracle Internal
+Monitor, Analyze & Alert 
+Walkthroughs 7
+The Accounts Receivable Team needs to Monitor & Analyze open 
+customer balances and be Alerted to tasks to complete:
+Walkthrough 7 
+Run Accounts Payable Report
+Walkthrough 8 
+Review Key Performance Indicators and 
+Scorecards
+Walkthrough 9 
+Investigate Tasks to Complete
+ 
+\226
+ 
+ 
+ 
+to
+ 
+. 
+\226
+ 
+15
+NetSuite
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+Oracle Internal
+Run Accounts Payable Report
+ 
+\226
+ 
+ 
+ 
+to
+ 
+. 
+\226
+ 
+16
+NetSuite
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+Oracle Internal
+Review Key Performance Indicators 
+and Scorecards
+ 
+\226
+ 
+ 
+ 
+to
+ 
+. 
+\226
+ 
+17
+NetSuite
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+Oracle Internal
+Investigate Tasks to Complete
+ 
+\226
+ 
+ 
+ 
+to
+ 
+. 
+\226
+ 
+\225
+\226
+ 
+\225
+\226
+ 
+\225
+\226
+ 
+\225
+\226
+ 
+\225
+\226
+ 
+\225
+\226
+ 
+\225
+\226
+ 
+\225
+\226
+ 
+\225
+\226
+ 
+18
+NetSuite
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+Oracle Internal
+Procure to Pay Process Exercises
+Complete the following exercises:
+Exercise 1 
+Create a Purchase Order
+Exercise 2 
+Receive Item on a Purchase Order
+Exercise 3 
+Bill a Purchase Order
+Exercise 4 
+Pay a Bill
+Exercise 5 
+Enter a Standalone Bill
+Exercise 6 
+Approve a Bill
+Exercise 7 
+Run Accounts Payable Report
+Exercise 8 
+Review Key Performance Indicators and 
+Scorecards
+Exercise 9 
+Investigate Tasks to Complete
+ 
+\226
+ 
+ 
+ 
+to
+ 
+. 
+\226
+ 
+\225
+\225
+\225
+\225
+\225
+\225
+19
+NetSuite
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+Oracle Internal
+Summary
+In this lesson, you should have learned how to:
+Describe the Procure to Pay process
+Process a Purchase Order
+Receive a Purchase Order
+Bill a Purchase Order
+Make a Vendor Payment
+Monitor & Analyze Vendor Account Balances
+ 
+  
+  
+ 
+ 
+to
+ 
+. 
+\225
+\225
+\225
+\225
+\225
+4
+NetSuite
+ \226 
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+\226 
+Oracle Internal
+What is Procure to Pay?
+Process of: 
+Purchasing goods and services
+Controlling expenses
+Finding the right suppliers
+Delivering goods at the right time
+Delivering goods and services at the right price
+ 
+ 
+to
+ 
+. 
+5
+NetSuite
+ \226 
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+\226 
+Oracle Internal
+Procure to Pay Overview
+ 
+ 
+to
+ 
+. 
+\225
+\225
+\225
+\225
+\225
+\225
+3
+NetSuite
+ \226 
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+\226 
+Oracle Internal
+Objectives
+In this lesson, you will learn to:
+Describe the Procure to Pay process
+Process a Purchase Order
+Receive a Purchase Order
+Bill a Purchase Order
+Make a Vendor Payment
+Monitor & Analyze Vendor Account Balances
+. 
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its affiliates. 
+Other names may be trademarks of their respective owners.
+Procure to Pay (PTP)
+ERP Basics
+ 
+ 
+to
+ 
+. 
+6
+NetSuite
+ \226 
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+\226 
+Oracle Internal
+Why Automate the Procure to Pay process 
+with a Modern ERP system?
+ 
+ 
+to
+ 
+. 
+10
+NetSuite
+ \226 
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+\226 
+Oracle Internal
+Bill a Purchase Order
+ 
+ 
+to
+ 
+. 
+9
+NetSuite
+ \226 
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+\226 
+Oracle Internal
+Receive Item on a Purchase Order
+ 
+ 
+to
+ 
+. 
+8
+NetSuite
+ \226 
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+\226 
+Oracle Internal
+Create a Purchase Order
+ 
+ 
+to
+ 
+. 
+-
+-
+\225
+\225
+\225
+\225
+\225
+\225
+7
+NetSuite
+ \226 
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+\226 
+Oracle Internal
+Procure to Pay Process 
+Walkthroughs 1
+-6
+Demonstration of the end
+to
+end process for Procure to Pay:
+Walkthrough 1 
+\226 
+Create a Purchase Order
+Walkthrough 2 
+\226 
+Receive Item on a Purchase Order
+Walkthrough 3 
+\226 
+Bill a Purchase Order
+Walkthrough 4 
+\226 
+Pay a Bill
+Walkthrough 5 
+\226 
+Enter a Standalone Bill
+Walkthrough 6 
+\226 
+Approve a Bill
+ 
+ 
+to
+ 
+. 
+11
+NetSuite
+ \226 
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+\226 
+Oracle Internal
+Pay a Bill
+ 
+ 
+to
+ 
+. 
+\225
+\225
+\225
+\225
+\225
+\225
+19
+NetSuite
+ \226 
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+\226 
+Oracle Internal
+Summary
+In this lesson, you should have learned how to:
+Describe the Procure to Pay process
+Process a Purchase Order
+Receive a Purchase Order
+Bill a Purchase Order
+Make a Vendor Payment
+Monitor & Analyze Vendor Account Balances
+ 
+ 
+to
+ 
+. 
+\225
+\226
+ 
+\225
+\226
+ 
+\225
+\226
+ 
+\225
+\226
+ 
+\225
+\226
+ 
+\225
+\226
+ 
+\225
+\226
+ 
+\225
+\226
+ 
+\225
+\226
+18
+NetSuite
+ \226 
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+\226 
+Oracle Internal
+Procure to Pay Process Exercises
+Complete the following exercises:
+Exercise 1 
+Create a Purchase Order
+Exercise 2 
+Receive Item on a Purchase Order
+Exercise 3 
+Bill a Purchase Order
+Exercise 4 
+Pay a Bill
+Exercise 5 
+Enter a Standalone Bill
+Exercise 6 
+Approve a Bill
+Exercise 7 
+Run Accounts Payable Report
+Exercise 8 
+Review Key Performance Indicators and 
+Scorecards
+Exercise 9 
+ Investigate Tasks to Complete
+ 
+ 
+to
+ 
+. 
+17
+NetSuite
+ \226 
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+\226 
+Oracle Internal
+Investigate Tasks to Complete
+ 
+ 
+to
+ 
+. 
+16
+NetSuite
+ \226 
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+\226 
+Oracle Internal
+Review Key Performance Indicators 
+and Scorecards
+ 
+ 
+to
+ 
+. 
+15
+NetSuite
+ \226 
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+\226 
+Oracle Internal
+Run Accounts Payable Report
+ 
+ 
+to
+ 
+. 
+\225
+\225
+\225
+\226
+In
+14
+NetSuite
+ \226 
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+\226 
+Oracle Internal
+Monitor, Analyze & Alert 
+Walkthroughs 7
+-9
+The Accounts Receivable Team needs to Monitor & Analyze open 
+customer balances and be Alerted to tasks to complete:
+Walkthrough 7 
+\226 
+Run Accounts Payable Report
+Walkthrough 8 
+\226 
+Review Key Performance Indicators and 
+Scorecards
+Walkthrough 9 
+vestigate Tasks to Complete
+ 
+ 
+to
+ 
+. 
+13
+NetSuite
+ \226 
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+\226 
+Oracle Internal
+Approve a Bill
+ 
+ 
+to
+ 
+. 
+12
+NetSuite
+ \226 
+ERP
+Basics
+Procure
+Pay
+Copyright \251 2025, Oracle and/or its affiliates
+Oracle\256, Java, MySQL and NetSuite are registered trademarks of Oracle and/or its 
+affiliates. Other names may be trademarks of their respective owners.
+Confidential 
+\226 
+Oracle Internal
+Enter a Standalone Bill

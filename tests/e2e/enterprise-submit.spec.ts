@@ -152,25 +152,39 @@ async function captureScreenshot(
   const relativePath = `docs/evidence/auto/${scenarioId}.png`;
   const fullPath = path.join(process.cwd(), relativePath);
 
-  // Navigate and wait for the initial HTML to be parsed
   await page.goto(route, { waitUntil: "domcontentloaded" });
+  await page.waitForLoadState("load").catch(() => {});
 
-  // Wait for all in-flight network requests to settle (forms, tables, charts)
-  await page.waitForLoadState("networkidle").catch(() => {});
-
-  // Aggressively wait for ALL skeleton loaders to disappear (up to 20s)
   await page.waitForFunction(
     () => document.querySelectorAll(".animate-pulse").length === 0,
-    { timeout: 20000 },
+    { timeout: 5_000 },
   ).catch(() => {});
 
-  // Extra settle time for animations and chart renders
-  await page.waitForTimeout(1500);
-
-  await page.screenshot({ path: fullPath, fullPage: true });
+  await page.waitForTimeout(500);
+  await page.screenshot({ path: fullPath, fullPage: false });
 
   return relativePath;
 }
+async function captureLocatorScreenshot(
+  page: Page,
+  fileName: string,
+  route: string,
+  testId: string,
+): Promise<string> {
+  const relativePath = `docs/evidence/auto/${fileName}`;
+  const fullPath = path.join(process.cwd(), relativePath);
+
+  await page.goto(route, { waitUntil: "domcontentloaded" });
+  await page.waitForLoadState("load").catch(() => {});
+  const locator = page.getByTestId(testId);
+  await expect(locator).toBeVisible({ timeout: 15_000 });
+  await locator.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(300);
+  await locator.screenshot({ path: fullPath });
+
+  return relativePath;
+}
+
 
 test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
   test.describe.configure({ mode: "serial" });
@@ -651,6 +665,7 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       try {
         // TS-05: Procurement Workbench — shows P2P form with Purchase Order flow
         evidence.artifactPath = await captureScreenshot(page, "TS-05", "/procurement");
+        await captureLocatorScreenshot(page, "P2P-01-create-purchase-order.png", "/procurement", "p2p-po-evidence-card");
       } catch (error) {
         evidence.notes = [
           ...(evidence.notes ?? []),
@@ -719,6 +734,7 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       try {
         // TS-06: Procurement Workbench after Item Receipt — P2P: Receive Items
         evidence.artifactPath = await captureScreenshot(page, "TS-06", "/procurement");
+        await captureLocatorScreenshot(page, "P2P-02-review-item-receipt.png", "/procurement", "p2p-receipt-evidence-card");
       } catch (error) {
         evidence.notes = [
           ...(evidence.notes ?? []),
@@ -749,7 +765,7 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
         purchaseOrderId: state.purchaseOrderId,
         goodsReceiptId: state.itemReceiptId,
         subtotal,
-        tax: 1000,
+        tax: 0,
         notes: "TS-07 vendor bill",
       });
 
@@ -758,6 +774,7 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       state.vendorBillId = asString(vendorBillBody.id);
       expect(state.vendorBillId).not.toBe("");
       expect(asString(vendorBillBody.status)).toBe("pending_approval");
+      await captureLocatorScreenshot(page, "P2P-03-enter-vendor-bill.png", "/procurement", "p2p-vendor-bill-evidence-card");
 
       const vendorBillApproveRes = await apiCall(api, "POST", `/api/netsuite/vendor-bills/${state.vendorBillId}/approve`, {
         notes: "TS-07 approve vendor bill",
@@ -790,6 +807,8 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       try {
         // TS-07: Procurement Workbench after Vendor Bill — P2P: Enter Vendor Bill
         evidence.artifactPath = await captureScreenshot(page, "TS-07", "/procurement");
+        // Note: P2P-03 is already captured during the test step before approval
+        await captureLocatorScreenshot(page, "P2P-04-approve-vendor-bill.png", "/procurement", "p2p-bill-approval-evidence-card");
       } catch (error) {
         evidence.notes = [
           ...(evidence.notes ?? []),
@@ -862,6 +881,8 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       try {
         // TS-08: Procurement Workbench after Bill Payment — P2P: Pay Bill
         evidence.artifactPath = await captureScreenshot(page, "TS-08", "/procurement");
+        await captureLocatorScreenshot(page, "P2P-05-pay-vendor-bill.png", "/procurement", "p2p-bill-payment-evidence-card");
+        await captureLocatorScreenshot(page, "P2P-06-linked-evidence-summary.png", "/procurement", "p2p-linked-evidence-summary");
       } catch (error) {
         evidence.notes = [
           ...(evidence.notes ?? []),
@@ -960,6 +981,10 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
           "TS-09",
           `/warehouses/${state.warehouseMainId}`,
         );
+        await captureLocatorScreenshot(page, "INV-01-create-item-master.png", `/warehouses/${state.warehouseMainId}`, "item-master-evidence-card");
+        await captureLocatorScreenshot(page, "INV-02-review-item-update-receipt.png", `/warehouses/${state.warehouseMainId}`, "inventory-receipt-evidence-card");
+        await captureLocatorScreenshot(page, "INV-03-perform-inventory-adjustment.png", `/warehouses/${state.warehouseMainId}`, "inventory-adjustment-request-card");
+        await captureLocatorScreenshot(page, "INV-04-review-approve-adjustment.png", `/warehouses/${state.warehouseMainId}`, "inventory-adjustment-approval-card");
       } catch (error) {
         evidence.notes = [
           ...(evidence.notes ?? []),
@@ -1035,6 +1060,8 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
           "TS-10",
           `/warehouses/${state.warehouseMainId}`,
         );
+        await captureLocatorScreenshot(page, "INV-05-monitor-analyze-inventory.png", `/warehouses/${state.warehouseMainId}`, "inventory-monitoring-ledger-card");
+        await captureLocatorScreenshot(page, "INV-06-linked-inventory-evidence-summary.png", `/warehouses/${state.warehouseMainId}`, "inventory-linked-evidence-summary");
       } catch (error) {
         evidence.notes = [
           ...(evidence.notes ?? []),

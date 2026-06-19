@@ -63,9 +63,9 @@ async function generateUniqueNumber(
   }
 }
 
-export async function getPurchaseOrders(userId: string) {
+export async function getPurchaseOrders(userId?: string) {
   return prisma.purchaseOrder.findMany({
-    where: { userId },
+    where: userId != null ? { userId } : {},
     include: { items: true },
     orderBy: { createdAt: "desc" },
   });
@@ -250,9 +250,9 @@ export async function deletePurchaseOrder(id: string, userId: string) {
   return prisma.purchaseOrder.delete({ where: { id } });
 }
 
-export async function getGoodsReceipts(userId: string) {
+export async function getGoodsReceipts(userId?: string) {
   return prisma.goodsReceipt.findMany({
-    where: { userId },
+    where: userId != null ? { userId } : {},
     include: { items: true, purchaseOrder: true },
     orderBy: { createdAt: "desc" },
   });
@@ -613,12 +613,13 @@ export async function reverseGoodsReceipt(
   });
 }
 
-export async function getAPInvoices(userId: string) {
+export async function getAPInvoices(userId?: string) {
   return prisma.aPInvoice.findMany({
-    where: { userId },
+    where: userId != null ? { userId } : {},
     include: {
       purchaseOrder: true,
       goodsReceipt: true,
+      billPayments: true,
     },
     orderBy: { createdAt: "desc" },
   });

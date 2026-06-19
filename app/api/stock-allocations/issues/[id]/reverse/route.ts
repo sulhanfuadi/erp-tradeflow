@@ -5,6 +5,7 @@ import { withRateLimit, defaultRateLimits } from "@/lib/api/rate-limit";
 import { reverseStockIssueSchema } from "@/lib/validations";
 import { reverseStockIssue } from "@/prisma/stock-allocation";
 import { createAuditLog } from "@/prisma/audit-log";
+import { canAdjustInventory } from "@/lib/role-helpers";
 
 function serializeMovement(movement: {
   id: string;
@@ -39,6 +40,13 @@ export async function POST(
     const session = await getSessionFromRequest(request);
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    if (!canAdjustInventory(session.role)) {
+      return NextResponse.json(
+        { error: "Forbidden: Inventory Manager role required" },
+        { status: 403 },
+      );
     }
 
     const body = await request.json().catch(() => ({}));

@@ -2,7 +2,7 @@
   "scenarioId": "TS-12",
   "title": "Legacy API compatibility regression",
   "status": "PASS",
-  "startedAt": "2026-06-13T07:07:18.266Z",
+  "startedAt": "2026-06-19T02:56:58.884Z",
   "assertions": {
     "legacyOrdersStatus": 200,
     "legacyInvoicesStatus": 200,
@@ -11,20 +11,20 @@
     "legacyApInvoicesStatus": 200,
     "foundSalesOrder": true,
     "foundVendorBill": true,
-    "legacyOrderCount": 1,
+    "legacyOrderCount": 13,
     "legacyInvoiceCount": 1,
-    "legacyPOCount": 1
+    "legacyPOCount": 14
   },
   "ids": {
-    "salesOrderId": "6a2d00dd7a27305f1f63465a",
-    "customerInvoiceId": "6a2d01017a27305f1f634662",
-    "purchaseOrderId": "6a2d01247a27305f1f634665",
-    "itemReceiptId": "6a2d01367a27305f1f634668",
-    "vendorBillId": "6a2d01477a27305f1f63466b"
+    "salesOrderId": "6a34afc83708df0fb31f831d",
+    "customerInvoiceId": "6a34afd23708df0fb31f8325",
+    "purchaseOrderId": "6a34afd93708df0fb31f8328",
+    "itemReceiptId": "6a34afde3708df0fb31f832b",
+    "vendorBillId": "6a34afe13708df0fb31f832e"
   },
   "notes": [
     "Endpoint legacy tetap berjalan saat endpoint NetSuite aktif."
   ],
   "artifactPath": "docs/evidence/auto/TS-12.png",
-  "finishedAt": "2026-06-13T07:07:37.285Z"
+  "finishedAt": "2026-06-19T02:57:01.294Z"
 }

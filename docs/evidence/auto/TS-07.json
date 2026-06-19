@@ -2,19 +2,19 @@
   "scenarioId": "TS-07",
   "title": "Vendor Bill creation from PO/Item Receipt",
   "status": "PASS",
-  "startedAt": "2026-06-13T07:05:43.595Z",
+  "startedAt": "2026-06-19T02:56:33.209Z",
   "assertions": {
-    "vendorBillId": "6a2d01477a27305f1f63466b",
+    "vendorBillId": "6a34afe13708df0fb31f832e",
     "vendorBillStatus": "pending_approval"
   },
   "ids": {
-    "vendorBillId": "6a2d01477a27305f1f63466b",
-    "purchaseOrderId": "6a2d01247a27305f1f634665",
-    "itemReceiptId": "6a2d01367a27305f1f634668"
+    "vendorBillId": "6a34afe13708df0fb31f832e",
+    "purchaseOrderId": "6a34afd93708df0fb31f8328",
+    "itemReceiptId": "6a34afde3708df0fb31f832b"
   },
   "notes": [
     "Vendor Bill berhasil dibuat dari PO + Item Receipt."
   ],
   "artifactPath": "docs/evidence/auto/TS-07.png",
-  "finishedAt": "2026-06-13T07:06:02.439Z"
+  "finishedAt": "2026-06-19T02:56:37.604Z"
 }

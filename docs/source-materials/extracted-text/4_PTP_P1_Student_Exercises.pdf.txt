@@ -1,0 +1,663 @@
+ 
+5
+. 
+\256
+ 
+ 
+1
+ 
+\226
+ 
+ 
+\226
+ 
+ 
+ 
+ 
+\226
+ 
+ 
+1.
+ 
+ 
+ 
+ 
+2.
+ 
+ 
+ 
+ 
+3.
+ 
+ 
+ 
+.
+ 
+ 
+ 
+ Copyright \251 202
+, Oracle and/or its affiliates
+Oracle
+, Java, 
+MySQL 
+and 
+NetSuite
+are registered trademarks of Oracle and/or its affiliates. Other 
+names may be trademarks of their respective owners.
+NetSuite 
+ERP Basics
+Procure to Pay 
+Part
+STUDENT EXERCISES
+Create a Purchase Order
+Select 
+Receiving > Receiving > Enter Purchase Orders
+or click 
+New Purchase Order
+in Tiles 
+using the Purchasing Manager role.
+Create a 
+Purchase Order
+as follows.
+Add
+and then 
+Save
+ 
+5
+. 
+\256
+ 
+ 
+2
+ 
+\226
+ 
+ 
+ 
+\224.
+ 
+ 
+ 
+ 
+.
+ 
+\226
+ 
+ 
+ 
+ 
+ Copyright \251 202
+, Oracle and/or its affiliates
+Oracle
+, Java, 
+MySQL 
+and 
+NetSuite
+are registered trademarks of Oracle and/or its affiliates. Other 
+names may be trademarks of their respective owners.
+Receive Item on a Purchase Order
+Using the 
+Inventory Manager
+role locate and receive the item on the Purchase Order you have 
+created in Wa
+lkthrough 1 via the Reminder Portlet \223
+Orders to Receive
+Note you can either just tick the associated checkbox and 
+Submit
+the receipt then 
+Refresh
+until 
+complete or review the Purchase Order via the 
+Receive
+hyperlink and then click 
+Save
+Note 
+Potentiall
+y you can perform partial receipting where you receive less items than you 
+originally ordered and then receive the remaining items at a later date.
+ 
+5
+. 
+\256
+ 
+ 
+3
+ 
+\226
+ 
+ 
+1.
+ 
+ 
+\224.
+ 
+2.
+ 
+ 
+.
+ 
+ 
+ 
+.
+ 
+3.
+ 
+ 
+.
+ 
+ 
+ 
+ Copyright \251 202
+, Oracle and/or its affiliates
+Oracle
+, Java, 
+MySQL 
+and 
+NetSuite
+are registered trademarks of Oracle and/or its affiliates. Other 
+names may be trademarks of their respective owners.
+Bill a Purchase Order
+Using the 
+A/P Analyst
+role locate and Bill the Purchase Order you have created in 
+Walkthrough 1 via the Reminder Portlet \223
+Purchase Orders to Bill
+Tick the associated 
+Bill
+checkbox and then click 
+Submit
+Note, rather than just ticking the 
+Bill
+checkbox you can view the Purcha
+se Order before 
+Billing by clicking the 
+Date
+hyperlink and then click 
+Bill
+Enter a Bill Number in the 
+Reference No.
+field and then click 
+Save
+ 
+5
+. 
+\256
+ 
+ 
+4
+ 
+\226
+ 
+ 
+1.
+ 
+ 
+ 
+ 
+2.
+ 
+ 
+\224.
+ 
+3.
+ 
+ 
+4.
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ Copyright \251 202
+, Oracle and/or its affiliates
+Oracle
+, Java, 
+MySQL 
+and 
+NetSuite
+are registered trademarks of Oracle and/or its affiliates. Other 
+names may be trademarks of their respective owners.
+Pay a Bill
+Remaining in the 
+A/P Analyst
+role return to the Home Dashboard and refresh the 
+Reminde
+rs Portlet.
+Locate and Bill you have created in Walkthrough 3 via the Reminder Portlet \223
+Bills to Pay
+In the Bill Payments screen set the fields as follows.
+Tick the associated Bill checkbox and then click 
+Save
+and then 
+Refresh
+until complete to 
+make the payment.
+ 
+5
+. 
+\256
+ 
+ 
+5
+ 
+\226
+ 
+ 
+ 
+1.
+ 
+ 
+.
+ 
+2.
+ 
+ 
+ 
+3.
+ 
+ 
+ 
+.
+ 
+\226
+ 
+Y
+Ok
+ 
+ 
+ 
+ 
+ 
+ Copyright \251 202
+, Oracle and/or its affiliates
+Oracle
+, Java, 
+MySQL 
+and 
+NetSuite
+are registered trademarks of Oracle and/or its affiliates. Other 
+names may be trademarks of their respective owners.
+Enter a Standalone Bill
+Not all Bills received may have an associated Purchase Order, for example utility bills. In this case we 
+can 
+create a standalone Bill.
+Remaining in the 
+A/P Analyst
+role select 
+Vendors > Purchases > Enter Bills
+Create a Bill as follows.
+Add
+& then 
+Save
+Note 
+ou may receive a warning that you have exceeded the vendor credit limit. This is only 
+a warning so click 
+to continue.
+The Bill requires approval.
+ 
+5
+. 
+\256
+ 
+ 
+6
+ 
+\226
+ 
+ 
+1.
+ 
+ 
+\224.
+ 
+2.
+ 
+ 
+ 
+ 
+ Copyright \251 202
+, Oracle and/or its affiliates
+Oracle
+, Java, 
+MySQL 
+and 
+NetSuite
+are registered trademarks of Oracle and/or its affiliates. Other 
+names may be trademarks of their respective owners.
+Approve a Bill
+Using the 
+Accounting Manager
+role locate the Bill you have created in Walkthr
+ough 5 via 
+the Reminder Portlet \223
+Bills to Approve
+You can just tick the associated checkbox then 
+Submit
+the Bill Approval.
+However, rather than just approving you may want to review the Bill via the Date hyperlink 
+and then click Back to return to the App
+rove Bills screen where you complete the approval.
+ 
+5
+. 
+\256
+ 
+ 
+1
+ 
+ 
+ 
+ 
+ 
+ 
+1.
+ 
+ 
+ 
+ 
+2.
+ 
+ 
+ 
+ 
+3.
+ 
+ 
+ 
+ 
+ 
+ Copyright \251 202
+, Oracle and/or its affiliates
+Oracle
+, Java, 
+MySQL 
+and 
+NetSuite
+are registered trademarks of Oracle and/or its affiliates. Other 
+names may be trademarks of their respective owners.
+NetSuite 
+\226 
+ERP Basics
+Procure to Pay 
+\226 
+Part
+STUDENT EXERCISES
+\226 
+Create a Purchase Order
+Select 
+Receiving > Receiving > Enter Purchase Orders
+or click 
+New Purchase Order
+in Tiles 
+using the Purchasing Manager role.
+Create a 
+Purchase Order
+as follows.
+Add
+and then 
+Save
+. 
+ 
+5
+. 
+\256
+ 
+ 
+2
+ 
+ 
+ 
+\224.
+ 
+ 
+ 
+\226 
+ 
+ 
+ 
+ Copyright \251 202
+, Oracle and/or its affiliates
+Oracle
+, Java, 
+MySQL 
+and 
+NetSuite
+are registered trademarks of Oracle and/or its affiliates. Other 
+names may be trademarks of their respective owners.
+\226 
+Receive Item on a Purchase Order
+Using the 
+Inventory Manager
+role locate and receive the item on the Purchase Order you have 
+created in Wa
+lkthrough 1 via the Reminder Portlet \223
+Orders to Receive
+Note you can either just tick the associated checkbox and 
+Submit
+the receipt then 
+Refresh
+ until 
+complete or review the Purchase Order via the 
+Receive
+hyperlink and then click 
+Save
+. 
+Note 
+Potentiall
+y you can perform partial receipting where you receive less items than you 
+originally ordered and then receive the remaining items at a later date.
+ 
+5
+. 
+\256
+ 
+ 
+3
+ 
+ 
+1.
+ 
+ 
+\224.
+ 
+2.
+ 
+ 
+ 
+ 
+3.
+ 
+ 
+ 
+ 
+ Copyright \251 202
+, Oracle and/or its affiliates
+Oracle
+, Java, 
+MySQL 
+and 
+NetSuite
+are registered trademarks of Oracle and/or its affiliates. Other 
+names may be trademarks of their respective owners.
+\226 
+Bill a Purchase Order
+Using the 
+A/P Analyst
+role locate and Bill the Purchase Order you have created in 
+Walkthrough 1 via the Reminder Portlet \223
+Purchase Orders to Bill
+Tick the associated 
+Bill
+checkbox and then click 
+Submit
+. 
+Note, rather than just ticking the 
+Bill
+checkbox you can view the Purcha
+se Order before 
+Billing by clicking the 
+Date
+hyperlink and then click 
+Bill
+. 
+Enter a Bill Number in the 
+Reference No.
+field and then click 
+Save
+. 
+ 
+5
+. 
+\256
+ 
+ 
+4
+ 
+ 
+1.
+ 
+ 
+ 
+ 
+2.
+ 
+ 
+\224.
+ 
+3.
+ 
+ 
+4.
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ Copyright \251 202
+, Oracle and/or its affiliates
+Oracle
+, Java, 
+MySQL 
+and 
+NetSuite
+are registered trademarks of Oracle and/or its affiliates. Other 
+names may be trademarks of their respective owners.
+\226 
+Pay a Bill
+Remaining in the 
+A/P Analyst
+role return to the Home Dashboard and refresh the 
+Reminde
+rs Portlet.
+Locate and Bill you have created in Walkthrough 3 via the Reminder Portlet \223
+Bills to Pay
+In the Bill Payments screen set the fields as follows.
+Tick the associated Bill checkbox and then click 
+Save
+and then 
+Refresh
+until complete to 
+make the payment.
+ 
+5
+. 
+\256
+ 
+ 
+5
+ 
+ 
+ 
+1.
+ 
+ 
+2.
+ 
+ 
+ 
+3.
+ 
+ 
+ 
+Ok
+ 
+ 
+ 
+ 
+ 
+ Copyright \251 202
+, Oracle and/or its affiliates
+Oracle
+, Java, 
+MySQL 
+and 
+NetSuite
+are registered trademarks of Oracle and/or its affiliates. Other 
+names may be trademarks of their respective owners.
+\226 
+Enter a Standalone Bill
+Not all Bills received may have an associated Purchase Order, for example utility bills. In this case we 
+can 
+create a standalone Bill.
+Remaining in the 
+A/P Analyst
+role select 
+Vendors > Purchases > Enter Bills
+. 
+Create a Bill as follows.
+Add
+& then 
+Save
+. 
+Note 
+\226 Y
+ou may receive a warning that you have exceeded the vendor credit limit. This is only 
+a warning so click 
+to continue.
+The Bill requires approval.
+ 
+5
+. 
+\256
+ 
+ 
+6
+ 
+ 
+1.
+ 
+ 
+\224.
+ 
+2.
+ 
+ 
+ 
+ 
+ Copyright \251 202
+, Oracle and/or its affiliates
+Oracle
+, Java, 
+MySQL 
+and 
+NetSuite
+are registered trademarks of Oracle and/or its affiliates. Other 
+names may be trademarks of their respective owners.
+\226 
+Approve a Bill
+Using the 
+Accounting Manager
+role locate the Bill you have created in Walkthr
+ough 5 via 
+the Reminder Portlet \223
+Bills to Approve
+You can just tick the associated checkbox then 
+Submit
+the Bill Approval.
+However, rather than just approving you may want to review the Bill via the Date hyperlink 
+and then click Back to return to the App
+rove Bills screen where you complete the approval.

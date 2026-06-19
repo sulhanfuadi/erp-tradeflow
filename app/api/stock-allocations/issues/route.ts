@@ -6,6 +6,7 @@ import { withRateLimit, defaultRateLimits } from "@/lib/api/rate-limit";
 import { createStockIssueSchema } from "@/lib/validations";
 import { createAuditLog } from "@/prisma/audit-log";
 import { createStockIssue, getStockIssues } from "@/prisma/stock-allocation";
+import { canAdjustInventory } from "@/lib/role-helpers";
 
 function serializeMovement(movement: {
   id: string;
@@ -43,7 +44,7 @@ export async function GET(request: NextRequest) {
     const warehouseId = searchParams.get("warehouseId") || undefined;
     const productId = searchParams.get("productId") || undefined;
 
-    const issues = await getStockIssues(session.id, {
+    const issues = await getStockIssues(undefined, {
       warehouseId,
       productId,
     });
@@ -103,6 +104,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    if (!canAdjustInventory(session.role)) {
+      return NextResponse.json(
+        { error: "Forbidden: Inventory Manager role required" },
+        { status: 403 },
+      );
+    }
+
     const body = await request.json();
     const validation = createStockIssueSchema.safeParse(body);
 
@@ -117,11 +125,11 @@ export async function POST(request: NextRequest) {
 
     const [product, warehouse] = await Promise.all([
       prisma.product.findFirst({
-        where: { id: input.productId, userId: session.id, deletedAt: null },
+        where: { id: input.productId, deletedAt: null },
         select: { id: true },
       }),
       prisma.warehouse.findFirst({
-        where: { id: input.warehouseId, userId: session.id },
+        where: { id: input.warehouseId },
         select: { id: true },
       }),
     ]);

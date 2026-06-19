@@ -3,6 +3,7 @@ import { logger } from "@/lib/logger";
 import { requireNetSuiteSession } from "@/app/api/netsuite/_shared";
 import { prisma } from "@/prisma/client";
 import { invalidateAllServerCaches } from "@/lib/cache";
+import { canApproveVendorBill } from "@/lib/role-helpers";
 
 export async function POST(
   request: NextRequest,
@@ -13,8 +14,8 @@ export async function POST(
     if (guard.errorResponse) return guard.errorResponse;
     const session = guard.session!;
 
-    if (session.role !== "ap_analyst" && session.role !== "admin") {
-      return NextResponse.json({ error: "Forbidden: Only A/P Analyst can approve vendor bills" }, { status: 403 });
+    if (!canApproveVendorBill(session.role)) {
+      return NextResponse.json({ error: "Forbidden: Only A/R Analyst or A/P Analyst can approve vendor bills" }, { status: 403 });
     }
 
     const { id } = await params;

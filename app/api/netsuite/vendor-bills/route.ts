@@ -4,13 +4,14 @@ import { requireNetSuiteSession } from "@/app/api/netsuite/_shared";
 import { createAPInvoiceSchema } from "@/lib/validations";
 import { createVendorBillFromItemReceipt, getNetSuiteVendorBills } from "@/prisma/netsuite";
 import { serializeP2PResult } from "@/prisma/p2p";
+import { canCreateVendorBill } from "@/lib/role-helpers";
 
 export async function GET(request: NextRequest) {
   try {
     const guard = await requireNetSuiteSession(request);
     if (guard.errorResponse) return guard.errorResponse;
 
-    const rows = await getNetSuiteVendorBills(guard.session!.id);
+    const rows = await getNetSuiteVendorBills();
     return NextResponse.json(serializeP2PResult(rows));
   } catch (error) {
     logger.error("Error fetching vendor bills:", error);
@@ -27,8 +28,8 @@ export async function POST(request: NextRequest) {
     if (guard.errorResponse) return guard.errorResponse;
     const session = guard.session!;
 
-    if (session.role !== "ap_analyst" && session.role !== "admin") {
-      return NextResponse.json({ error: "Forbidden: Only A/P Analyst can create vendor bills" }, { status: 403 });
+    if (!canCreateVendorBill(session.role)) {
+      return NextResponse.json({ error: "Forbidden: Only A/R Analyst or A/P Analyst can create vendor bills" }, { status: 403 });
     }
 
     const payload = await request.json();

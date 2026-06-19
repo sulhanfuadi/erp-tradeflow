@@ -3,6 +3,7 @@ import { logger } from "@/lib/logger";
 import { requireNetSuiteSession } from "@/app/api/netsuite/_shared";
 import { createStockIssueSchema } from "@/lib/validations";
 import { createStockIssue, getStockIssues } from "@/prisma/stock-allocation";
+import { canAdjustInventory } from "@/lib/role-helpers";
 
 function serializeMovement(row: {
   id: string;
@@ -32,7 +33,7 @@ export async function GET(request: NextRequest) {
     const productId = searchParams.get("productId") || undefined;
     const warehouseId = searchParams.get("warehouseId") || undefined;
 
-    const rows = await getStockIssues(guard.session!.id, {
+    const rows = await getStockIssues(undefined, {
       productId,
       warehouseId,
     });
@@ -53,7 +54,7 @@ export async function POST(request: NextRequest) {
     if (guard.errorResponse) return guard.errorResponse;
     const session = guard.session!;
 
-    if (session.role !== "inventory_manager" && session.role !== "admin") {
+    if (!canAdjustInventory(session.role)) {
       return NextResponse.json({ error: "Forbidden: Only Inventory Manager can issue stock" }, { status: 403 });
     }
 

@@ -6,6 +6,7 @@ import { withRateLimit, defaultRateLimits } from "@/lib/api/rate-limit";
 import { createStockTransferSchema } from "@/lib/validations";
 import { createAuditLog } from "@/prisma/audit-log";
 import { createStockTransfer, getStockTransfers } from "@/prisma/stock-allocation";
+import { canAdjustInventory } from "@/lib/role-helpers";
 
 function serializeTransfer(transfer: {
   id: string;
@@ -49,7 +50,7 @@ export async function GET(request: NextRequest) {
     const productId = searchParams.get("productId") || undefined;
     const warehouseId = searchParams.get("warehouseId") || undefined;
 
-    const transfers = await getStockTransfers(session.id);
+    const transfers = await getStockTransfers();
 
     const filtered = transfers.filter((transfer) => {
       if (productId && transfer.productId !== productId) return false;
@@ -131,6 +132,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    if (!canAdjustInventory(session.role)) {
+      return NextResponse.json(
+        { error: "Forbidden: Inventory Manager role required" },
+        { status: 403 },
+      );
+    }
+
     const body = await request.json();
     const validation = createStockTransferSchema.safeParse(body);
 
@@ -145,15 +153,15 @@ export async function POST(request: NextRequest) {
 
     const [product, sourceWarehouse, destinationWarehouse] = await Promise.all([
       prisma.product.findFirst({
-        where: { id: input.productId, userId: session.id, deletedAt: null },
+        where: { id: input.productId, deletedAt: null },
         select: { id: true },
       }),
       prisma.warehouse.findFirst({
-        where: { id: input.fromWarehouseId, userId: session.id },
+        where: { id: input.fromWarehouseId },
         select: { id: true },
       }),
       prisma.warehouse.findFirst({
-        where: { id: input.toWarehouseId, userId: session.id },
+        where: { id: input.toWarehouseId },
         select: { id: true },
       }),
     ]);

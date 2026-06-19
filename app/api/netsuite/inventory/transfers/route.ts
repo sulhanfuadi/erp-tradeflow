@@ -3,6 +3,7 @@ import { logger } from "@/lib/logger";
 import { requireNetSuiteSession } from "@/app/api/netsuite/_shared";
 import { createStockTransferSchema } from "@/lib/validations";
 import { createStockTransfer, getStockTransfers } from "@/prisma/stock-allocation";
+import { canAdjustInventory } from "@/lib/role-helpers";
 
 function serializeTransfer(row: {
   id: string;
@@ -38,7 +39,7 @@ export async function GET(request: NextRequest) {
     const productId = searchParams.get("productId") || undefined;
     const warehouseId = searchParams.get("warehouseId") || undefined;
 
-    const rows = await getStockTransfers(guard.session!.id);
+    const rows = await getStockTransfers();
 
     const filtered = rows.filter((row) => {
       if (productId && row.productId !== productId) return false;
@@ -68,7 +69,7 @@ export async function POST(request: NextRequest) {
     if (guard.errorResponse) return guard.errorResponse;
     const session = guard.session!;
 
-    if (session.role !== "inventory_manager" && session.role !== "admin") {
+    if (!canAdjustInventory(session.role)) {
       return NextResponse.json({ error: "Forbidden: Only Inventory Manager can transfer stock" }, { status: 403 });
     }
 

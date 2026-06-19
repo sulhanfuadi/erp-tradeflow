@@ -381,6 +381,8 @@ export async function createVendorBillFromItemReceipt(
     throw new Error("Vendor bill requires purchaseOrderId or goodsReceiptId");
   }
 
+  let maxBillableAmount: number | null = null;
+
   if (input.purchaseOrderId) {
     const po = await prisma.purchaseOrder.findFirst({
       where: { id: input.purchaseOrderId },
@@ -389,13 +391,41 @@ export async function createVendorBillFromItemReceipt(
 
     if (!po) throw new Error("Purchase order not found");
 
-    const hasReceivableLine = po.items.some(
-      (item) => Number(item.receivedQuantity) > Number(item.billedQuantity ?? 0),
-    );
+    maxBillableAmount = po.items.reduce((sum, item) => {
+      const unbilledReceivedQty = Math.max(
+        0,
+        Number(item.receivedQuantity) - Number(item.billedQuantity ?? 0),
+      );
+      return sum + unbilledReceivedQty * Number(item.unitCost);
+    }, 0);
 
-    if (!hasReceivableLine) {
+    if (maxBillableAmount <= 0) {
       throw new Error("No received quantity available to bill for this purchase order");
     }
+  }
+
+  if (input.goodsReceiptId) {
+    const receipt = await prisma.goodsReceipt.findFirst({
+      where: { id: input.goodsReceiptId, status: "received" },
+      include: { items: true },
+    });
+
+    if (!receipt) throw new Error("Item receipt not found or already reversed");
+
+    const receiptAmount = receipt.items.reduce(
+      (sum, item) => sum + Number(item.quantity) * Number(item.unitCost),
+      0,
+    );
+
+    maxBillableAmount =
+      maxBillableAmount == null ? receiptAmount : Math.min(maxBillableAmount, receiptAmount);
+  }
+
+  const requestedAmount = input.subtotal + (input.tax ?? 0);
+  if (maxBillableAmount != null && requestedAmount > maxBillableAmount) {
+    throw new Error(
+      `Vendor bill amount exceeds received unbilled value. Available: ${maxBillableAmount}`,
+    );
   }
 
   const vendorBill = await createAPInvoice(input, userId);
@@ -429,6 +459,19 @@ export async function recordBillPayment(
   userId: string,
 ) {
   return prisma.$transaction(async (tx) => {
+    const invoiceBeforePayment = await tx.aPInvoice.findUnique({
+      where: { id: input.apInvoiceId },
+      select: { id: true, status: true, amountDue: true },
+    });
+
+    if (!invoiceBeforePayment) throw new Error("Vendor bill not found");
+    if (invoiceBeforePayment.status === "pending_approval") {
+      throw new Error("Vendor bill must be approved before payment");
+    }
+    if (invoiceBeforePayment.status === "rejected" || invoiceBeforePayment.status === "cancelled") {
+      throw new Error("Rejected or cancelled vendor bill cannot be paid");
+    }
+
     const paymentPayload: RecordAPInvoicePaymentInput = {
       paymentAmount: input.paymentAmount,
       notes: input.notes,
@@ -446,7 +489,7 @@ export async function recordBillPayment(
       "BP",
     );
 
-    const applied = Math.min(input.paymentAmount, Number(updatedVendorBill.total));
+    const applied = Math.min(input.paymentAmount, Number(invoiceBeforePayment.amountDue));
 
     const paymentDoc = await tx.billPayment.create({
       data: {
@@ -482,9 +525,9 @@ export async function getNetSuiteItemReceipts(userId: string) {
   }));
 }
 
-export async function getNetSuiteVendorBills(userId: string) {
+export async function getNetSuiteVendorBills(userId?: string) {
   const rows = await prisma.aPInvoice.findMany({
-    where: { userId },
+    where: userId != null ? { userId } : {},
     include: { purchaseOrder: true, goodsReceipt: true, billPayments: true },
     orderBy: { createdAt: "desc" },
   });
@@ -506,9 +549,9 @@ export async function listCustomerPayments(userId: string) {
   });
 }
 
-export async function listBillPayments(userId: string) {
+export async function listBillPayments(userId?: string) {
   return prisma.billPayment.findMany({
-    where: { userId },
+    where: userId != null ? { userId } : {},
     orderBy: { createdAt: "desc" },
   });
 }

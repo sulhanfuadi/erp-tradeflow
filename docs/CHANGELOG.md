@@ -5,6 +5,15 @@
 
 ## [Unreleased]
 
+### Changed & Verified (2026-06-19) — P2P + Inventory Role-Flow Stabilization
+- **`scripts/demo-dry-run.ts`** — Added narrow null guards for supplier/warehouse seed lookups to fix the TypeScript build blocker without changing demo behavior.
+- **`lib/role-helpers.ts`** — Expanded centralized ERP role helpers for P2P and Inventory (`canCreatePurchaseOrder`, `canReceivePurchaseOrder`, `canCreateVendorBill`, `canPayVendorBill`, `canManageItemMaster`, `canAdjustInventory`, `canMonitorInventory`). Generic `user` is not treated as an internal role.
+- **P2P APIs and UI** — Updated NetSuite and legacy P2P read paths for role-switch demo visibility, added role-specific write guards, and tightened Vendor Bill/Bill Payment data integrity so bills cannot exceed received unbilled PO value and payments require approved bills.
+- **Inventory APIs and UI** — Updated stock allocation, transfer, issue, and ledger paths so internal roles can see operational inventory data without current-user-only filters. Inventory mutation endpoints require Inventory Manager/Admin. Warehouse Staff remains limited to receipt/monitoring role capabilities.
+- **`components/warehouses/WarehouseInventoryWorkbench.tsx`** — Replaced hardcoded Inventory Manager UI checks with the new helper functions and clarified demo labels for Item/Product master context, Inventory Adjustment, Inventory Transfer, Stock Issue/Reversal, and Stock Card/Movement Ledger. Ledger now shows warehouse and creator identifier when available.
+- **Tests** — Added focused P2P and Inventory unit coverage for role helper behavior, internal visibility without `userId`-only filters, Vendor Bill/Payment integrity, and issue reversal as compensating movement rather than deleting history.
+- **Verification** — `npm run lint`, `npm test`, and `npm run build` passed after P2P and Inventory changes. Final `npm run test:e2e` is blocked by Playwright webServer startup on Windows: `'DATABASE_URL' is not recognized as an internal or external command`.
+
 ### Fixed (2026-06-16) — P0 Stabilization Phase
 - **`lib/react-query/invalidate-coverage.test.ts`** — Fixed Windows path separator bug: `path.relative()` returns backslash paths on Windows but spec/exempt Set keys use forward slashes. Added `.replaceAll("\\", "/")` normalization at 3 lookup sites. Result: `npm test` went from **82 failures → 324/324 passed** (✅).
 - **`app/api/netsuite/vendor-bills/route.ts`** — Fixed role mismatch: POST guard was `ar_analyst` (wrong) → `ap_analyst` (correct). Vendor bills are AP-side operations per AGENTS.md.

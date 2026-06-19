@@ -4,6 +4,7 @@ import { prisma } from "@/prisma/client";
 import { requireNetSuiteSession } from "@/app/api/netsuite/_shared";
 import { createStockAllocationSchema } from "@/lib/validations";
 import { getStockAllocations, upsertStockAllocation } from "@/prisma/stock-allocation";
+import { canAdjustInventory } from "@/lib/role-helpers";
 
 function serializeAllocation(row: {
   id: string;
@@ -32,7 +33,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const warehouseId = searchParams.get("warehouseId");
 
-    const rows = await getStockAllocations(guard.session!.id);
+    const rows = await getStockAllocations();
 
     const filtered = warehouseId
       ? rows.filter((row) => row.warehouseId === warehouseId)
@@ -53,6 +54,10 @@ export async function POST(request: NextRequest) {
     const guard = await requireNetSuiteSession(request);
     if (guard.errorResponse) return guard.errorResponse;
 
+    if (!canAdjustInventory(guard.session!.role)) {
+      return NextResponse.json({ error: "Forbidden: Only Inventory Manager can adjust inventory" }, { status: 403 });
+    }
+
     const payload = await request.json();
     const validation = createStockAllocationSchema.safeParse(payload);
 
@@ -70,11 +75,11 @@ export async function POST(request: NextRequest) {
 
     const [product, warehouse] = await Promise.all([
       prisma.product.findFirst({
-        where: { id: input.productId, userId: guard.session!.id, deletedAt: null },
+        where: { id: input.productId, deletedAt: null },
         select: { id: true },
       }),
       prisma.warehouse.findFirst({
-        where: { id: input.warehouseId, userId: guard.session!.id },
+        where: { id: input.warehouseId },
         select: { id: true },
       }),
     ]);

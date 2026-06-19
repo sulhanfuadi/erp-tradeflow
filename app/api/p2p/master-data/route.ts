@@ -31,12 +31,12 @@ export async function GET(request: NextRequest) {
     const [suppliers, warehouses, products] = await Promise.all([
       getSuppliersForAdminIncludingDemo(session.id),
       prisma.warehouse.findMany({
-        where: { userId: session.id, status: true },
+        where: { status: true },
         select: { id: true, name: true },
         orderBy: { name: "asc" },
       }),
       prisma.product.findMany({
-        where: { userId: session.id, deletedAt: null },
+        where: { deletedAt: null },
         select: {
           id: true,
           name: true,

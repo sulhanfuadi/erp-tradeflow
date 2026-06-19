@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     const productId = searchParams.get("productId") || undefined;
     const limit = Number(searchParams.get("limit") || "200");
 
-    const rows = await getStockMovements(guard.session!.id, {
+    const rows = await getStockMovements(undefined, {
       warehouseId,
       productId,
       limit,

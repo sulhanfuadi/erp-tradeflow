@@ -27,7 +27,11 @@ export default defineConfig({
   },
   globalSetup: "./tests/e2e/global-setup.ts",
   webServer: {
-    command: `DATABASE_URL='${TEST_DATABASE_URL}' npm run dev -- --port ${PORT}`,
+    command: `npm run dev -- --port ${PORT}`,
+    env: {
+      ...process.env,
+      DATABASE_URL: TEST_DATABASE_URL,
+    },
     url: `${BASE_URL}/login`,
     timeout: 180_000,
     reuseExistingServer: !process.env.CI,

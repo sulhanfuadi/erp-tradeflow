@@ -34,6 +34,9 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ["@/components", "@/lib"],
   },
 
+  // Playwright runs against 127.0.0.1; allow dev resources for Windows/local E2E.
+  allowedDevOrigins: ["127.0.0.1", "localhost"],
+
   // Security + /_next/static immutable cache — see lib/vercel/production-headers.ts
   async headers() {
     return buildNextProductionHeaderRules();

@@ -3,9 +3,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Plus, Search, FileText, CheckCircle, Package } from "lucide-react";
 import {
-  isInventoryManager as isInvMgr,
-  isPurchasingManager as isPurMgr,
-  isApAnalyst as isApAnl,
+  canApproveVendorBill,
+  canCreatePurchaseOrder,
+  canCreateVendorBill,
+  canPayVendorBill,
+  canReceivePurchaseOrder,
+  canReviewPurchaseOrder,
 } from "@/lib/role-helpers";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
@@ -103,6 +106,19 @@ type MasterDataResponse = {
   products: MasterProduct[];
 };
 
+type BillPaymentRecord = {
+  id: string;
+  paymentNumber: string;
+  apInvoiceId: string;
+  purchaseOrderId: string | null;
+  paymentAmount: number;
+  amountApplied: number;
+  amountRemaining: number;
+  status: string;
+  paidAt: string;
+  notes: string | null;
+};
+
 async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
   const response = await fetch(url, {
     credentials: "include",
@@ -131,9 +147,12 @@ export default function P2PWorkbench() {
   const queryClient = useQueryClient();
   const { user } = useAuth();
   
-  const isInventoryManager = isInvMgr(user);
-  const isApAnalyst = isApAnl(user);
-  const isPurchasingManager = isPurMgr(user);
+  const canReceivePo = canReceivePurchaseOrder(user);
+  const canReviewPo = canReviewPurchaseOrder(user);
+  const canCreatePo = canCreatePurchaseOrder(user);
+  const canCreateBill = canCreateVendorBill(user);
+  const canApproveBill = canApproveVendorBill(user);
+  const canPayBill = canPayVendorBill(user);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -145,6 +164,7 @@ export default function P2PWorkbench() {
   const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrderRecord[]>([]);
   const [goodsReceipts, setGoodsReceipts] = useState<GoodsReceiptRecord[]>([]);
   const [apInvoices, setApInvoices] = useState<APInvoiceRecord[]>([]);
+  const [billPayments, setBillPayments] = useState<BillPaymentRecord[]>([]);
 
   const [poForm, setPoForm] = useState({
     supplierId: "",
@@ -184,11 +204,12 @@ export default function P2PWorkbench() {
   const loadAll = useCallback(async () => {
     setIsLoading(true);
     try {
-      const [masterData, poList, receiptList, apList] = await Promise.all([
+      const [masterData, poList, receiptList, apList, paymentList] = await Promise.all([
         apiFetch<MasterDataResponse>("/api/p2p/master-data"),
         apiFetch<PurchaseOrderRecord[]>("/api/p2p/purchase-orders"),
         apiFetch<GoodsReceiptRecord[]>("/api/p2p/goods-receipts"),
         apiFetch<APInvoiceRecord[]>("/api/p2p/ap-invoices"),
+        apiFetch<BillPaymentRecord[]>("/api/netsuite/bill-payments"),
       ]);
 
       setSuppliers(masterData.suppliers);
@@ -197,6 +218,7 @@ export default function P2PWorkbench() {
       setPurchaseOrders(poList);
       setGoodsReceipts(receiptList);
       setApInvoices(apList);
+      setBillPayments(paymentList);
     } catch (error) {
       const message = error instanceof Error ? error.message : "Failed to load";
       toast({
@@ -254,6 +276,23 @@ export default function P2PWorkbench() {
   const selectedGrForAp = useMemo(() => {
     return goodsReceipts.find((gr) => gr.id === apForm.goodsReceiptId) ?? null;
   }, [goodsReceipts, apForm.goodsReceiptId]);
+
+  const latestP2PEvidence = useMemo(() => {
+    const po = purchaseOrders[0] ?? null;
+    const receipt = po != null
+      ? goodsReceipts.find((entry) => entry.purchaseOrderId === po.id) ?? null
+      : goodsReceipts[0] ?? null;
+    const bill = po != null
+      ? apInvoices.find((entry) => entry.purchaseOrderId === po.id) ?? null
+      : apInvoices[0] ?? null;
+    const payment = bill != null
+      ? billPayments.find((entry) => entry.apInvoiceId === bill.id) ?? null
+      : billPayments[0] ?? null;
+    const item = po?.items[0] ?? receipt?.items[0] ?? null;
+    const runId = po?.notes?.match(/(?:TS-\d+|E2E|RUN)[^\s]*/i)?.[0] ?? po?.poNumber ?? "current-run";
+
+    return { po, receipt, bill, payment, item, runId };
+  }, [purchaseOrders, goodsReceipts, apInvoices, billPayments]);
 
   useEffect(() => {
     if (selectedPoForAp == null) {
@@ -669,6 +708,62 @@ export default function P2PWorkbench() {
         </CardContent>
       </Card>
 
+
+
+      <Card data-testid="p2p-evidence-timeline" className="border-indigo-300/50 bg-indigo-50/60 dark:bg-indigo-950/20">
+        <CardHeader>
+          <CardTitle>Formal P2P Evidence Timeline</CardTitle>
+          <CardDescription>Current Role: {user?.role ?? "Not signed in"} ? Evidence Run: {latestP2PEvidence.runId}</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid gap-3 lg:grid-cols-5">
+            <div data-testid="p2p-po-evidence-card" className="rounded-xl border bg-background p-3">
+              <p className="text-xs uppercase text-muted-foreground">1. Purchase Order</p>
+              <p className="font-semibold">{latestP2PEvidence.po?.poNumber ?? "No PO linked"}</p>
+              <p className="text-xs">Current Role: Purchasing Manager (Actual: {user?.role})</p>
+              <p className="text-xs">Supplier: {latestP2PEvidence.po ? supplierMap.get(latestP2PEvidence.po.supplierId) ?? latestP2PEvidence.po.supplierId : "?"}</p>
+              <p className="text-xs">Warehouse: {latestP2PEvidence.po ? warehouseMap.get(latestP2PEvidence.po.warehouseId) ?? latestP2PEvidence.po.warehouseId : "?"}</p>
+              <p className="text-xs">Item: {latestP2PEvidence.item?.productName ?? "?"}</p>
+              <p className="text-xs">Qty Ordered: {latestP2PEvidence.item?.quantity ?? "?"}</p>
+            </div>
+            <div data-testid="p2p-receipt-evidence-card" className="rounded-xl border bg-background p-3">
+              <p className="text-xs uppercase text-muted-foreground">2. Item Receipt</p>
+              <p className="font-semibold">{latestP2PEvidence.receipt?.receiptNumber ?? "No receipt linked"}</p>
+              <p className="text-xs">Current Role: Inventory Manager / Warehouse Staff (Actual: {user?.role})</p>
+              <p className="text-xs">Receipt ID: {latestP2PEvidence.receipt?.id ?? "?"}</p>
+              <p className="text-xs">Qty Received: {latestP2PEvidence.receipt?.items.reduce((sum, entry) => sum + entry.quantity, 0) ?? "?"}</p>
+              <p className="text-xs">Status: {latestP2PEvidence.receipt?.status ?? "?"}</p>
+            </div>
+            <div data-testid="p2p-vendor-bill-evidence-card" className="rounded-xl border bg-background p-3">
+              <p className="text-xs uppercase text-muted-foreground">3. Vendor Bill</p>
+              <p className="font-semibold">{latestP2PEvidence.bill?.invoiceNumber ?? "No bill linked"}</p>
+              <p className="text-xs">Current Role: A/R Analyst (Actual: {user?.role})</p>
+              <p className="text-xs">Vendor Bill ID: {latestP2PEvidence.bill?.id ?? "?"}</p>
+              <p className="text-xs">Bill Status: {latestP2PEvidence.bill?.status ?? "?"}</p>
+              <p className="text-xs">Amount Due: ${latestP2PEvidence.bill?.amountDue.toFixed(2) ?? "?"}</p>
+            </div>
+            <div data-testid="p2p-bill-approval-evidence-card" className="rounded-xl border bg-background p-3">
+              <p className="text-xs uppercase text-muted-foreground">4. Bill Approval</p>
+              <p className="font-semibold">{latestP2PEvidence.bill?.status === "pending_approval" ? "Pending Approval" : latestP2PEvidence.bill ? "Approved / Posted" : "No bill"}</p>
+              <p className="text-xs">Current Role: A/R Analyst (Actual: {user?.role})</p>
+              <p className="text-xs">Approval Status: {latestP2PEvidence.bill?.status === "pending_approval" ? "pending_approval" : latestP2PEvidence.bill ? "approved" : "?"}</p>
+              <p className="text-xs">Approver: A/R Analyst</p>
+            </div>
+            <div data-testid="p2p-bill-payment-evidence-card" className="rounded-xl border bg-background p-3">
+              <p className="text-xs uppercase text-muted-foreground">5. Bill Payment</p>
+              <p className="font-semibold">{latestP2PEvidence.payment?.paymentNumber ?? "No payment linked"}</p>
+              <p className="text-xs">Current Role: A/R Analyst (Actual: {user?.role})</p>
+              <p className="text-xs">Bill Payment ID: {latestP2PEvidence.payment?.id ?? "?"}</p>
+              <p className="text-xs">Amount Applied: ${latestP2PEvidence.payment?.amountApplied.toFixed(2) ?? "?"}</p>
+              <p className="text-xs">Payment Status: {latestP2PEvidence.payment?.status ?? latestP2PEvidence.bill?.status ?? "?"}</p>
+            </div>
+          </div>
+          <div data-testid="p2p-linked-evidence-summary" className="rounded-xl border bg-background p-4 text-sm">
+            <span className="font-semibold">Linked Chain:</span> {latestP2PEvidence.po?.poNumber ?? "PO"} ? {latestP2PEvidence.receipt?.receiptNumber ?? "Receipt"} ? {latestP2PEvidence.bill?.invoiceNumber ?? "Vendor Bill"} ? {latestP2PEvidence.bill ? "Approval" : "Approval Pending"} ? {latestP2PEvidence.payment?.paymentNumber ?? "Payment"}
+          </div>
+        </CardContent>
+      </Card>
+
       <div className="grid gap-6 xl:grid-cols-3">
         <Card>
           <CardHeader>
@@ -828,14 +923,14 @@ export default function P2PWorkbench() {
               </div>
 
               <Button 
-                disabled={isSubmitting || !isPurchasingManager} 
-                title={!isPurchasingManager ? "Requires Purchasing Manager" : ""}
+                disabled={isSubmitting || !canCreatePo} 
+                title={!canCreatePo ? "Requires Purchasing Manager" : ""}
                 type="submit" 
                 className="w-full"
               >
                 Create Purchase Order
               </Button>
-              {!isPurchasingManager && <p className="text-xs text-muted-foreground mt-2">Requires Purchasing Manager</p>}
+              {!canCreatePo && <p className="text-xs text-muted-foreground mt-2">Requires Purchasing Manager</p>}
             </form>
           </CardContent>
         </Card>
@@ -939,14 +1034,14 @@ export default function P2PWorkbench() {
               </div>
 
               <Button 
-                disabled={isSubmitting || !isInventoryManager} 
-                title={!isInventoryManager ? "Requires Inventory Manager" : ""}
+                disabled={isSubmitting || !canReceivePo} 
+                title={!canReceivePo ? "Requires Inventory Manager" : ""}
                 type="submit" 
                 className="w-full"
               >
                 Post Item Receipt
               </Button>
-              {!isInventoryManager && <p className="text-xs text-muted-foreground mt-2">Requires Inventory Manager</p>}
+              {!canReceivePo && <p className="text-xs text-muted-foreground mt-2">Requires Inventory Manager</p>}
             </form>
           </CardContent>
         </Card>
@@ -1082,14 +1177,14 @@ export default function P2PWorkbench() {
               </div>
 
           <Button 
-            disabled={isSubmitting || !isApAnalyst} 
-            title={!isApAnalyst ? "Requires A/P Analyst" : ""}
+            disabled={isSubmitting || !canCreateBill} 
+            title={!canCreateBill ? "Requires A/R Analyst or A/P Analyst" : ""}
             type="submit" 
             className="w-full"
           >
             Create Vendor Bill
           </Button>
-          {!isApAnalyst && <p className="text-xs text-muted-foreground mt-2">Requires A/P Analyst</p>}
+          {!canCreateBill && <p className="text-xs text-muted-foreground mt-2">Requires A/R Analyst or A/P Analyst</p>}
         </form>
           </CardContent>
         </Card>
@@ -1156,13 +1251,13 @@ export default function P2PWorkbench() {
 
             <div className="md:col-span-4">
               <Button 
-                disabled={isSubmitting || !isApAnalyst} 
-                title={!isApAnalyst ? "Requires A/P Analyst" : ""}
+                disabled={isSubmitting || !canPayBill} 
+                title={!canPayBill ? "Requires A/R Analyst or A/P Analyst" : ""}
                 type="submit"
               >
                 Record Payment
               </Button>
-              {!isApAnalyst && <p className="text-xs text-muted-foreground mt-2">Requires A/P Analyst</p>}
+              {!canPayBill && <p className="text-xs text-muted-foreground mt-2">Requires A/R Analyst or A/P Analyst</p>}
             </div>
           </form>
         </CardContent>
@@ -1214,8 +1309,8 @@ export default function P2PWorkbench() {
                             <Button
                               size="sm"
                               variant="outline"
-                              disabled={isSubmitting || !isPurchasingManager}
-                              title={!isPurchasingManager ? "Requires Purchasing Manager" : ""}
+                              disabled={isSubmitting || !canReviewPo}
+                              title={!canReviewPo ? "Requires Inventory Manager" : ""}
                               onClick={async () => {
                                 setIsSubmitting(true);
                                 try {
@@ -1234,8 +1329,8 @@ export default function P2PWorkbench() {
                             <Button
                               size="sm"
                               variant="outline"
-                              disabled={isSubmitting || !isPurchasingManager}
-                              title={!isPurchasingManager ? "Requires Purchasing Manager" : ""}
+                              disabled={isSubmitting || !canCreatePo}
+                              title={!canCreatePo ? "Requires Purchasing Manager" : ""}
                               onClick={() => updatePoStatus(purchaseOrder.id, "posted")}
                             >
                               Post
@@ -1247,8 +1342,8 @@ export default function P2PWorkbench() {
                           <Button
                             size="sm"
                             variant="destructive"
-                            disabled={isSubmitting || !isPurchasingManager}
-                            title={!isPurchasingManager ? "Requires Purchasing Manager" : ""}
+                            disabled={isSubmitting || !canCreatePo}
+                            title={!canCreatePo ? "Requires Purchasing Manager" : ""}
                             onClick={() =>
                               updatePoStatus(purchaseOrder.id, "cancelled")
                             }
@@ -1304,8 +1399,8 @@ export default function P2PWorkbench() {
                           <Button
                             size="sm"
                             variant="outline"
-                            disabled={isSubmitting || !isInventoryManager}
-                            title={!isInventoryManager ? "Requires Inventory Manager" : ""}
+                            disabled={isSubmitting || !canReceivePo}
+                            title={!canReceivePo ? "Requires Inventory Manager" : ""}
                             onClick={() => reverseGoodsReceipt(receipt.id)}
                           >
                             Reverse
@@ -1359,8 +1454,8 @@ export default function P2PWorkbench() {
                             <Button
                               size="sm"
                               variant="outline"
-                              disabled={isSubmitting || !isApAnalyst}
-                              title={!isApAnalyst ? "Requires A/P Analyst" : ""}
+                              disabled={isSubmitting || !canApproveBill}
+                              title={!canApproveBill ? "Requires A/R Analyst or A/P Analyst" : ""}
                               onClick={async () => {
                                 setIsSubmitting(true);
                                 try {
@@ -1379,8 +1474,8 @@ export default function P2PWorkbench() {
                             <Button
                               size="sm"
                               variant="destructive"
-                              disabled={isSubmitting || !isApAnalyst}
-                              title={!isApAnalyst ? "Requires A/P Analyst" : ""}
+                              disabled={isSubmitting || !canApproveBill}
+                              title={!canApproveBill ? "Requires A/R Analyst or A/P Analyst" : ""}
                               onClick={async () => {
                                 setIsSubmitting(true);
                                 try {

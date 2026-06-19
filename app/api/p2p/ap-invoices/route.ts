@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const apInvoices = await getAPInvoices(session.id);
+    const apInvoices = await getAPInvoices();
     return NextResponse.json(serializeP2PResult(apInvoices));
   } catch (error) {
     logger.error("Error fetching AP invoices:", error);

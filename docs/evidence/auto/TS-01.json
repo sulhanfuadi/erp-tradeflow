@@ -2,21 +2,21 @@
   "scenarioId": "TS-01",
   "title": "Sales Order create + reservation + oversell prevention",
   "status": "PASS",
-  "startedAt": "2026-06-13T07:03:56.723Z",
+  "startedAt": "2026-06-19T02:56:06.776Z",
   "assertions": {
-    "salesOrderId": "6a2d00dd7a27305f1f63465a",
-    "salesOrderItemId": "6a2d00dd7a27305f1f63465b",
+    "salesOrderId": "6a34afc83708df0fb31f831d",
+    "salesOrderItemId": "6a34afc83708df0fb31f831e",
     "reservedBefore": 0,
     "reservedAfter": 3,
     "oversellStatus": 400
   },
   "ids": {
-    "categoryId": "6a2d00dc7a27305f1f63464e",
-    "supplierId": "6a2d00dc7a27305f1f634650",
-    "warehouseMainId": "6a2d00dc7a27305f1f634652",
-    "warehouseSecondaryId": "6a2d00dc7a27305f1f634654",
-    "productId": "6a2d00dc7a27305f1f634656",
-    "salesOrderId": "6a2d00dd7a27305f1f63465a"
+    "categoryId": "6a34afc63708df0fb31f8311",
+    "supplierId": "6a34afc63708df0fb31f8313",
+    "warehouseMainId": "6a34afc63708df0fb31f8315",
+    "warehouseSecondaryId": "6a34afc63708df0fb31f8317",
+    "productId": "6a34afc73708df0fb31f8319",
+    "salesOrderId": "6a34afc83708df0fb31f831d"
   },
   "notes": [
     "Sales Order berhasil dibuat.",
@@ -24,5 +24,5 @@
     "Oversell prevention aktif."
   ],
   "artifactPath": "docs/evidence/auto/TS-01.png",
-  "finishedAt": "2026-06-13T07:04:15.178Z"
+  "finishedAt": "2026-06-19T02:56:11.079Z"
 }

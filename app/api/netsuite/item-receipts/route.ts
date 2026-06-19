@@ -2,16 +2,20 @@ import { NextRequest, NextResponse } from "next/server";
 import { logger } from "@/lib/logger";
 import { createGoodsReceiptSchema } from "@/lib/validations";
 import { requireNetSuiteSession } from "@/app/api/netsuite/_shared";
-import { createGoodsReceipt, serializeP2PResult } from "@/prisma/p2p";
-import { getNetSuiteItemReceipts } from "@/prisma/netsuite";
+import { createGoodsReceipt, getGoodsReceipts, serializeP2PResult } from "@/prisma/p2p";
+import { canReceivePurchaseOrder } from "@/lib/role-helpers";
 
 export async function GET(request: NextRequest) {
   try {
     const guard = await requireNetSuiteSession(request);
     if (guard.errorResponse) return guard.errorResponse;
 
-    const rows = await getNetSuiteItemReceipts(guard.session!.id);
-    return NextResponse.json(serializeP2PResult(rows));
+    const rows = await getGoodsReceipts();
+    return NextResponse.json(serializeP2PResult(rows.map((row) => ({
+      ...row,
+      itemReceiptNumber: row.receiptNumber,
+      netsuiteStatus: row.status === "received" ? "Posted" : "Reversed",
+    }))));
   } catch (error) {
     logger.error("Error fetching item receipts:", error);
     return NextResponse.json(
@@ -27,8 +31,8 @@ export async function POST(request: NextRequest) {
     if (guard.errorResponse) return guard.errorResponse;
     const session = guard.session!;
 
-    if (session.role !== "inventory_manager" && session.role !== "admin") {
-      return NextResponse.json({ error: "Forbidden: Only Inventory Manager can create item receipts" }, { status: 403 });
+    if (!canReceivePurchaseOrder(session.role)) {
+      return NextResponse.json({ error: "Forbidden: Only Inventory Manager or Warehouse Staff can create item receipts" }, { status: 403 });
     }
 
     const payload = await request.json();

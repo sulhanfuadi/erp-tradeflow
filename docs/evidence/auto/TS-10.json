@@ -2,18 +2,18 @@
   "scenarioId": "TS-10",
   "title": "Inventory issue to reverse issue",
   "status": "PASS",
-  "startedAt": "2026-06-13T07:06:42.333Z",
+  "startedAt": "2026-06-19T02:56:51.818Z",
   "assertions": {
     "issueMovementType": "issue",
     "reverseMovementType": "reversal"
   },
   "ids": {
-    "issueId": "6a2d01827a27305f1f634675",
-    "issueReversalId": "6a2d01837a27305f1f634676"
+    "issueId": "6a34aff43708df0fb31f8338",
+    "issueReversalId": "6a34aff53708df0fb31f8339"
   },
   "notes": [
     "Issue stock dan reverse issue berhasil."
   ],
   "artifactPath": "docs/evidence/auto/TS-10.png",
-  "finishedAt": "2026-06-13T07:07:00.501Z"
+  "finishedAt": "2026-06-19T02:56:56.523Z"
 }

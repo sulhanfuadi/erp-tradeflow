@@ -18,6 +18,7 @@ import { getCache, setCache, cacheKeys } from "@/lib/cache";
 import { withRateLimit, defaultRateLimits } from "@/lib/api/rate-limit";
 import { createStockAllocationSchema } from "@/lib/validations";
 import type { StockAllocation, WarehouseStockSummary } from "@/types";
+import { canAdjustInventory } from "@/lib/role-helpers";
 
 function transform(
   r: Awaited<ReturnType<typeof getStockAllocations>>[number],
@@ -67,11 +68,11 @@ export async function GET(request: NextRequest) {
 
     if (summary) {
       // Return warehouse stock summary
-      const cacheKey = cacheKeys.stockAllocation.summary(session.id);
+      const cacheKey = cacheKeys.stockAllocation.summary("internal");
       const cached = await getCache<WarehouseStockSummary[]>(cacheKey);
       if (cached) return NextResponse.json(cached);
 
-      const result = await getWarehouseStockSummary(session.id);
+      const result = await getWarehouseStockSummary();
       await setCache(cacheKey, result, 300);
       return NextResponse.json(result);
     }
@@ -81,9 +82,8 @@ export async function GET(request: NextRequest) {
     let cacheKey: string;
 
     if (warehouseId) {
-      // Verify warehouse belongs to user
       const warehouse = await prisma.warehouse.findFirst({
-        where: { id: warehouseId, userId: session.id },
+        where: { id: warehouseId },
       });
       if (!warehouse) {
         return NextResponse.json(
@@ -106,7 +106,7 @@ export async function GET(request: NextRequest) {
       const cached = await getCache<StockAllocation[]>(cacheKey);
       if (cached) return NextResponse.json(cached);
 
-      allocations = await getStockAllocations(session.id);
+      allocations = await getStockAllocations();
     }
 
     // Fetch products and warehouses for context
@@ -161,6 +161,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    if (!canAdjustInventory(session.role)) {
+      return NextResponse.json(
+        { error: "Forbidden: Only Inventory Manager can adjust inventory" },
+        { status: 403 },
+      );
+    }
+
     const body = await request.json();
     const validation = createStockAllocationSchema.safeParse(body);
     if (!validation.success) {
@@ -172,20 +179,17 @@ export async function POST(request: NextRequest) {
 
     const data = validation.data;
 
-    // Verify product belongs to user
     const product = await prisma.product.findFirst({
       where: mergeProductListWhere({
         id: data.productId,
-        userId: session.id,
       }),
     });
     if (!product) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
 
-    // Verify warehouse belongs to user
     const warehouse = await prisma.warehouse.findFirst({
-      where: { id: data.warehouseId, userId: session.id },
+      where: { id: data.warehouseId },
     });
     if (!warehouse) {
       return NextResponse.json(

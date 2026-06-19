@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
       ? Math.max(1, Math.min(500, Math.trunc(limitParam)))
       : 200;
 
-    const movements = await getStockMovements(session.id, {
+    const movements = await getStockMovements(undefined, {
       warehouseId,
       productId,
       limit,

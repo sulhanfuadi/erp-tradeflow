@@ -7,13 +7,14 @@ import {
   getPurchaseOrders,
   serializeP2PResult,
 } from "@/prisma/p2p";
+import { canCreatePurchaseOrder } from "@/lib/role-helpers";
 
 export async function GET(request: NextRequest) {
   try {
     const guard = await requireNetSuiteSession(request);
     if (guard.errorResponse) return guard.errorResponse;
 
-    const rows = await getPurchaseOrders(guard.session!.id);
+    const rows = await getPurchaseOrders();
     return NextResponse.json(
       serializeP2PResult(
         rows.map((row) => ({
@@ -37,7 +38,7 @@ export async function POST(request: NextRequest) {
     if (guard.errorResponse) return guard.errorResponse;
     const session = guard.session!;
 
-    if (session.role !== "purchasing_manager" && session.role !== "admin") {
+    if (!canCreatePurchaseOrder(session.role)) {
       return NextResponse.json({ error: "Forbidden: Only Purchasing Manager can create purchase orders" }, { status: 403 });
     }
 

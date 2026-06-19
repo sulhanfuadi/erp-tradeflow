@@ -49,6 +49,9 @@ async function run() {
 
   const s = supplier[0];
   const w = wh[0];
+  if (s == null) throw new Error("No supplier found");
+  if (w == null) throw new Error("No warehouse found");
+
   const p = await prisma.product.findFirst({ where: { supplierId: s.id } });
   if (!p) throw new Error("No product found for supplier");
 
