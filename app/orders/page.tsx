@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth-server";
+import { canAccessRoute } from "@/lib/role-helpers";
 import OrdersPage from "@/components/Pages/OrdersPage";
 import {
   getOrdersForUser,
@@ -18,6 +19,10 @@ export default async function OrdersRoute() {
   const user = await getSession();
   if (!user) {
     redirect("/login");
+  }
+
+  if (!canAccessRoute(user.role, "/orders")) {
+    redirect("/");
   }
   let initialOrders;
   if (user.role === "client") {

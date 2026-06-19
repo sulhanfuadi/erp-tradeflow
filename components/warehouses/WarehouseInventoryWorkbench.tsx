@@ -302,9 +302,10 @@ export default function WarehouseInventoryWorkbench({
           <p className="text-xs text-muted-foreground">Current Role: {user?.role ?? "Not signed in"}</p>
         </div>
         <div className="grid gap-3 lg:grid-cols-3">
-          <div data-testid="item-master-evidence-card" className="rounded-xl border bg-background p-3 text-xs">
-            <p className="uppercase text-muted-foreground">1. Item Master Created</p>
-            <p className="text-sm font-semibold">{latestInventoryEvidence.product?.name ?? "No item"}</p>
+          <div data-testid="inventory-step-item-master" className="rounded-xl border bg-background p-3 text-xs">
+            <p className="uppercase text-muted-foreground">Step 1 ? Creates Purchase Order / Item Master</p>
+            <p className="text-sm font-semibold">Current Role: Purchasing Manager</p>
+            <p>Item Master Name: {latestInventoryEvidence.product?.name ?? "No item"}</p>
             <p>SKU: {latestInventoryEvidence.product?.sku ?? "?"}</p>
             <p>Item Type: Inventory Item</p>
             <p>Supplier: {latestInventoryEvidence.product?.supplierId ?? "?"}</p>
@@ -312,25 +313,25 @@ export default function WarehouseInventoryWorkbench({
             <p>Purchase Price: linked PO cost when available</p>
             <p>Created by: Purchasing Manager (Actual: {user?.role})</p>
           </div>
-          <div data-testid="inventory-receipt-evidence-card" className="rounded-xl border bg-background p-3 text-xs">
-            <p className="uppercase text-muted-foreground">2. Review Item / Update Receipt</p>
-            <p className="text-sm font-semibold">Current Role: Warehouse Staff (Actual: {user?.role})</p>
+          <div data-testid="inventory-step-receipt-update" className="rounded-xl border bg-background p-3 text-xs">
+            <p className="uppercase text-muted-foreground">Step 2 ? Review Item & Update Inventory Receipt</p>
+            <p className="text-sm font-semibold">Current Role: Warehouse Staff</p>
             <p>Warehouse: {latestInventoryEvidence.warehouse?.name ?? warehouseId}</p>
             <p>Linked PO: shown in P2P evidence when available</p>
             <p>Receipt ID: {latestInventoryEvidence.latestMovement?.referenceType === "goods_receipt" ? latestInventoryEvidence.latestMovement.referenceId : "See Item Receipt evidence"}</p>
             <p>Allocation Before/After: {latestInventoryEvidence.quantity - Number(latestInventoryEvidence.latestMovement?.quantityChange ?? 0)} ? {latestInventoryEvidence.quantity}</p>
           </div>
-          <div data-testid="inventory-adjustment-request-card" className="rounded-xl border bg-background p-3 text-xs">
-            <p className="uppercase text-muted-foreground">3. Perform Inventory Adjustment</p>
-            <p className="text-sm font-semibold">Current Role: Inventory Manager (Actual: {user?.role})</p>
+          <div data-testid="inventory-step-adjustment" className="rounded-xl border bg-background p-3 text-xs">
+            <p className="uppercase text-muted-foreground">Step 3 ? Perform Inventory Adjustment</p>
+            <p className="text-sm font-semibold">Current Role: Inventory Manager</p>
             <p>Adjustment ID: {latestInventoryEvidence.adjustmentId}</p>
             <p>Adjustment Reason: {latestInventoryEvidence.adjustmentReason}</p>
             <p>Adjustment Status: pending_approval ? {latestInventoryEvidence.adjustmentStatus}</p>
             <p>Warehouse Allocation: Qty {latestInventoryEvidence.quantity}, Reserved {latestInventoryEvidence.safeReserved}, Available {latestInventoryEvidence.available}</p>
           </div>
-          <div data-testid="inventory-adjustment-approval-card" className="rounded-xl border bg-background p-3 text-xs">
-            <p className="uppercase text-muted-foreground">4. Review & Approve Adjustment</p>
-            <p className="text-sm font-semibold">Current Role: Inventory Manager (Actual: {user?.role})</p>
+          <div data-testid="inventory-step-approve-adjustment" className="rounded-xl border bg-background p-3 text-xs">
+            <p className="uppercase text-muted-foreground">Step 4 ? Review & Approved Adjustment</p>
+            <p className="text-sm font-semibold">Current Role: Inventory Manager / Approver</p>
             <p>Approval Status: {latestInventoryEvidence.adjustmentStatus}</p>
             <p>Approved/Rejected By: {canApproveAdjustment ? "Inventory Manager/Admin" : "Requires Inventory Manager/Admin"}</p>
             <p>Stock Movement Reference: {latestInventoryEvidence.latestMovement?.referenceType ?? "stock_allocation_adjustment"}:{latestInventoryEvidence.latestMovement?.referenceId ?? latestInventoryEvidence.adjustmentId}</p>
@@ -343,17 +344,17 @@ export default function WarehouseInventoryWorkbench({
               Approve Evidence Adjustment
             </button>
           </div>
-          <div data-testid="inventory-monitoring-ledger-card" className="rounded-xl border bg-background p-3 text-xs">
-            <p className="uppercase text-muted-foreground">5. Monitor & Analyze Ledger</p>
-            <p className="text-sm font-semibold">Current Role: Inventory Manager (Actual: {user?.role})</p>
+          <div data-testid="inventory-step-monitoring" className="rounded-xl border bg-background p-3 text-xs">
+            <p className="uppercase text-muted-foreground">Step 5 ? Monitoring & Analyze Inventory</p>
+            <p className="text-sm font-semibold">Current Role: Inventory Manager</p>
             <p>Ledger Movement: {latestInventoryEvidence.latestMovement?.movementType ?? "?"}</p>
             <p>Qty Change: {latestInventoryEvidence.latestMovement?.quantityChange ?? "?"}</p>
             <p>Running Balance: {latestInventoryEvidence.latestMovement?.runningBalance ?? "?"}</p>
             <p>Timestamp: {latestInventoryEvidence.latestMovement != null ? new Date(latestInventoryEvidence.latestMovement.createdAt).toLocaleString() : "?"}</p>
           </div>
           <div data-testid="inventory-linked-evidence-summary" className="rounded-xl border bg-background p-3 text-xs">
-            <p className="uppercase text-muted-foreground">6. Linked Inventory Evidence</p>
-            <p className="text-sm font-semibold">Item ? Receipt ? Adjustment ? Approval ? Ledger</p>
+            <p className="uppercase text-muted-foreground">Step 6 ? Linked Inventory Evidence Summary</p>
+            <p className="text-sm font-semibold">Item Master ? Purchase Order ? Receipt ? Inventory Update ? Adjustment ? Approval ? Ledger Monitoring</p>
             <p>{latestInventoryEvidence.product?.sku ?? "SKU"} ? {latestInventoryEvidence.latestMovement?.referenceId ?? "receipt/adjustment"} ? {latestInventoryEvidence.adjustmentId} ? {latestInventoryEvidence.adjustmentStatus} ? balance {latestInventoryEvidence.latestMovement?.runningBalance ?? "?"}</p>
           </div>
         </div>

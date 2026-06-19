@@ -143,7 +143,7 @@ Diagram swimlane di bawah menunjukkan **alur lengkap P2P** per peran sesuai spes
 > **Actor:** Purchasing Manager  
 > Membuat *Purchase Order* atas dasar *Purchase Request* internal dan mengirimkannya ke vendor (dokumen Purchase dashed ke Vendor lane).
 
-![P2P Step 1 — Procurement Workbench & Create PO](docs/evidence/bpmn/P2P-01_procurement-workbench.png)
+![P2P Step 1 — Creates Purchase Order](docs/evidence/auto/P2P-01-create-purchase-order.png)
 
 ---
 
@@ -154,7 +154,7 @@ Diagram swimlane di bawah menunjukkan **alur lengkap P2P** per peran sesuai spes
 > **Actor:** Inventory Manager  
 > Menerima barang fisik di gudang (*Item Receipt / Good Receipt ASN*) dan memvalidasi item sesuai PO. Stok produk otomatis meningkat.
 
-![P2P Step 2 — Item Receipt](docs/evidence/bpmn/P2P-03_item-receipt.png)
+![P2P Step 2 — Review Item on Purchase Order](docs/evidence/auto/P2P-02-review-item-on-purchase-order.png)
 
 ---
 
@@ -165,7 +165,7 @@ Diagram swimlane di bawah menunjukkan **alur lengkap P2P** per peran sesuai spes
 > **Actor:** A/R Analyst  
 > Memasukkan tagihan vendor (*Vendor Bill / Invoice*) ke dalam sistem, menghubungkannya ke PO dan Good Receipt. Dokumen Vendor Bill dikirim ke Vendor.
 
-![P2P Step 3 — Vendor Bill](docs/evidence/bpmn/P2P-04_vendor-bill.png)
+![P2P Step 3 — Bill Purchase Order](docs/evidence/auto/P2P-03-bill-purchase-order.png)
 
 ---
 
@@ -176,7 +176,32 @@ Diagram swimlane di bawah menunjukkan **alur lengkap P2P** per peran sesuai spes
 > **Actor:** A/R Analyst  
 > Melakukan pembayaran tagihan ke vendor. Mendukung pembayaran parsial maupun penuh. Proses selesai saat *Payment Received* (End Event).
 
-![P2P Step 4 — Bill Payment](docs/evidence/bpmn/P2P-05_bill-payment.png)
+![P2P Step 4 — Pay Vendor Bill](docs/evidence/auto/P2P-04-pay-vendor-bill.png)
+
+---
+
+### Step 5 — Enter Standalone Bill
+> [!IMPORTANT]
+> **Role-Switching Required:** Masih login sebagai **A/R Analyst**.
+>
+> **Actor:** A/R Analyst  
+> Memasukkan *Vendor Bill / Invoice* standalone yang tidak terkait Purchase Order, sesuai cabang BPMN.
+
+![P2P Step 5 — Enter Standalone Bill](docs/evidence/auto/P2P-05-enter-standalone-bill.png)
+
+---
+
+### Step 6 — Approve Vendor Bill
+> [!IMPORTANT]
+> **Role-Switching Required:** Masih login sebagai **A/R Analyst**.
+>
+> **Actor:** A/R Analyst  
+> Meninjau dan menyetujui Vendor Bill. Bukti UI menampilkan status approval, approver, timestamp, dan end event *Payment Received*.
+
+![P2P Step 6 — Approve Vendor Bill](docs/evidence/auto/P2P-06-approve-vendor-bill.png)
+
+*Linked Evidence Summary:*  
+![P2P Step 7 — Linked Evidence Summary](docs/evidence/auto/P2P-07-linked-evidence-summary.png)
 
 ---
 
@@ -198,7 +223,7 @@ Diagram swimlane di bawah menunjukkan **alur lengkap Inventory Management** per 
 > **Actor:** Purchasing Manager  
 > Membuat Purchase Order berdasarkan *Item Master Created*. Data Item Master tersimpan di sistem inventori.
 
-![Inventory Step 1 — Warehouses Overview](docs/evidence/bpmn/INV-01_warehouses-list.png)
+![Inventory Step 1 — Create Item Master](docs/evidence/auto/INV-01-create-item-master.png)
 
 ---
 
@@ -209,7 +234,7 @@ Diagram swimlane di bawah menunjukkan **alur lengkap Inventory Management** per 
 > **Actor:** Warehouse Staff  
 > Menerima barang, me-*review item* sesuai PO, lalu mengupdate *Inventory Receipt*. Stok sistem diperbarui secara otomatis.
 
-![Inventory Step 2 — Warehouse Detail](docs/evidence/bpmn/INV-02_warehouse-detail.png)
+![Inventory Step 2 — Review Item Update Inventory Receipt](docs/evidence/auto/INV-02-review-item-update-inventory-receipt.png)
 
 ---
 
@@ -220,7 +245,7 @@ Diagram swimlane di bawah menunjukkan **alur lengkap Inventory Management** per 
 > **Actor:** Inventory Manager  
 > Melakukan penyesuaian stok manual (*Inventory Adjustment*) untuk pengeluaran barang, koreksi stok, atau transfer antar gudang. Mendukung *Reverse* untuk koreksi.
 
-![Inventory Step 3 — Products & Stock Levels](docs/evidence/bpmn/INV-03_products-stock.png)
+![Inventory Step 3 — Perform Inventory Adjustment](docs/evidence/auto/INV-03-perform-inventory-adjustment.png)
 
 ---
 
@@ -229,9 +254,9 @@ Diagram swimlane di bawah menunjukkan **alur lengkap Inventory Management** per 
 > **Role-Switching Required:** Masih login sebagai **Inventory Manager**.
 >
 > **Actor:** Inventory Manager  
-> Memvalidasi dan menyetujui hasil adjustment inventori.
+> Memvalidasi dan menyetujui hasil adjustment inventori. Bukti implementasi menggunakan request/approval adjustment yang menghasilkan referensi movement ledger.
 
-![Inventory Step 4 — Inventory Adjustment Review](docs/evidence/bpmn/INV-04_inventory-ledger.png)
+![Inventory Step 4 — Review Approved Adjustment](docs/evidence/auto/INV-04-review-approved-adjustment.png)
 
 ---
 
@@ -242,7 +267,10 @@ Diagram swimlane di bawah menunjukkan **alur lengkap Inventory Management** per 
 > **Actor:** Inventory Manager  
 > Memantau seluruh pergerakan stok melalui *Inventory Ledger* dan laporan inventori. Proses selesai: *Inventory Managed Effectively* (End Event).
 
-![Inventory Step 5 — Inventory Ledger & History](docs/evidence/bpmn/INV-05_suppliers.png)
+![Inventory Step 5 — Monitoring Analyze Inventory](docs/evidence/auto/INV-05-monitoring-analyze-inventory.png)
+
+*Linked Inventory Evidence Summary:*  
+![Inventory Step 6 — Linked Inventory Evidence Summary](docs/evidence/auto/INV-06-linked-inventory-evidence-summary.png)
 
 ---
 

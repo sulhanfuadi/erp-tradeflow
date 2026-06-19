@@ -38,6 +38,7 @@ import { useTheme } from "next-themes";
 import ScrollControl from "../shared/ScrollControl";
 import Footer from "./Footer";
 import { NotificationBell } from "../shared";
+import { getNavigationItemsForRole } from "@/lib/role-helpers";
 
 /**
  * RoboHash fallback avatar URL when user has no custom/Google image.
@@ -182,23 +183,6 @@ export default function Navbar({ children }: NavbarProps) {
         dropdownItems: Array<{ label: string; path: string }>;
       };
 
-  const adminNavItems: NavItem[] = [
-    { label: "Dashboard", path: "/", hasDropdown: false },
-    { label: "Products", path: "/products", hasDropdown: false },
-    { label: "Sales Orders", path: "/orders", hasDropdown: false },
-    { label: "Customer Invoices", path: "/invoices", hasDropdown: false },
-    { label: "Procure-to-Pay", path: "/procurement", hasDropdown: false },
-    { label: "Categories", path: "/categories", hasDropdown: false },
-    { label: "Suppliers", path: "/suppliers", hasDropdown: false },
-    { label: "Warehouses", path: "/warehouses", hasDropdown: false },
-    {
-      label: "Business Insights",
-      path: "/business-insights",
-      hasDropdown: false,
-    },
-    { label: "Admin Panel", path: "/admin", hasDropdown: false },
-  ];
-
   const clientNavItems: NavItem[] = [
     { label: "Client Portal", path: "/client", hasDropdown: false },
     { label: "Browse Products", path: "/products", hasDropdown: false },
@@ -212,7 +196,7 @@ export default function Navbar({ children }: NavbarProps) {
     { label: "View Sales Orders", path: "/orders", hasDropdown: false },
   ];
 
-  // Role from auth when available; else infer from pathname so client/supplier see correct nav on refresh (no admin flash).
+  // Role from auth when available; else infer from pathname so client/supplier see correct nav on refresh.
   const role =
     user?.role ??
     (pathname?.startsWith("/client")
@@ -225,7 +209,7 @@ export default function Navbar({ children }: NavbarProps) {
       ? clientNavItems
       : role === "supplier"
         ? supplierNavItems
-        : adminNavItems;
+        : getNavigationItemsForRole(role);
 
   /** Home link for logo/brand: admin → /, client → /client, supplier → /supplier */
   const homePath =
