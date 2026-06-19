@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth-server";
+import { canAccessRoute } from "@/lib/role-helpers";
 import ProductsPage from "@/components/Pages/ProductsPage";
 import {
   getProductsForUser,
@@ -24,6 +25,10 @@ export default async function ProductsRoute({
   const user = await getSession();
   if (!user) {
     redirect("/login");
+  }
+
+  if (!canAccessRoute(user.role, "/products")) {
+    redirect("/");
   }
   const params = await searchParams;
   const initialOwnerId = params?.ownerId ?? "";

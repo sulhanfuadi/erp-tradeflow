@@ -2,19 +2,19 @@
   "scenarioId": "TS-05",
   "title": "Purchase Order create and post",
   "status": "PASS",
-  "startedAt": "2026-06-19T02:56:25.558Z",
+  "startedAt": "2026-06-19T13:49:57.092Z",
   "assertions": {
-    "purchaseOrderId": "6a34afd93708df0fb31f8328",
-    "purchaseOrderItemId": "6a34afd93708df0fb31f8329",
+    "purchaseOrderId": "6a35490546e66ccd1dc7f566",
+    "purchaseOrderItemId": "6a35490546e66ccd1dc7f567",
     "postedStatus": "posted"
   },
   "ids": {
-    "purchaseOrderId": "6a34afd93708df0fb31f8328",
-    "purchaseOrderItemId": "6a34afd93708df0fb31f8329"
+    "purchaseOrderId": "6a35490546e66ccd1dc7f566",
+    "purchaseOrderItemId": "6a35490546e66ccd1dc7f567"
   },
   "notes": [
     "Purchase Order berhasil dibuat dan diposting."
   ],
   "artifactPath": "docs/evidence/auto/TS-05.png",
-  "finishedAt": "2026-06-19T02:56:29.920Z"
+  "finishedAt": "2026-06-19T13:50:01.004Z"
 }

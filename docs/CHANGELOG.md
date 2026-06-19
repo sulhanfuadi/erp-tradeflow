@@ -5,6 +5,16 @@
 
 ## [Unreleased]
 
+### Changed (2026-06-19) — Strict BPMN Screenshot Evidence Rework In Progress
+- **`components/p2p/P2PWorkbench.tsx`** — Reworked P2P evidence UI into strict BPMN step cards with locator targets for Purchase Order, Item Receipt, Vendor Bill, Bill Payment, Standalone Bill, Vendor Bill Approval, and linked evidence summary. Formal P2P evidence uses **A/R Analyst** as the primary BPMN bill/payment actor while retaining A/P Analyst compatibility in helpers.
+- **`components/warehouses/WarehouseInventoryWorkbench.tsx`** — Updated Inventory evidence locators and labels to match requested Item Master, Receipt Update, Inventory Adjustment, Approval, Monitoring, and linked summary screenshots. Approval evidence is represented by the implemented adjustment request/approval path and linked stock movement reference.
+- **`lib/role-helpers.ts`** — Added `canAccessRoute()` and `getNavigationItemsForRole()` for role-based navigation and page-level route blocking.
+- **`components/layouts/Navbar.tsx`** — Switched internal navigation from all-menu visibility to BPMN role-filtered navigation.
+- **Route pages** — Added page-level route guards for key ERP routes including `/procurement`, `/warehouses`, `/suppliers`, `/invoices`, `/orders`, `/products`, and `/business-insights`.
+- **`tests/e2e/enterprise-submit.spec.ts`** — Updated locator-based screenshot names/test IDs to the strict required P2P and Inventory evidence set, and added standalone Vendor Bill creation/approval in the P2P flow.
+- **`lib/role-helpers.test.ts`** — Added unit tests for route blocking and role-filtered navigation.
+- **Verification so far** — `npm run lint`, `npm test`, and `npm run build` passed. `npm run test:e2e` is currently blocked by local MongoDB connectivity (`ReplicaSetNoPrimary`, `127.0.0.1:27017` refused), so strict screenshots have **not yet been regenerated** and README has **not** been updated.
+
 ### Changed & Verified (2026-06-19) — P2P + Inventory Role-Flow Stabilization
 - **`scripts/demo-dry-run.ts`** — Added narrow null guards for supplier/warehouse seed lookups to fix the TypeScript build blocker without changing demo behavior.
 - **`lib/role-helpers.ts`** — Expanded centralized ERP role helpers for P2P and Inventory (`canCreatePurchaseOrder`, `canReceivePurchaseOrder`, `canCreateVendorBill`, `canPayVendorBill`, `canManageItemMaster`, `canAdjustInventory`, `canMonitorInventory`). Generic `user` is not treated as an internal role.

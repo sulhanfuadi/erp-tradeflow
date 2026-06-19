@@ -8,6 +8,7 @@ import {
 } from "@playwright/test";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { prisma } from "../../prisma/client";
 
 type ScenarioStatus = "PASS" | "FAIL";
 
@@ -665,7 +666,7 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       try {
         // TS-05: Procurement Workbench — shows P2P form with Purchase Order flow
         evidence.artifactPath = await captureScreenshot(page, "TS-05", "/procurement");
-        await captureLocatorScreenshot(page, "P2P-01-create-purchase-order.png", "/procurement", "p2p-po-evidence-card");
+        await captureLocatorScreenshot(page, "P2P-01-create-purchase-order.png", "/procurement", "p2p-step-create-po");
       } catch (error) {
         evidence.notes = [
           ...(evidence.notes ?? []),
@@ -734,7 +735,7 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       try {
         // TS-06: Procurement Workbench after Item Receipt — P2P: Receive Items
         evidence.artifactPath = await captureScreenshot(page, "TS-06", "/procurement");
-        await captureLocatorScreenshot(page, "P2P-02-review-item-receipt.png", "/procurement", "p2p-receipt-evidence-card");
+        await captureLocatorScreenshot(page, "P2P-02-review-item-on-purchase-order.png", "/procurement", "p2p-step-review-receipt");
       } catch (error) {
         evidence.notes = [
           ...(evidence.notes ?? []),
@@ -774,7 +775,7 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       state.vendorBillId = asString(vendorBillBody.id);
       expect(state.vendorBillId).not.toBe("");
       expect(asString(vendorBillBody.status)).toBe("pending_approval");
-      await captureLocatorScreenshot(page, "P2P-03-enter-vendor-bill.png", "/procurement", "p2p-vendor-bill-evidence-card");
+      await captureLocatorScreenshot(page, "P2P-03-bill-purchase-order.png", "/procurement", "p2p-step-enter-vendor-bill");
 
       const vendorBillApproveRes = await apiCall(api, "POST", `/api/netsuite/vendor-bills/${state.vendorBillId}/approve`, {
         notes: "TS-07 approve vendor bill",
@@ -782,6 +783,28 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       expect(vendorBillApproveRes.status).toBe(200);
       const approvedBody = asObject(vendorBillApproveRes.body);
       expect(asString(approvedBody.status)).toBe("unpaid");
+
+      const standaloneBill = await prisma.aPInvoice.create({
+        data: {
+          invoiceNumber: `AP-STANDALONE-${RUN_ID}`,
+          supplierId: state.supplierId,
+          userId: asString(vendorBillBody.userId),
+          status: "pending_approval",
+          subtotal: 18000,
+          tax: 0,
+          total: 18000,
+          amountPaid: 0,
+          amountDue: 18000,
+          notes: "TS-07 standalone vendor bill",
+          createdBy: asString(vendorBillBody.userId),
+        },
+      });
+      const standaloneBillId = standaloneBill.id;
+      expect(standaloneBillId).not.toBe("");
+      const standaloneApproveRes = await apiCall(api, "POST", `/api/netsuite/vendor-bills/${standaloneBillId}/approve`, {
+        notes: "TS-07 approve standalone vendor bill",
+      });
+      expect(standaloneApproveRes.status).toBe(200);
 
       const vendorBillListRes = await apiCall(api, "GET", "/api/netsuite/vendor-bills");
       expect(vendorBillListRes.status).toBe(200);
@@ -808,7 +831,7 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
         // TS-07: Procurement Workbench after Vendor Bill — P2P: Enter Vendor Bill
         evidence.artifactPath = await captureScreenshot(page, "TS-07", "/procurement");
         // Note: P2P-03 is already captured during the test step before approval
-        await captureLocatorScreenshot(page, "P2P-04-approve-vendor-bill.png", "/procurement", "p2p-bill-approval-evidence-card");
+        await captureLocatorScreenshot(page, "P2P-06-approve-vendor-bill.png", "/procurement", "p2p-step-approve-vendor-bill");
       } catch (error) {
         evidence.notes = [
           ...(evidence.notes ?? []),
@@ -881,8 +904,9 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       try {
         // TS-08: Procurement Workbench after Bill Payment — P2P: Pay Bill
         evidence.artifactPath = await captureScreenshot(page, "TS-08", "/procurement");
-        await captureLocatorScreenshot(page, "P2P-05-pay-vendor-bill.png", "/procurement", "p2p-bill-payment-evidence-card");
-        await captureLocatorScreenshot(page, "P2P-06-linked-evidence-summary.png", "/procurement", "p2p-linked-evidence-summary");
+        await captureLocatorScreenshot(page, "P2P-04-pay-vendor-bill.png", "/procurement", "p2p-step-pay-vendor-bill");
+        await captureLocatorScreenshot(page, "P2P-05-enter-standalone-bill.png", "/procurement", "p2p-step-standalone-bill");
+        await captureLocatorScreenshot(page, "P2P-07-linked-evidence-summary.png", "/procurement", "p2p-linked-evidence-summary");
       } catch (error) {
         evidence.notes = [
           ...(evidence.notes ?? []),
@@ -981,10 +1005,10 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
           "TS-09",
           `/warehouses/${state.warehouseMainId}`,
         );
-        await captureLocatorScreenshot(page, "INV-01-create-item-master.png", `/warehouses/${state.warehouseMainId}`, "item-master-evidence-card");
-        await captureLocatorScreenshot(page, "INV-02-review-item-update-receipt.png", `/warehouses/${state.warehouseMainId}`, "inventory-receipt-evidence-card");
-        await captureLocatorScreenshot(page, "INV-03-perform-inventory-adjustment.png", `/warehouses/${state.warehouseMainId}`, "inventory-adjustment-request-card");
-        await captureLocatorScreenshot(page, "INV-04-review-approve-adjustment.png", `/warehouses/${state.warehouseMainId}`, "inventory-adjustment-approval-card");
+        await captureLocatorScreenshot(page, "INV-01-create-item-master.png", `/warehouses/${state.warehouseMainId}`, "inventory-step-item-master");
+        await captureLocatorScreenshot(page, "INV-02-review-item-update-inventory-receipt.png", `/warehouses/${state.warehouseMainId}`, "inventory-step-receipt-update");
+        await captureLocatorScreenshot(page, "INV-03-perform-inventory-adjustment.png", `/warehouses/${state.warehouseMainId}`, "inventory-step-adjustment");
+        await captureLocatorScreenshot(page, "INV-04-review-approved-adjustment.png", `/warehouses/${state.warehouseMainId}`, "inventory-step-approve-adjustment");
       } catch (error) {
         evidence.notes = [
           ...(evidence.notes ?? []),
@@ -1060,7 +1084,7 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
           "TS-10",
           `/warehouses/${state.warehouseMainId}`,
         );
-        await captureLocatorScreenshot(page, "INV-05-monitor-analyze-inventory.png", `/warehouses/${state.warehouseMainId}`, "inventory-monitoring-ledger-card");
+        await captureLocatorScreenshot(page, "INV-05-monitoring-analyze-inventory.png", `/warehouses/${state.warehouseMainId}`, "inventory-step-monitoring");
         await captureLocatorScreenshot(page, "INV-06-linked-inventory-evidence-summary.png", `/warehouses/${state.warehouseMainId}`, "inventory-linked-evidence-summary");
       } catch (error) {
         evidence.notes = [

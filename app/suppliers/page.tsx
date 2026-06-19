@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth-server";
+import { canAccessRoute } from "@/lib/role-helpers";
 import SuppliersPage from "@/components/Pages/SuppliersPage";
 import { getSuppliersForUser } from "@/lib/server/home-data";
 
@@ -12,6 +13,10 @@ export default async function SuppliersRoute() {
   const user = await getSession();
   if (!user) {
     redirect("/login");
+  }
+
+  if (!canAccessRoute(user.role, "/suppliers")) {
+    redirect("/");
   }
   const initialSuppliers = await getSuppliersForUser(user.id);
   return <SuppliersPage initialSuppliers={initialSuppliers} />;

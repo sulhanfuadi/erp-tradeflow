@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth-server";
+import { canAccessRoute } from "@/lib/role-helpers";
 import InvoicesPage from "@/components/Pages/InvoicesPage";
 import {
   getInvoicesForUser,
@@ -15,6 +16,10 @@ export default async function InvoicesRoute() {
   const user = await getSession();
   if (!user) {
     redirect("/login");
+  }
+
+  if (!canAccessRoute(user.role, "/invoices")) {
+    redirect("/");
   }
   const initialInvoices =
     user.role === "client"

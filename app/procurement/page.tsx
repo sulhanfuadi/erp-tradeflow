@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth-server";
+import { canAccessRoute } from "@/lib/role-helpers";
 import ProcurementPage from "@/components/Pages/ProcurementPage";
 
 export default async function ProcurementRoute() {
@@ -9,7 +10,7 @@ export default async function ProcurementRoute() {
     redirect("/login");
   }
 
-  if (user.role === "client" || user.role === "supplier") {
+  if (!canAccessRoute(user.role, "/procurement")) {
     redirect("/");
   }
 
