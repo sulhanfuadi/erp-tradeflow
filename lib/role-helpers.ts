@@ -168,6 +168,8 @@ export function canAccessRoute(roleOrUser: RoleCarrier, pathname: string): boole
   if (pathname.startsWith("/invoices")) return role === "sales_manager" || role === "ar_analyst" || role === "client";
   if (pathname.startsWith("/orders")) return role === "sales_representative" || role === "sales_rep" || role === "sales_manager" || role === "inventory_manager" || role === "client" || role === "supplier";
   if (pathname.startsWith("/products")) return role !== "ar_analyst" && role !== "ap_analyst";
-  if (pathname.startsWith("/categories")) return false;
+  if (pathname.startsWith("/categories")) return isInternalRole(roleOrUser);
+  if (pathname.startsWith("/support-tickets")) return true;
+  if (pathname.startsWith("/settings")) return true;
   return true;
 }

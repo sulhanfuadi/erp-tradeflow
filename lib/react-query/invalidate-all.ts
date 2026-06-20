@@ -21,7 +21,7 @@ import { queryKeys } from "./config";
 export function invalidateAllRelatedQueries(queryClient: QueryClient): void {
   // Catalog (list+detail) — lists() only; delete hooks remove detail before this runs
   queryClient.invalidateQueries({ queryKey: queryKeys.products.lists() });
-  queryClient.invalidateQueries({ queryKey: queryKeys.categories.lists() });
+  queryClient.invalidateQueries({ queryKey: queryKeys.categories.all });
   queryClient.invalidateQueries({ queryKey: queryKeys.suppliers.lists() });
   queryClient.invalidateQueries({ queryKey: queryKeys.orders.lists() });
   queryClient.invalidateQueries({ queryKey: queryKeys.clientOrders.lists() });

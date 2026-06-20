@@ -32,6 +32,7 @@ const COMPONENT_FETCH_CRUD_ALLOWLIST = new Set([
 
 /** Domains with query sub-keys beyond list/detail — invalidate-all must use *.all */
 const DOMAIN_KEYS_REQUIRE_ALL = [
+  { domain: "categories", key: "queryKeys.categories.all" },
   { domain: "productReviews", key: "queryKeys.productReviews.all" },
   { domain: "invoices", key: "queryKeys.invoices.all" },
   { domain: "supportTickets", key: "queryKeys.supportTickets.all" },
@@ -132,7 +133,6 @@ const UPDATE_HOOKS_TOUCH_DETAIL = [
 /** Domains with list+detail only — invalidate-all must use *.lists() (avoid detail 404 after delete) */
 const DOMAIN_KEYS_REQUIRE_LISTS = [
   "queryKeys.products.lists()",
-  "queryKeys.categories.lists()",
   "queryKeys.suppliers.lists()",
   "queryKeys.orders.lists()",
 ] as const;

@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth-server";
+import { canAccessRoute } from "@/lib/role-helpers";
 import CategoriesPage from "@/components/Pages/CategoriesPage";
 import { getCategoriesForUser } from "@/lib/server/home-data";
 
@@ -13,6 +14,11 @@ export default async function CategoriesRoute() {
   if (!user) {
     redirect("/login");
   }
+
+  if (!canAccessRoute(user.role, "/categories")) {
+    redirect("/");
+  }
+
   const initialCategories = await getCategoriesForUser(user.id);
   return <CategoriesPage initialCategories={initialCategories} />;
 }
