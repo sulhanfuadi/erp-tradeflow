@@ -133,6 +133,7 @@ model PurchaseOrder {
   goodsReceipts  GoodsReceipt[]
   apInvoices     APInvoice[]
   billPayments   BillPayment[]
+  itemReviews    ItemReview[]
 
   @@index([userId, status, createdAt])
   @@index([supplierId])
@@ -469,6 +470,7 @@ model User {
   //   orderStatusUpdates: boolean
   // }
   notifications Notification[] // In-app notifications (one-to-many relationship)
+  itemReviews    ItemReview[] // Reviews performed by this user
 }
 
 model UserAction {
@@ -569,6 +571,24 @@ model ProductReview {
   @@index([status])
   @@index([rating])
   @@index([createdAt])
+}
+
+// Item Review for Inventory Management (BPMN: Review Item)
+model ItemReview {
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  purchaseOrderId  String    @db.ObjectId
+  reviewerId       String    @db.ObjectId
+  notes            String?
+  approved         Boolean
+  reviewedAt       DateTime  @default(now()) @db.Date
+  createdAt        DateTime  @default(now()) @db.Date
+
+  purchaseOrder    PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  reviewer         User           @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+
+  @@index([purchaseOrderId])
+  @@index([reviewerId])
+  @@index([reviewedAt])
 }
 
 // System Configuration - for app-wide settings managed by admin

@@ -1,9 +1,9 @@
 {
   "status": "PASS",
-  "baseURL": "http://127.0.0.1:3100",
+  "baseURL": "http://localhost:3000",
   "user": {
-    "name": "E2E User kjdc7",
-    "email": "e2e.1781876982528.w7o9eux5@example.com"
+    "name": "E2E User lt061",
+    "email": "e2e.1781950966952.bf1ggfg2@example.com"
   },
-  "generatedAt": "2026-06-19T13:49:43.071Z"
+  "generatedAt": "2026-06-20T10:22:49.362Z"
 }

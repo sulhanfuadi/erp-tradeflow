@@ -666,7 +666,6 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       try {
         // TS-05: Procurement Workbench — shows P2P form with Purchase Order flow
         evidence.artifactPath = await captureScreenshot(page, "TS-05", "/procurement");
-        await captureLocatorScreenshot(page, "P2P-01-create-purchase-order.png", "/procurement", "p2p-step-create-po");
       } catch (error) {
         evidence.notes = [
           ...(evidence.notes ?? []),
@@ -735,7 +734,6 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       try {
         // TS-06: Procurement Workbench after Item Receipt — P2P: Receive Items
         evidence.artifactPath = await captureScreenshot(page, "TS-06", "/procurement");
-        await captureLocatorScreenshot(page, "P2P-02-review-item-on-purchase-order.png", "/procurement", "p2p-step-review-receipt");
       } catch (error) {
         evidence.notes = [
           ...(evidence.notes ?? []),
@@ -775,7 +773,6 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       state.vendorBillId = asString(vendorBillBody.id);
       expect(state.vendorBillId).not.toBe("");
       expect(asString(vendorBillBody.status)).toBe("pending_approval");
-      await captureLocatorScreenshot(page, "P2P-03-bill-purchase-order.png", "/procurement", "p2p-step-enter-vendor-bill");
 
       const vendorBillApproveRes = await apiCall(api, "POST", `/api/netsuite/vendor-bills/${state.vendorBillId}/approve`, {
         notes: "TS-07 approve vendor bill",
@@ -830,8 +827,6 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       try {
         // TS-07: Procurement Workbench after Vendor Bill — P2P: Enter Vendor Bill
         evidence.artifactPath = await captureScreenshot(page, "TS-07", "/procurement");
-        // Note: P2P-03 is already captured during the test step before approval
-        await captureLocatorScreenshot(page, "P2P-06-approve-vendor-bill.png", "/procurement", "p2p-step-approve-vendor-bill");
       } catch (error) {
         evidence.notes = [
           ...(evidence.notes ?? []),
@@ -904,9 +899,6 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       try {
         // TS-08: Procurement Workbench after Bill Payment — P2P: Pay Bill
         evidence.artifactPath = await captureScreenshot(page, "TS-08", "/procurement");
-        await captureLocatorScreenshot(page, "P2P-04-pay-vendor-bill.png", "/procurement", "p2p-step-pay-vendor-bill");
-        await captureLocatorScreenshot(page, "P2P-05-enter-standalone-bill.png", "/procurement", "p2p-step-standalone-bill");
-        await captureLocatorScreenshot(page, "P2P-07-linked-evidence-summary.png", "/procurement", "p2p-linked-evidence-summary");
       } catch (error) {
         evidence.notes = [
           ...(evidence.notes ?? []),

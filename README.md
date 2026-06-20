@@ -127,81 +127,9 @@ Diagram swimlane di bawah menunjukkan **alur lengkap O2C** per peran sesuai spes
 
 ## 4. Procure-to-Pay (P2P)
 
-### BPMN Diagram — P2P Level 1
-
-Diagram swimlane di bawah menunjukkan **alur lengkap P2P** per peran sesuai spesifikasi BPMN.
-
-> **BPMN Level 1 — Procure-to-Pay Process**
-![TradeFlow P2P BPMN](docs/evidence/bpmn/TradeFlow_Level1_P2P_Procure_To_Pay_Process.jpg)
-
----
-
-### Step 1 — Creates Purchase Order
-> [!IMPORTANT]
-> **Role-Switching Required:** Logout dari A/R Analyst, kemudian login kembali sebagai **Purchasing Manager**.
->
-> **Actor:** Purchasing Manager  
-> Membuat *Purchase Order* atas dasar *Purchase Request* internal dan mengirimkannya ke vendor (dokumen Purchase dashed ke Vendor lane).
-
-![P2P Step 1 — Creates Purchase Order](docs/evidence/auto/P2P-01-create-purchase-order.png)
-
----
-
-### Step 2 — Review Item on Purchase Order
-> [!IMPORTANT]
-> **Role-Switching Required:** Logout dari Purchasing Manager, kemudian login kembali sebagai **Inventory Manager**.
->
-> **Actor:** Inventory Manager  
-> Menerima barang fisik di gudang (*Item Receipt / Good Receipt ASN*) dan memvalidasi item sesuai PO. Stok produk otomatis meningkat.
-
-![P2P Step 2 — Review Item on Purchase Order](docs/evidence/auto/P2P-02-review-item-on-purchase-order.png)
-
----
-
-### Step 3 — Bill Purchase Order (Enter Vendor Bill)
-> [!IMPORTANT]
-> **Role-Switching Required:** Logout dari Inventory Manager, kemudian login kembali sebagai **A/R Analyst**.
->
-> **Actor:** A/R Analyst  
-> Memasukkan tagihan vendor (*Vendor Bill / Invoice*) ke dalam sistem, menghubungkannya ke PO dan Good Receipt. Dokumen Vendor Bill dikirim ke Vendor.
-
-![P2P Step 3 — Bill Purchase Order](docs/evidence/auto/P2P-03-bill-purchase-order.png)
-
----
-
-### Step 4 — Pay Vendor Bill
-> [!IMPORTANT]
-> **Role-Switching Required:** Masih login sebagai **A/R Analyst**.
->
-> **Actor:** A/R Analyst  
-> Melakukan pembayaran tagihan ke vendor. Mendukung pembayaran parsial maupun penuh. Proses selesai saat *Payment Received* (End Event).
-
-![P2P Step 4 — Pay Vendor Bill](docs/evidence/auto/P2P-04-pay-vendor-bill.png)
-
----
-
-### Step 5 — Enter Standalone Bill
-> [!IMPORTANT]
-> **Role-Switching Required:** Masih login sebagai **A/R Analyst**.
->
-> **Actor:** A/R Analyst  
-> Memasukkan *Vendor Bill / Invoice* standalone yang tidak terkait Purchase Order, sesuai cabang BPMN.
-
-![P2P Step 5 — Enter Standalone Bill](docs/evidence/auto/P2P-05-enter-standalone-bill.png)
-
----
-
-### Step 6 — Approve Vendor Bill
-> [!IMPORTANT]
-> **Role-Switching Required:** Masih login sebagai **A/R Analyst**.
->
-> **Actor:** A/R Analyst  
-> Meninjau dan menyetujui Vendor Bill. Bukti UI menampilkan status approval, approver, timestamp, dan end event *Payment Received*.
-
-![P2P Step 6 — Approve Vendor Bill](docs/evidence/auto/P2P-06-approve-vendor-bill.png)
-
-*Linked Evidence Summary:*  
-![P2P Step 7 — Linked Evidence Summary](docs/evidence/auto/P2P-07-linked-evidence-summary.png)
+P2P is implemented as the functional procurement workbench flow:
+Purchase Order -> Item Receipt -> Vendor Bill -> Bill Payment.
+The strict BPMN P2P screenshot evidence section and its role-by-role Step 1 through final step images were removed from this README and from the app UI.
 
 ---
 
@@ -281,7 +209,7 @@ Diagram swimlane di bawah menunjukkan **alur lengkap Inventory Management** per 
 | **Framework** | Next.js 16, React 19, Prisma, MongoDB, Tailwind CSS |
 | **Unit Testing** | ✅ Vitest — 324 tests lolos (validasi, PO limits, dll) |
 | **E2E Testing** | ✅ Playwright — 12 Test Scenarios (TS-01 s.d. TS-12) |
-| **BPMN Screenshots** | ✅ 15 screenshots per BPMN activity (O2C, P2P, Inventory) |
+| **BPMN Screenshots** | O2C and Inventory references retained; strict P2P step screenshot evidence removed |
 | **BPMN Diagrams** | ✅ 4 diagram JPG (Level 0, O2C, P2P, Inventory Management) |
 | **TypeScript** | ✅ Bebas type error, strict mode |
 | **Build** | ✅ Production build sukses |

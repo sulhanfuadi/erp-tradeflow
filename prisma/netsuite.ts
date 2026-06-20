@@ -373,6 +373,22 @@ export async function recordCustomerPayment(
   });
 }
 
+export async function createStandaloneVendorBill(
+  input: Omit<CreateAPInvoiceInput, "purchaseOrderId" | "goodsReceiptId">,
+  userId: string,
+) {
+  const vendorBill = await createAPInvoice(
+    {
+      ...input,
+      purchaseOrderId: undefined,
+      goodsReceiptId: undefined,
+    },
+    userId,
+  );
+
+  return vendorBill;
+}
+
 export async function createVendorBillFromItemReceipt(
   input: CreateAPInvoiceInput,
   userId: string,

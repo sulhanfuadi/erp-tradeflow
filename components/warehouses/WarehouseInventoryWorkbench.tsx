@@ -215,7 +215,6 @@ export default function WarehouseInventoryWorkbench({
     if (res.ok) {
       toast({ title: "Adjustment Approved" });
       fetchRequests();
-      // Use location.reload() to refresh the server component easily to see updated allocation
       setTimeout(() => window.location.reload(), 1000);
     } else {
       toast({ title: "Failed to approve", variant: "destructive" });
@@ -294,72 +293,6 @@ export default function WarehouseInventoryWorkbench({
 
   return (
     <div className="space-y-6">
-
-
-      <section data-testid="inventory-evidence-timeline" className="rounded-xl border border-indigo-300/50 bg-indigo-50/60 p-4 dark:bg-indigo-950/20">
-        <div className="mb-4">
-          <h4 className="text-sm font-semibold">Formal Inventory / Item Management Evidence Timeline</h4>
-          <p className="text-xs text-muted-foreground">Current Role: {user?.role ?? "Not signed in"}</p>
-        </div>
-        <div className="grid gap-3 lg:grid-cols-3">
-          <div data-testid="inventory-step-item-master" className="rounded-xl border bg-background p-3 text-xs">
-            <p className="uppercase text-muted-foreground">Step 1 ? Creates Purchase Order / Item Master</p>
-            <p className="text-sm font-semibold">Current Role: Purchasing Manager</p>
-            <p>Item Master Name: {latestInventoryEvidence.product?.name ?? "No item"}</p>
-            <p>SKU: {latestInventoryEvidence.product?.sku ?? "?"}</p>
-            <p>Item Type: Inventory Item</p>
-            <p>Supplier: {latestInventoryEvidence.product?.supplierId ?? "?"}</p>
-            <p>Sales Price: ${Number(latestInventoryEvidence.product?.price ?? 0).toFixed(2)}</p>
-            <p>Purchase Price: linked PO cost when available</p>
-            <p>Created by: Purchasing Manager (Actual: {user?.role})</p>
-          </div>
-          <div data-testid="inventory-step-receipt-update" className="rounded-xl border bg-background p-3 text-xs">
-            <p className="uppercase text-muted-foreground">Step 2 ? Review Item & Update Inventory Receipt</p>
-            <p className="text-sm font-semibold">Current Role: Warehouse Staff</p>
-            <p>Warehouse: {latestInventoryEvidence.warehouse?.name ?? warehouseId}</p>
-            <p>Linked PO: shown in P2P evidence when available</p>
-            <p>Receipt ID: {latestInventoryEvidence.latestMovement?.referenceType === "goods_receipt" ? latestInventoryEvidence.latestMovement.referenceId : "See Item Receipt evidence"}</p>
-            <p>Allocation Before/After: {latestInventoryEvidence.quantity - Number(latestInventoryEvidence.latestMovement?.quantityChange ?? 0)} ? {latestInventoryEvidence.quantity}</p>
-          </div>
-          <div data-testid="inventory-step-adjustment" className="rounded-xl border bg-background p-3 text-xs">
-            <p className="uppercase text-muted-foreground">Step 3 ? Perform Inventory Adjustment</p>
-            <p className="text-sm font-semibold">Current Role: Inventory Manager</p>
-            <p>Adjustment ID: {latestInventoryEvidence.adjustmentId}</p>
-            <p>Adjustment Reason: {latestInventoryEvidence.adjustmentReason}</p>
-            <p>Adjustment Status: pending_approval ? {latestInventoryEvidence.adjustmentStatus}</p>
-            <p>Warehouse Allocation: Qty {latestInventoryEvidence.quantity}, Reserved {latestInventoryEvidence.safeReserved}, Available {latestInventoryEvidence.available}</p>
-          </div>
-          <div data-testid="inventory-step-approve-adjustment" className="rounded-xl border bg-background p-3 text-xs">
-            <p className="uppercase text-muted-foreground">Step 4 ? Review & Approved Adjustment</p>
-            <p className="text-sm font-semibold">Current Role: Inventory Manager / Approver</p>
-            <p>Approval Status: {latestInventoryEvidence.adjustmentStatus}</p>
-            <p>Approved/Rejected By: {canApproveAdjustment ? "Inventory Manager/Admin" : "Requires Inventory Manager/Admin"}</p>
-            <p>Stock Movement Reference: {latestInventoryEvidence.latestMovement?.referenceType ?? "stock_allocation_adjustment"}:{latestInventoryEvidence.latestMovement?.referenceId ?? latestInventoryEvidence.adjustmentId}</p>
-            <button 
-              type="button" 
-              disabled={!canApproveAdjustment || latestInventoryEvidence.adjustmentStatus !== "pending_approval"} 
-              className="mt-2 rounded-md border px-2 py-1 text-[11px] disabled:opacity-50"
-              onClick={handleApproveAdjustment}
-            >
-              Approve Evidence Adjustment
-            </button>
-          </div>
-          <div data-testid="inventory-step-monitoring" className="rounded-xl border bg-background p-3 text-xs">
-            <p className="uppercase text-muted-foreground">Step 5 ? Monitoring & Analyze Inventory</p>
-            <p className="text-sm font-semibold">Current Role: Inventory Manager</p>
-            <p>Ledger Movement: {latestInventoryEvidence.latestMovement?.movementType ?? "?"}</p>
-            <p>Qty Change: {latestInventoryEvidence.latestMovement?.quantityChange ?? "?"}</p>
-            <p>Running Balance: {latestInventoryEvidence.latestMovement?.runningBalance ?? "?"}</p>
-            <p>Timestamp: {latestInventoryEvidence.latestMovement != null ? new Date(latestInventoryEvidence.latestMovement.createdAt).toLocaleString() : "?"}</p>
-          </div>
-          <div data-testid="inventory-linked-evidence-summary" className="rounded-xl border bg-background p-3 text-xs">
-            <p className="uppercase text-muted-foreground">Step 6 ? Linked Inventory Evidence Summary</p>
-            <p className="text-sm font-semibold">Item Master ? Purchase Order ? Receipt ? Inventory Update ? Adjustment ? Approval ? Ledger Monitoring</p>
-            <p>{latestInventoryEvidence.product?.sku ?? "SKU"} ? {latestInventoryEvidence.latestMovement?.referenceId ?? "receipt/adjustment"} ? {latestInventoryEvidence.adjustmentId} ? {latestInventoryEvidence.adjustmentStatus} ? balance {latestInventoryEvidence.latestMovement?.runningBalance ?? "?"}</p>
-          </div>
-        </div>
-      </section>
-
       <section className="rounded-xl border border-emerald-300/30 p-4 bg-white/60 dark:bg-white/5">
         <h4 className="text-sm font-semibold mb-1">Inventory Adjustment (Manual Allocation)</h4>
         <p className="mb-3 text-xs text-muted-foreground">

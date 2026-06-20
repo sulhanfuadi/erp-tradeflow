@@ -5,9 +5,14 @@
 
 ## [Unreleased]
 
-### Changed (2026-06-19) — Strict BPMN Screenshot Evidence Rework In Progress
-- **`components/p2p/P2PWorkbench.tsx`** — Reworked P2P evidence UI into strict BPMN step cards with locator targets for Purchase Order, Item Receipt, Vendor Bill, Bill Payment, Standalone Bill, Vendor Bill Approval, and linked evidence summary. Formal P2P evidence uses **A/R Analyst** as the primary BPMN bill/payment actor while retaining A/P Analyst compatibility in helpers.
-- **`components/warehouses/WarehouseInventoryWorkbench.tsx`** — Updated Inventory evidence locators and labels to match requested Item Master, Receipt Update, Inventory Adjustment, Approval, Monitoring, and linked summary screenshots. Approval evidence is represented by the implemented adjustment request/approval path and linked stock movement reference.
+### Removed (2026-06-20) - Strict P2P Screenshot Evidence
+- **`README.md`** - Removed the strict BPMN P2P screenshot evidence section, including role-by-role Step 1 through the final linked evidence summary.
+- **`components/p2p/P2PWorkbench.tsx`** - Removed unused P2P evidence state/fetching left over after the UI evidence cards were removed.
+- **`tests/e2e/enterprise-submit.spec.ts`** - Stopped capturing removed P2P locator screenshots (`P2P-01` through `P2P-07`) while keeping TS-05 through TS-08 functional P2P evidence screenshots.
+
+### Changed (2026-06-19) — Removed Strict BPMN Screenshot Evidence UI
+- **`components/p2p/P2PWorkbench.tsx`** — Removed "Strict BPMN P2P Screenshot Evidence" card and all inline BPMN step documentation (Steps 1-6 + Linked Evidence Summary). Workbench now shows only functional transaction forms and data tables.
+- **`components/warehouses/WarehouseInventoryWorkbench.tsx`** — Removed "Formal Inventory / Item Management Evidence Timeline" section (Steps 1-6) with BPMN role annotations and evidence cards. Workbench now shows only functional inventory operations (adjustment, transfer, issue, ledger).
 - **`lib/role-helpers.ts`** — Added `canAccessRoute()` and `getNavigationItemsForRole()` for role-based navigation and page-level route blocking.
 - **`components/layouts/Navbar.tsx`** — Switched internal navigation from all-menu visibility to BPMN role-filtered navigation.
 - **Route pages** — Added page-level route guards for key ERP routes including `/procurement`, `/warehouses`, `/suppliers`, `/invoices`, `/orders`, `/products`, and `/business-insights`.

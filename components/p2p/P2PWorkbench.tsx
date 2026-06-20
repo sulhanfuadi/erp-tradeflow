@@ -106,19 +106,6 @@ type MasterDataResponse = {
   products: MasterProduct[];
 };
 
-type BillPaymentRecord = {
-  id: string;
-  paymentNumber: string;
-  apInvoiceId: string;
-  purchaseOrderId: string | null;
-  paymentAmount: number;
-  amountApplied: number;
-  amountRemaining: number;
-  status: string;
-  paidAt: string;
-  notes: string | null;
-};
-
 async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
   const response = await fetch(url, {
     credentials: "include",
@@ -164,7 +151,6 @@ export default function P2PWorkbench() {
   const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrderRecord[]>([]);
   const [goodsReceipts, setGoodsReceipts] = useState<GoodsReceiptRecord[]>([]);
   const [apInvoices, setApInvoices] = useState<APInvoiceRecord[]>([]);
-  const [billPayments, setBillPayments] = useState<BillPaymentRecord[]>([]);
 
   const [poForm, setPoForm] = useState({
     supplierId: "",
@@ -193,6 +179,7 @@ export default function P2PWorkbench() {
     tax: "0",
     dueDate: "",
     notes: "",
+    isStandalone: false,
   });
 
   const [paymentForm, setPaymentForm] = useState({
@@ -204,12 +191,11 @@ export default function P2PWorkbench() {
   const loadAll = useCallback(async () => {
     setIsLoading(true);
     try {
-      const [masterData, poList, receiptList, apList, paymentList] = await Promise.all([
+      const [masterData, poList, receiptList, apList] = await Promise.all([
         apiFetch<MasterDataResponse>("/api/p2p/master-data"),
         apiFetch<PurchaseOrderRecord[]>("/api/p2p/purchase-orders"),
         apiFetch<GoodsReceiptRecord[]>("/api/p2p/goods-receipts"),
         apiFetch<APInvoiceRecord[]>("/api/p2p/ap-invoices"),
-        apiFetch<BillPaymentRecord[]>("/api/netsuite/bill-payments"),
       ]);
 
       setSuppliers(masterData.suppliers);
@@ -218,7 +204,6 @@ export default function P2PWorkbench() {
       setPurchaseOrders(poList);
       setGoodsReceipts(receiptList);
       setApInvoices(apList);
-      setBillPayments(paymentList);
     } catch (error) {
       const message = error instanceof Error ? error.message : "Failed to load";
       toast({
@@ -277,25 +262,6 @@ export default function P2PWorkbench() {
     return goodsReceipts.find((gr) => gr.id === apForm.goodsReceiptId) ?? null;
   }, [goodsReceipts, apForm.goodsReceiptId]);
 
-  const latestP2PEvidence = useMemo(() => {
-    const po = purchaseOrders[0] ?? null;
-    const receipt = po != null
-      ? goodsReceipts.find((entry) => entry.purchaseOrderId === po.id) ?? null
-      : goodsReceipts[0] ?? null;
-    const bill = po != null
-      ? apInvoices.find((entry) => entry.purchaseOrderId === po.id) ?? null
-      : apInvoices[0] ?? null;
-    const payment = bill != null
-      ? billPayments.find((entry) => entry.apInvoiceId === bill.id) ?? null
-      : billPayments[0] ?? null;
-    const standaloneBill =
-      apInvoices.find((entry) => entry.purchaseOrderId == null) ?? null;
-    const item = po?.items[0] ?? receipt?.items[0] ?? null;
-    const runId = po?.notes?.match(/(?:TS-\d+|E2E|RUN)[^\s]*/i)?.[0] ?? po?.poNumber ?? "current-run";
-
-    return { po, receipt, bill, payment, standaloneBill, item, runId };
-  }, [purchaseOrders, goodsReceipts, apInvoices, billPayments]);
-
   useEffect(() => {
     if (selectedPoForAp == null) {
       return;
@@ -306,6 +272,7 @@ export default function P2PWorkbench() {
       supplierId: selectedPoForAp.supplierId,
       subtotal: String(selectedPoForAp.subtotal),
       tax: String(selectedPoForAp.tax ?? 0),
+      isStandalone: false,
     }));
   }, [selectedPoForAp]);
 
@@ -324,6 +291,7 @@ export default function P2PWorkbench() {
       purchaseOrderId: selectedGrForAp.purchaseOrderId,
       subtotal: String(linkedPo?.subtotal ?? 0),
       tax: String(linkedPo?.tax ?? 0),
+      isStandalone: false,
     }));
   }, [selectedGrForAp, purchaseOrders]);
 
@@ -572,6 +540,7 @@ export default function P2PWorkbench() {
         tax: "0",
         dueDate: "",
         notes: "",
+        isStandalone: false,
       });
 
       await reloadAfterMutation();
@@ -707,142 +676,6 @@ export default function P2PWorkbench() {
               }
             </p>
           </div>
-        </CardContent>
-      </Card>
-
-
-
-      <Card data-testid="p2p-evidence-timeline" className="overflow-hidden border-indigo-300/60 bg-gradient-to-br from-indigo-50 via-white to-sky-50 dark:from-indigo-950/30 dark:via-background dark:to-sky-950/20">
-        <CardHeader>
-          <CardTitle>Strict BPMN P2P Screenshot Evidence</CardTitle>
-          <CardDescription>
-            Source: TradeFlow Level 1 P2P BPMN ? evidence cards show transaction documents and links, not empty forms.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4 text-sm">
-          <section data-testid="p2p-step-create-po" className="rounded-2xl border bg-background/95 p-5 shadow-sm">
-            <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-indigo-600">Purchase Order</p>
-                <h2 className="text-xl font-semibold">Step 1 ? Creates Purchase Order</h2>
-              </div>
-              <span className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700">Current Role: Purchasing Manager</span>
-            </div>
-            <div className="grid gap-3 md:grid-cols-4">
-              <p><span className="text-muted-foreground">Trigger:</span><br />Purchase Request (Internal)</p>
-              <p><span className="text-muted-foreground">PO number:</span><br />{latestP2PEvidence.po?.poNumber ?? "No PO generated"}</p>
-              <p><span className="text-muted-foreground">Supplier/Vendor:</span><br />{latestP2PEvidence.po ? supplierMap.get(latestP2PEvidence.po.supplierId) ?? latestP2PEvidence.po.supplierId : "-"}</p>
-              <p><span className="text-muted-foreground">Warehouse/Location:</span><br />{latestP2PEvidence.po ? warehouseMap.get(latestP2PEvidence.po.warehouseId) ?? latestP2PEvidence.po.warehouseId : "-"}</p>
-              <p><span className="text-muted-foreground">Item/Product:</span><br />{latestP2PEvidence.item?.productName ?? "-"}</p>
-              <p><span className="text-muted-foreground">Quantity ordered:</span><br />{latestP2PEvidence.item?.quantity ?? "-"}</p>
-              <p><span className="text-muted-foreground">Unit cost:</span><br />${latestP2PEvidence.item?.unitCost.toFixed(2) ?? "-"}</p>
-              <p><span className="text-muted-foreground">Total / Status:</span><br />${latestP2PEvidence.po?.total.toFixed(2) ?? "-"} ? {latestP2PEvidence.po?.status ?? "-"}</p>
-            </div>
-            <p className="mt-3 rounded-lg border bg-indigo-50 p-3 text-xs dark:bg-indigo-950/20">Document Label: <strong>Purchase Order</strong> ? Next Link: <strong>Review Item on Purchase Order</strong></p>
-          </section>
-
-          <section data-testid="p2p-step-review-receipt" className="rounded-2xl border bg-background/95 p-5 shadow-sm">
-            <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-emerald-600">Good Receipt / ASN</p>
-                <h2 className="text-xl font-semibold">Step 2 ? Review Item on Purchase Order</h2>
-              </div>
-              <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">Current Role: Inventory Manager</span>
-            </div>
-            <div className="grid gap-3 md:grid-cols-4">
-              <p><span className="text-muted-foreground">Linked PO number:</span><br />{latestP2PEvidence.po?.poNumber ?? "-"}</p>
-              <p><span className="text-muted-foreground">Item reviewed:</span><br />{latestP2PEvidence.item?.productName ?? "-"}</p>
-              <p><span className="text-muted-foreground">Qty ordered:</span><br />{latestP2PEvidence.item?.quantity ?? "-"}</p>
-              <p><span className="text-muted-foreground">Qty received:</span><br />{latestP2PEvidence.receipt?.items.reduce((sum, entry) => sum + entry.quantity, 0) ?? "-"}</p>
-              <p><span className="text-muted-foreground">Item Receipt ID:</span><br />{latestP2PEvidence.receipt?.receiptNumber ?? latestP2PEvidence.receipt?.id ?? "-"}</p>
-              <p><span className="text-muted-foreground">Receipt status:</span><br />{latestP2PEvidence.receipt?.status ?? "-"}</p>
-              <p><span className="text-muted-foreground">Warehouse update:</span><br />{latestP2PEvidence.po ? warehouseMap.get(latestP2PEvidence.po.warehouseId) ?? latestP2PEvidence.po.warehouseId : "-"}</p>
-              <p><span className="text-muted-foreground">Document Label:</span><br />Good Receipt (ASN) / Item Receipt</p>
-            </div>
-          </section>
-
-          <section data-testid="p2p-step-enter-vendor-bill" className="rounded-2xl border bg-background/95 p-5 shadow-sm">
-            <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-amber-600">Vendor Bill / Invoice</p>
-                <h2 className="text-xl font-semibold">Step 3 ? Bill Purchase Order</h2>
-              </div>
-              <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">Current Role: A/R Analyst</span>
-            </div>
-            <div className="grid gap-3 md:grid-cols-4">
-              <p><span className="text-muted-foreground">Vendor Bill ID:</span><br />{latestP2PEvidence.bill?.invoiceNumber ?? latestP2PEvidence.bill?.id ?? "-"}</p>
-              <p><span className="text-muted-foreground">Linked PO number:</span><br />{latestP2PEvidence.po?.poNumber ?? "-"}</p>
-              <p><span className="text-muted-foreground">Linked receipt ID:</span><br />{latestP2PEvidence.receipt?.receiptNumber ?? "-"}</p>
-              <p><span className="text-muted-foreground">Supplier/Vendor:</span><br />{latestP2PEvidence.bill ? supplierMap.get(latestP2PEvidence.bill.supplierId) ?? latestP2PEvidence.bill.supplierId : "-"}</p>
-              <p><span className="text-muted-foreground">Bill amount:</span><br />${latestP2PEvidence.bill?.subtotal.toFixed(2) ?? "-"}</p>
-              <p><span className="text-muted-foreground">Tax:</span><br />${latestP2PEvidence.bill?.tax?.toFixed(2) ?? "0.00"}</p>
-              <p><span className="text-muted-foreground">Amount due:</span><br />${latestP2PEvidence.bill?.amountDue.toFixed(2) ?? "-"}</p>
-              <p><span className="text-muted-foreground">Status:</span><br />{latestP2PEvidence.bill?.status ?? "-"}</p>
-            </div>
-          </section>
-
-          <section data-testid="p2p-step-pay-vendor-bill" className="rounded-2xl border bg-background/95 p-5 shadow-sm">
-            <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-sky-600">Payment</p>
-                <h2 className="text-xl font-semibold">Step 4 ? Pay Vendor Bill</h2>
-              </div>
-              <span className="rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-700">Current Role: A/R Analyst</span>
-            </div>
-            <div className="grid gap-3 md:grid-cols-4">
-              <p><span className="text-muted-foreground">Linked Vendor Bill ID:</span><br />{latestP2PEvidence.bill?.invoiceNumber ?? "-"}</p>
-              <p><span className="text-muted-foreground">Payment ID:</span><br />{latestP2PEvidence.payment?.paymentNumber ?? latestP2PEvidence.payment?.id ?? "-"}</p>
-              <p><span className="text-muted-foreground">Amount applied:</span><br />${latestP2PEvidence.payment?.amountApplied.toFixed(2) ?? "-"}</p>
-              <p><span className="text-muted-foreground">Previous amount due:</span><br />${latestP2PEvidence.payment ? (latestP2PEvidence.payment.amountApplied + latestP2PEvidence.payment.amountRemaining).toFixed(2) : latestP2PEvidence.bill?.total.toFixed(2) ?? "-"}</p>
-              <p><span className="text-muted-foreground">Remaining amount due:</span><br />${latestP2PEvidence.payment?.amountRemaining.toFixed(2) ?? latestP2PEvidence.bill?.amountDue.toFixed(2) ?? "-"}</p>
-              <p><span className="text-muted-foreground">Payment status:</span><br />{latestP2PEvidence.payment?.status ?? latestP2PEvidence.bill?.status ?? "-"}</p>
-              <p><span className="text-muted-foreground">Supplier/Vendor:</span><br />{latestP2PEvidence.bill ? supplierMap.get(latestP2PEvidence.bill.supplierId) ?? latestP2PEvidence.bill.supplierId : "-"}</p>
-              <p><span className="text-muted-foreground">Document Label:</span><br />Payment</p>
-            </div>
-          </section>
-
-          <section data-testid="p2p-step-standalone-bill" className="rounded-2xl border bg-background/95 p-5 shadow-sm">
-            <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-fuchsia-600">Standalone Vendor Bill</p>
-                <h2 className="text-xl font-semibold">Step 5 ? Enter Standalone Bill</h2>
-              </div>
-              <span className="rounded-full bg-fuchsia-100 px-3 py-1 text-xs font-semibold text-fuchsia-700">Current Role: A/R Analyst</span>
-            </div>
-            <div className="grid gap-3 md:grid-cols-4">
-              <p><span className="text-muted-foreground">Standalone Bill ID:</span><br />{latestP2PEvidence.standaloneBill?.invoiceNumber ?? latestP2PEvidence.standaloneBill?.id ?? "-"}</p>
-              <p><span className="text-muted-foreground">Supplier/Vendor:</span><br />{latestP2PEvidence.standaloneBill ? supplierMap.get(latestP2PEvidence.standaloneBill.supplierId) ?? latestP2PEvidence.standaloneBill.supplierId : "-"}</p>
-              <p><span className="text-muted-foreground">Amount:</span><br />${latestP2PEvidence.standaloneBill?.total.toFixed(2) ?? "-"}</p>
-              <p><span className="text-muted-foreground">Status:</span><br />{latestP2PEvidence.standaloneBill?.status ?? "-"}</p>
-              <p className="md:col-span-4"><span className="text-muted-foreground">PO link check:</span><br />Not linked to PO ? purchaseOrderId is {latestP2PEvidence.standaloneBill?.purchaseOrderId ?? "null"}. This is distinct from PO-linked Vendor Bill {latestP2PEvidence.bill?.invoiceNumber ?? "-"}.</p>
-            </div>
-          </section>
-
-          <section data-testid="p2p-step-approve-vendor-bill" className="rounded-2xl border bg-background/95 p-5 shadow-sm">
-            <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-rose-600">Approval / End Event</p>
-                <h2 className="text-xl font-semibold">Step 6 ? Approve Vendor Bill</h2>
-              </div>
-              <span className="rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-700">Current Role: A/R Analyst</span>
-            </div>
-            <div className="grid gap-3 md:grid-cols-4">
-              <p><span className="text-muted-foreground">Vendor Bill ID:</span><br />{latestP2PEvidence.standaloneBill?.invoiceNumber ?? latestP2PEvidence.bill?.invoiceNumber ?? "-"}</p>
-              <p><span className="text-muted-foreground">Approval status:</span><br />{latestP2PEvidence.standaloneBill ? (latestP2PEvidence.standaloneBill.status === "pending_approval" ? "pending_approval" : "approved") : latestP2PEvidence.bill ? "approved" : "-"}</p>
-              <p><span className="text-muted-foreground">Approved/Rejected by:</span><br />A/R Analyst</p>
-              <p><span className="text-muted-foreground">Timestamp:</span><br />{latestP2PEvidence.standaloneBill ? new Date(latestP2PEvidence.standaloneBill.issuedAt).toLocaleString() : latestP2PEvidence.bill ? new Date(latestP2PEvidence.bill.issuedAt).toLocaleString() : "-"}</p>
-              <p><span className="text-muted-foreground">Final status:</span><br />{latestP2PEvidence.standaloneBill?.status ?? latestP2PEvidence.bill?.status ?? "-"}</p>
-              <p><span className="text-muted-foreground">End Event:</span><br />Payment Received</p>
-            </div>
-          </section>
-
-          <section data-testid="p2p-linked-evidence-summary" className="rounded-2xl border bg-background/95 p-5 shadow-sm">
-            <p className="text-xs uppercase tracking-[0.2em] text-slate-600">Linked Evidence Summary</p>
-            <h2 className="mb-3 text-xl font-semibold">P2P-07 ? Linked Evidence Summary</h2>
-            <div className="rounded-xl border bg-slate-50 p-4 text-sm dark:bg-slate-900/30">
-              Purchase Request ? <strong>{latestP2PEvidence.po?.poNumber ?? "Purchase Order"}</strong> ? <strong>{latestP2PEvidence.receipt?.receiptNumber ?? "Good Receipt/ASN"}</strong> ? <strong>{latestP2PEvidence.bill?.invoiceNumber ?? "Vendor Bill/Invoice"}</strong> ? <strong>{latestP2PEvidence.payment?.paymentNumber ?? "Payment"}</strong> ? Payment Received
-            </div>
-          </section>
         </CardContent>
       </Card>
 
@@ -1256,6 +1089,24 @@ export default function P2PWorkbench() {
                     }))
                   }
                 />
+              </div>
+
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="isStandalone"
+                  checked={apForm.isStandalone}
+                  onChange={(event) =>
+                    setApForm((previous) => ({
+                      ...previous,
+                      isStandalone: event.target.checked,
+                    }))
+                  }
+                  className="h-4 w-4 rounded border-gray-300"
+                />
+                <Label htmlFor="isStandalone" className="text-sm cursor-pointer">
+                  Standalone Bill (no PO or Item Receipt)
+                </Label>
               </div>
 
           <Button 

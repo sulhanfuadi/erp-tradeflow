@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { logger } from "@/lib/logger";
 import { requireNetSuiteSession } from "@/app/api/netsuite/_shared";
 import { createAPInvoiceSchema } from "@/lib/validations";
-import { createVendorBillFromItemReceipt, getNetSuiteVendorBills } from "@/prisma/netsuite";
+import { createStandaloneVendorBill, createVendorBillFromItemReceipt, getNetSuiteVendorBills } from "@/prisma/netsuite";
 import { serializeP2PResult } from "@/prisma/p2p";
 import { canCreateVendorBill } from "@/lib/role-helpers";
 
@@ -45,10 +45,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const created = await createVendorBillFromItemReceipt(
-      validation.data,
-      guard.session!.id,
-    );
+    const { isStandalone, ...invoiceData } = validation.data;
+
+    let created;
+    if (isStandalone) {
+      // Create standalone vendor bill without PO or Goods Receipt
+      created = await createStandaloneVendorBill(invoiceData, guard.session!.id);
+    } else {
+      // Create vendor bill from PO or Goods Receipt
+      created = await createVendorBillFromItemReceipt(
+        validation.data,
+        guard.session!.id,
+      );
+    }
 
     const { invalidateAllServerCaches } = await import("@/lib/cache");
     await invalidateAllServerCaches().catch(() => {});

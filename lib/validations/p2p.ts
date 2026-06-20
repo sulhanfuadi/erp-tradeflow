@@ -52,30 +52,21 @@ export const createGoodsReceiptSchema = z.object({
     .min(1, "At least one receipt item is required"),
 });
 
-export const createAPInvoiceSchema = z
-  .object({
-    supplierId: z.string().min(1, "Supplier is required"),
-    purchaseOrderId: z.string().optional(),
-    goodsReceiptId: z.string().optional(),
-    subtotal: z.number().min(0, "Subtotal cannot be negative"),
-    tax: z.number().min(0, "Tax cannot be negative").optional(),
-    dueDate: z
-      .string()
-      .datetime("Invalid due date format")
-      .optional()
-      .or(z.string().date("Invalid due date format"))
-      .or(z.literal("")),
-    notes: z.string().optional(),
-  })
-  .refine(
-    (data) =>
-      (data.purchaseOrderId != null && data.purchaseOrderId !== "") ||
-      (data.goodsReceiptId != null && data.goodsReceiptId !== ""),
-    {
-      message: "Either purchaseOrderId or goodsReceiptId is required",
-      path: ["purchaseOrderId"],
-    },
-  );
+export const createAPInvoiceSchema = z.object({
+  supplierId: z.string().min(1, "Supplier is required"),
+  purchaseOrderId: z.string().optional(),
+  goodsReceiptId: z.string().optional(),
+  subtotal: z.number().min(0, "Subtotal cannot be negative"),
+  tax: z.number().min(0, "Tax cannot be negative").optional(),
+  dueDate: z
+    .string()
+    .datetime("Invalid due date format")
+    .optional()
+    .or(z.string().date("Invalid due date format"))
+    .or(z.literal("")),
+  notes: z.string().optional(),
+  isStandalone: z.boolean().optional().default(false),
+});
 
 export const recordAPInvoicePaymentSchema = z.object({
   paymentAmount: z.number().positive("Payment amount must be greater than 0"),
