@@ -37,6 +37,12 @@ const nextConfig: NextConfig = {
   // Playwright runs against 127.0.0.1; allow dev resources for Windows/local E2E.
   allowedDevOrigins: ["127.0.0.1", "localhost"],
 
+  // Explicitly set workspace root to this directory so Next.js/Turbopack
+  // loads .env from the project root, not from a parent directory.
+  turbopack: {
+    root: ".",
+  },
+
   // Security + /_next/static immutable cache — see lib/vercel/production-headers.ts
   async headers() {
     return buildNextProductionHeaderRules();
