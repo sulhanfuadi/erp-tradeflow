@@ -71,6 +71,7 @@ const API_WRITE_ROUTE_INVALIDATION_SPEC: Record<string, readonly string[]> = {
   "app/api/netsuite/customer-payments/route.ts": ["invalidateAllServerCaches"],
   "app/api/netsuite/purchase-orders/route.ts": ["invalidateAllServerCaches"],
   "app/api/netsuite/purchase-orders/[id]/review/route.ts": ["invalidateAllServerCaches"],
+  "app/api/netsuite/inventory/review-item/route.ts": ["invalidateAllServerCaches"],
   "app/api/netsuite/item-receipts/route.ts": ["invalidateAllServerCaches"],
   "app/api/netsuite/vendor-bills/route.ts": ["invalidateAllServerCaches"],
   "app/api/netsuite/vendor-bills/[id]/approve/route.ts": ["invalidateAllServerCaches"],
