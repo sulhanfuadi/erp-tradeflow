@@ -2,11 +2,11 @@
   "scenarioId": "IM-Step1-Create-PO",
   "title": "Creates Purchase Order",
   "status": "PASS",
-  "startedAt": "2026-06-21T06:27:32.549Z",
+  "startedAt": "2026-06-21T12:52:00.951Z",
   "notes": [],
   "ids": {
-    "purchaseOrderId": "6a378454bfbcce79e3a15f6f"
+    "purchaseOrderId": "6a37de71598bdb968b0da9ec"
   },
   "artifactPath": "docs/evidence/auto/IM-Step1-Create-PO.png",
-  "finishedAt": "2026-06-21T06:27:35.155Z"
+  "finishedAt": "2026-06-21T12:52:03.318Z"
 }

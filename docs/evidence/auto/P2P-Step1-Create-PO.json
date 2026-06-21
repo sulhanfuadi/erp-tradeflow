@@ -2,10 +2,10 @@
   "scenarioId": "P2P-Step1-Create-PO",
   "title": "Creates Purchase Order",
   "status": "PASS",
-  "startedAt": "2026-06-21T06:51:42.113Z",
+  "startedAt": "2026-06-21T12:52:14.805Z",
   "ids": {
-    "purchaseOrderId": "6a3789fe86c2d466049c07d6"
+    "purchaseOrderId": "6a37de7e598bdb968b0da9fd"
   },
   "artifactPath": "docs/evidence/auto/P2P-Step1-Create-PO.png",
-  "finishedAt": "2026-06-21T06:51:46.751Z"
+  "finishedAt": "2026-06-21T12:52:19.435Z"
 }

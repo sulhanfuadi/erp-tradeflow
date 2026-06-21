@@ -27,6 +27,12 @@ export async function POST(request: NextRequest) {
   try {
     const guard = await requireNetSuiteSession(request);
     if (guard.errorResponse) return guard.errorResponse;
+    const session = guard.session!;
+
+    const { isSalesRep } = await import("@/lib/role-helpers");
+    if (!isSalesRep(session.role)) {
+      return NextResponse.json({ error: "Forbidden: Only Sales Rep can create sales orders" }, { status: 403 });
+    }
 
     const payload = await request.json();
     const validation = createOrderSchema.safeParse(payload);

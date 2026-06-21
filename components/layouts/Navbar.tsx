@@ -343,7 +343,6 @@ export default function Navbar({ children }: NavbarProps) {
                       width={40}
                       height={40}
                       className="rounded-full object-cover"
-                      unoptimized
                       priority
                     />
                   ) : (
@@ -469,7 +468,6 @@ export default function Navbar({ children }: NavbarProps) {
                       width={40}
                       height={40}
                       className="rounded-full object-cover"
-                      unoptimized
                     />
                   </div>
                 )

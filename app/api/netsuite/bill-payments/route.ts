@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     const session = guard.session!;
 
     if (!canPayVendorBill(session.role)) {
-      return NextResponse.json({ error: "Forbidden: Only A/R Analyst or A/P Analyst can record bill payments" }, { status: 403 });
+      return NextResponse.json({ error: "Forbidden: Only A/P Analyst can record bill payments" }, { status: 403 });
     }
 
     const payload = (await request.json()) as {

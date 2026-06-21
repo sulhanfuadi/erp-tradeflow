@@ -43,6 +43,8 @@ import { ResponsiveChartContainer } from "@/components/ui/responsive-chart-conta
 import { format } from "date-fns";
 import type { DashboardStats } from "@/types";
 import ForecastingSection from "@/components/admin/ForecastingSection";
+import APAgingReport from "@/components/reports/APAgingReport";
+import ARAgingReport from "@/components/reports/ARAgingReport";
 
 function formatCurrency(value: number): string {
   return `$${value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -1402,6 +1404,11 @@ export default function AdminAnalyticsContent({
         description="Store-wide"
       >
         <ForecastingSection />
+
+        <div className="grid gap-6 lg:grid-cols-2">
+          <APAgingReport />
+          <ARAgingReport />
+        </div>
       </ChartCard>
     </PageContentWrapper>
   );

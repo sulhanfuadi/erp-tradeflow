@@ -62,6 +62,12 @@ export async function POST(request: NextRequest) {
   try {
     const guard = await requireNetSuiteSession(request);
     if (guard.errorResponse) return guard.errorResponse;
+    const session = guard.session!;
+
+    const { isArAnalyst } = await import("@/lib/role-helpers");
+    if (!isArAnalyst(session.role)) {
+      return NextResponse.json({ error: "Forbidden: Only A/R Analyst can create customer invoices" }, { status: 403 });
+    }
 
     const payload = await request.json();
     const validation = createInvoiceSchema.safeParse(payload);

@@ -282,7 +282,6 @@ export default function ProductReviewsSection({
                         width={32}
                         height={32}
                         className="h-8 w-8 rounded-full object-cover border border-amber-200/90 dark:border-white/30 flex-shrink-0"
-                        unoptimized
                         onError={(e) => {
                           const target = e.currentTarget;
                           if (!target.src.includes("robohash.org")) {

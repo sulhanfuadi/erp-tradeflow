@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth-server";
 import OrderDetailPage from "@/components/Pages/OrderDetailPage";
@@ -12,5 +13,9 @@ export default async function OrderDetailRoute() {
   if (!user) {
     redirect("/login");
   }
-  return <OrderDetailPage />;
+  return (
+    <Suspense fallback={<div>Loading order details...</div>}>
+      <OrderDetailPage />
+    </Suspense>
+  );
 }

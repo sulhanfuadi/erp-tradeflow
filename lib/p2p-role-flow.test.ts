@@ -12,13 +12,10 @@ describe("P2P BPMN role helpers", () => {
   it("allows the BPMN P2P role sequence and preserves AP compatibility", () => {
     expect(canCreatePurchaseOrder("purchasing_manager")).toBe(true);
     expect(canReceivePurchaseOrder("inventory_manager")).toBe(true);
-    expect(canCreateVendorBill("ar_analyst")).toBe(true);
-    expect(canApproveVendorBill("ar_analyst")).toBe(true);
-    expect(canPayVendorBill("ar_analyst")).toBe(true);
-
     expect(canCreateVendorBill("ap_analyst")).toBe(true);
     expect(canApproveVendorBill("ap_analyst")).toBe(true);
     expect(canPayVendorBill("ap_analyst")).toBe(true);
+
   });
 
   it("does not treat generic user/client/supplier as internal P2P roles", () => {

@@ -158,7 +158,6 @@ export default function ImageField() {
             width={256}
             height={128}
             className="w-full h-32 object-cover rounded-lg border border-rose-400/30"
-            unoptimized={imageUrl.includes("ik.imagekit.io")} // ImageKit handles optimization
           />
           <Button
             type="button"

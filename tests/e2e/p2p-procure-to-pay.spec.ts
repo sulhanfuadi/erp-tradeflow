@@ -178,8 +178,8 @@ test.describe("P2P Procure To Pay Workflow", () => {
   });
 
   test("P2P-Step3-Bill-PO Bill Purchase Order", async ({ page }) => {
-    // Role: A/R Analyst
-    await loginAsRole(api, "aranalyst@demo.com");
+    // Role: A/P Analyst
+    await loginAsRole(api, "apanalyst@demo.com");
     const evidence: ScenarioEvidence = {
       scenarioId: "P2P-Step3-Bill-PO",
       title: "Bill Purchase Order",
@@ -208,7 +208,7 @@ test.describe("P2P Procure To Pay Workflow", () => {
       evidence.status = "FAIL"; evidence.error = String(e); throw e;
     } finally {
       try {
-        await loginUi(page, "aranalyst@demo.com");
+        await loginUi(page, "apanalyst@demo.com");
         // Prefill form for visual confirmation in screenshot
         await page.goto(`/procurement`);
         await page.waitForTimeout(1000);
@@ -220,8 +220,8 @@ test.describe("P2P Procure To Pay Workflow", () => {
   });
 
   test("P2P-Step4-Pay-Bill Pay Vendor Bill", async ({ page }) => {
-    // Role: A/R Analyst
-    await loginAsRole(api, "aranalyst@demo.com");
+    // Role: A/P Analyst
+    await loginAsRole(api, "apanalyst@demo.com");
     const evidence: ScenarioEvidence = {
       scenarioId: "P2P-Step4-Pay-Bill",
       title: "Pay Vendor Bill",
@@ -240,7 +240,7 @@ test.describe("P2P Procure To Pay Workflow", () => {
       evidence.status = "FAIL"; evidence.error = String(e); throw e;
     } finally {
       try {
-        await loginUi(page, "aranalyst@demo.com");
+        await loginUi(page, "apanalyst@demo.com");
         evidence.artifactPath = await captureScreenshot(page, "P2P-Step4-Pay-Bill", `/procurement`);
       } catch (e) {}
       evidence.finishedAt = new Date().toISOString();
