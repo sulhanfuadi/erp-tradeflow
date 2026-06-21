@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
     // Determine if connection is secure
     const isSecure =
       request.headers.get("x-forwarded-proto") === "https" ||
-      process.env.NODE_ENV !== "development";
+      (process.env.NODE_ENV !== "development" && process.env.PLAYWRIGHT_TEST_MODE !== "true");
 
     // Role for access control; existing users without role default to "user"
     const userRole = user.role ?? "user";

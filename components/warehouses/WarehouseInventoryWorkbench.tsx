@@ -6,6 +6,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
   useProducts,
   useWarehouses,
   useCreateStockAllocation,
@@ -343,6 +354,78 @@ export default function WarehouseInventoryWorkbench({
             </Button>
           </div>
         </form>
+
+        <div className="mt-6 overflow-x-auto">
+          {adjustmentRequests.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No pending adjustments.</p>
+          ) : (
+            <table className="w-full min-w-[700px] text-sm">
+              <thead>
+                <tr className="border-b text-left text-xs uppercase text-muted-foreground">
+                  <th className="py-2">Date</th>
+                  <th className="py-2">Product ID</th>
+                  <th className="py-2">Requested Qty</th>
+                  <th className="py-2">Notes</th>
+                  <th className="py-2">Status</th>
+                  <th className="py-2">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {adjustmentRequests.map((req) => (
+                  <tr key={req.id} className="border-b">
+                    <td className="py-2">{new Date(req.createdAt).toLocaleString()}</td>
+                    <td className="py-2">{req.details?.productId}</td>
+                    <td className="py-2">{req.details?.quantity}</td>
+                    <td className="py-2">{req.details?.notes || "-"}</td>
+                    <td className="py-2">{req.details?.status}</td>
+                    <td className="py-2">
+                      {req.details?.status === "pending_approval" && (
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button
+                              size="sm"
+                              disabled={!canApproveAdjustment}
+                              title={!canApproveAdjustment ? "Requires Inventory Manager role" : ""}
+                            >
+                              Approve
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Approve Inventory Adjustment</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Are you sure you want to approve this adjustment of {req.details?.quantity} units for product ID: {req.details?.productId}? This will immediately update the stock balance and create a movement ledger entry.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={() => {
+                                  fetch(`/api/stock-allocations/adjustments/${req.id}/approve`, { method: "POST" })
+                                    .then((res) => {
+                                      if (res.ok) {
+                                        toast({ title: "Adjustment Approved" });
+                                        fetchRequests();
+                                        setTimeout(() => window.location.reload(), 1000);
+                                      } else {
+                                        toast({ title: "Failed to approve", variant: "destructive" });
+                                      }
+                                    });
+                                }}
+                              >
+                                Confirm Approval
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
       </section>
 
       <section className="rounded-xl border border-sky-300/30 p-4 bg-white/60 dark:bg-white/5">

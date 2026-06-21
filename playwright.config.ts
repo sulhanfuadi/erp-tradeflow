@@ -27,10 +27,11 @@ export default defineConfig({
   },
   globalSetup: "./tests/e2e/global-setup.ts",
   webServer: {
-    command: `npm run dev -- --port ${PORT}`,
+    command: `npm run start -- --port ${PORT}`,
     env: {
       ...process.env,
       DATABASE_URL: TEST_DATABASE_URL,
+      PLAYWRIGHT_TEST_MODE: "true",
     },
     url: `${BASE_URL}/login`,
     timeout: 180_000,

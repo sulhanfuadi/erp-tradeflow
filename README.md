@@ -151,7 +151,7 @@ Diagram swimlane di bawah menunjukkan **alur lengkap Inventory Management** per 
 > **Actor:** Purchasing Manager  
 > Membuat Purchase Order berdasarkan *Item Master Created*. Data Item Master tersimpan di sistem inventori.
 
-![Inventory Step 1 — Create Item Master](docs/evidence/auto/INV-01-create-item-master.png)
+![Inventory Step 1 — Create Item Master](docs/evidence/auto/IM-Step1-Create-PO.png)
 
 ---
 
@@ -162,7 +162,7 @@ Diagram swimlane di bawah menunjukkan **alur lengkap Inventory Management** per 
 > **Actor:** Warehouse Staff  
 > Menerima barang, me-*review item* sesuai PO, lalu mengupdate *Inventory Receipt*. Stok sistem diperbarui secara otomatis.
 
-![Inventory Step 2 — Review Item Update Inventory Receipt](docs/evidence/auto/INV-02-review-item-update-inventory-receipt.png)
+![Inventory Step 2 — Review Item Update Inventory Receipt](docs/evidence/auto/IM-Step2-ItemReceipt.png)
 
 ---
 
@@ -173,7 +173,7 @@ Diagram swimlane di bawah menunjukkan **alur lengkap Inventory Management** per 
 > **Actor:** Inventory Manager  
 > Melakukan penyesuaian stok manual (*Inventory Adjustment*) untuk pengeluaran barang, koreksi stok, atau transfer antar gudang. Mendukung *Reverse* untuk koreksi.
 
-![Inventory Step 3 — Perform Inventory Adjustment](docs/evidence/auto/INV-03-perform-inventory-adjustment.png)
+![Inventory Step 3 — Perform Inventory Adjustment](docs/evidence/auto/IM-Step3-InventoryAdjustment.png)
 
 ---
 
@@ -184,7 +184,7 @@ Diagram swimlane di bawah menunjukkan **alur lengkap Inventory Management** per 
 > **Actor:** Inventory Manager  
 > Memvalidasi dan menyetujui hasil adjustment inventori. Bukti implementasi menggunakan request/approval adjustment yang menghasilkan referensi movement ledger.
 
-![Inventory Step 4 — Review Approved Adjustment](docs/evidence/auto/INV-04-review-approved-adjustment.png)
+![Inventory Step 4 — Review Approved Adjustment](docs/evidence/auto/IM-Step4-ApprovedAdjustment.png)
 
 ---
 
@@ -195,7 +195,7 @@ Diagram swimlane di bawah menunjukkan **alur lengkap Inventory Management** per 
 > **Actor:** Inventory Manager  
 > Memantau seluruh pergerakan stok melalui *Inventory Ledger* dan laporan inventori. Proses selesai: *Inventory Managed Effectively* (End Event).
 
-![Inventory Step 5 — Monitoring Analyze Inventory](docs/evidence/auto/INV-05-monitoring-analyze-inventory.png)
+![Inventory Step 5 — Monitoring Analyze Inventory](docs/evidence/auto/IM-Step5-MonitoringAnalyze.png)
 
 *Linked Inventory Evidence Summary:*  
 ![Inventory Step 6 — Linked Inventory Evidence Summary](docs/evidence/auto/INV-06-linked-inventory-evidence-summary.png)

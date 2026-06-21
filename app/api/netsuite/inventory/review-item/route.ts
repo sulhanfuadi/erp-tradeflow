@@ -7,7 +7,6 @@ import { canReviewPurchaseOrder } from "@/lib/role-helpers";
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ purchaseOrderId: string }> }
 ) {
   try {
     const guard = await requireNetSuiteSession(request);
@@ -18,9 +17,8 @@ export async function POST(
       return NextResponse.json({ error: "Forbidden: Only Inventory Manager can review items" }, { status: 403 });
     }
 
-    const { purchaseOrderId } = await params;
     const body = await request.json();
-    const { notes, approved } = body as { notes?: string; approved: boolean };
+    const { purchaseOrderId, notes, approved } = body as { purchaseOrderId: string; notes?: string; approved: boolean };
 
     const po = await prisma.purchaseOrder.findUnique({
       where: { id: purchaseOrderId },
@@ -66,13 +64,16 @@ export async function POST(
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ purchaseOrderId: string }> }
 ) {
   try {
     const guard = await requireNetSuiteSession(request);
     if (guard.errorResponse) return guard.errorResponse;
 
-    const { purchaseOrderId } = await params;
+    const { searchParams } = new URL(request.url);
+    const purchaseOrderId = searchParams.get("purchaseOrderId");
+    if (!purchaseOrderId) {
+      return NextResponse.json({ error: "Missing purchaseOrderId" }, { status: 400 });
+    }
 
     const reviews = await prisma.itemReview.findMany({
       where: { purchaseOrderId },
