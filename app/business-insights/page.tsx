@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
+import BusinessInsightPage from "@/components/Pages/BusinessInsightPage";
 import { getSession } from "@/lib/auth-server";
 import { canAccessRoute } from "@/lib/role-helpers";
-import BusinessInsightPage from "@/components/Pages/BusinessInsightPage";
 import { getProductsForUser } from "@/lib/server/home-data";
 import { getOrdersForUser } from "@/lib/server/orders-data";
 

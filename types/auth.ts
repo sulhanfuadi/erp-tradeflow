@@ -2,6 +2,20 @@
  * Authentication-related type definitions
  */
 
+export type ERPRole = 
+  | "admin"
+  | "sales_rep"
+  | "sales_manager"
+  | "purchasing_manager"
+  | "inventory_manager"
+  | "ap_analyst"
+  | "ar_analyst"
+  | "warehouse_staff"
+  | "user"
+  | "supplier"
+  | "client"
+  | "retailer";
+
 /**
  * User interface for authentication context
  */
@@ -10,8 +24,8 @@ export interface User {
   name?: string;
   email: string;
   image?: string; // Profile image URL (from Google OAuth or other sources)
-  /** Role for access: user, admin, supplier, client, retailer. Defaults to "user" when not set. */
-  role?: string;
+  /** Role for access. Defaults to "user" when not set. */
+  role?: ERPRole | string;
 }
 
 /**

@@ -1,0 +1,21 @@
+{
+  "scenarioId": "TS-09",
+  "title": "Inventory transfer pending to completed to reverse",
+  "status": "PASS",
+  "startedAt": "2026-06-21T12:51:23.866Z",
+  "assertions": {
+    "transferPendingStatus": "pending",
+    "transferCompletedStatus": "completed",
+    "transferStatusAfterReverse": "completed"
+  },
+  "ids": {
+    "transferId": "6a37de4b598bdb968b0da9db",
+    "transferReversalId": "6a37de4b598bdb968b0da9df"
+  },
+  "notes": [
+    "Transfer berhasil pending → completed → reversed.",
+    "Screenshot error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('inventory-step-item-master')\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('inventory-step-item-master')\u001b[22m\n"
+  ],
+  "artifactPath": "docs/evidence/auto/TS-09.png",
+  "finishedAt": "2026-06-21T12:51:40.069Z"
+}

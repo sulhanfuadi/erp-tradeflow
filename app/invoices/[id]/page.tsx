@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth-server";
 import InvoiceDetailPage from "@/components/Pages/InvoiceDetailPage";
@@ -12,5 +13,9 @@ export default async function InvoiceDetailRoute() {
   if (!user) {
     redirect("/login");
   }
-  return <InvoiceDetailPage />;
+  return (
+    <Suspense fallback={<div>Loading invoice details...</div>}>
+      <InvoiceDetailPage />
+    </Suspense>
+  );
 }

@@ -31,7 +31,7 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
 
   experimental: {
-    optimizePackageImports: ["@/components", "@/lib"],
+    optimizePackageImports: ["@/components", "@/lib", "lucide-react", "date-fns", "react-icons", "recharts"],
   },
 
   // Playwright runs against 127.0.0.1; allow dev resources for Windows/local E2E.
@@ -49,17 +49,20 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withSentryConfig(nextConfig, {
-  org: process.env.SENTRY_ORG ?? "arnob-mahmuds-org",
-  project: process.env.SENTRY_PROJECT ?? "stock-inventory",
-  silent: !process.env.CI,
-  widenClientFileUpload: true,
-  // First-party tunnel — must match `tunnel` in instrumentation-client.ts (SENTRY_TUNNEL_PATH)
-  tunnelRoute: SENTRY_TUNNEL_PATH,
-  webpack: {
-    automaticVercelMonitors: true,
-    treeshake: {
-      removeDebugLogging: true,
-    },
-  },
-});
+const isProd = process.env.NODE_ENV === "production";
+
+export default isProd 
+  ? withSentryConfig(nextConfig, {
+      org: process.env.SENTRY_ORG ?? "arnob-mahmuds-org",
+      project: process.env.SENTRY_PROJECT ?? "stock-inventory",
+      silent: !process.env.CI,
+      widenClientFileUpload: true,
+      tunnelRoute: SENTRY_TUNNEL_PATH,
+      webpack: {
+        automaticVercelMonitors: true,
+        treeshake: {
+          removeDebugLogging: true,
+        },
+      },
+    })
+  : nextConfig;

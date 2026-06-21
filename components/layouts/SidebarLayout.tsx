@@ -162,7 +162,6 @@ export default function SidebarLayout({
                     width={32}
                     height={32}
                     className="rounded-full object-cover flex-shrink-0"
-                    unoptimized
                   />
                 ) : (
                   <span className="flex h-8 w-8 items-center justify-center rounded-full bg-sky-500/20 text-sm font-medium text-sky-700 dark:text-sky-300">

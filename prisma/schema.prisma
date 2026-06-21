@@ -23,6 +23,8 @@ model Category {
   updatedAt   DateTime? @db.Date // Manually managed - null on create, set on update
   createdBy   String    @db.ObjectId // Same as userId, for clarity
   updatedBy   String?   @db.ObjectId // Last updated by user ID
+
+  @@index([userId, status])
 }
 
 model Department {
@@ -95,6 +97,10 @@ model Order {
   invoice           Invoice? // Invoice for this order (one-to-one relationship)
   itemFulfillments  ItemFulfillment[]
   customerPayments  CustomerPayment[]
+
+  @@index([userId, status, createdAt])
+  @@index([clientId])
+  @@index([paymentStatus])
 }
 
 model OrderItem {
@@ -111,6 +117,9 @@ model OrderItem {
   createdAt   DateTime @default(now()) @db.Date
   order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade) // Cascade delete when order is deleted
   product     Product  @relation(fields: [productId], references: [id]) // Reference to product
+
+  @@index([orderId])
+  @@index([productId])
 }
 
 model PurchaseOrder {
@@ -347,6 +356,10 @@ model Product {
   orderItems       OrderItem[] // Orders containing this product (one-to-many relationship)
 
   @@index([deletedAt])
+  @@index([categoryId])
+  @@index([supplierId])
+  @@index([status])
+  @@index([userId])
 }
 
 model Session {
@@ -443,6 +456,8 @@ model Supplier {
   updatedAt   DateTime? @db.Date // Manually managed - null on create, set on update
   createdBy   String    @db.ObjectId // Same as userId, for clarity
   updatedBy   String?   @db.ObjectId // Last updated by user ID
+
+  @@index([userId, status])
 }
 
 model User {
@@ -471,6 +486,9 @@ model User {
   // }
   notifications Notification[] // In-app notifications (one-to-many relationship)
   itemReviews    ItemReview[] // Reviews performed by this user
+
+  @@index([role])
+  @@index([googleId])
 }
 
 model UserAction {

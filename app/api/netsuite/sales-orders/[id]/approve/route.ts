@@ -31,7 +31,8 @@ export async function POST(
 
     const updated = await updateOrder(id, { status: "pending" }, session.id, { bypassAuth: true });
     
-    await invalidateCache(cacheKeys.products.pattern).catch(() => {});
+    const { invalidateAllServerCaches } = await import("@/lib/cache");
+    await invalidateAllServerCaches().catch(() => {});
 
     return NextResponse.json(updated);
   } catch (error) {

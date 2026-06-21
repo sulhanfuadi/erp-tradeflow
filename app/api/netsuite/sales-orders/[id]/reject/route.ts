@@ -47,7 +47,8 @@ export async function POST(
       }
     }
 
-    await invalidateCache(cacheKeys.products.pattern).catch(() => {});
+    const { invalidateAllServerCaches } = await import("@/lib/cache");
+    await invalidateAllServerCaches().catch(() => {});
 
     return NextResponse.json(updated);
   } catch (error) {

@@ -1,0 +1,28 @@
+{
+  "scenarioId": "TS-01",
+  "title": "Sales Order create + reservation + oversell prevention",
+  "status": "PASS",
+  "startedAt": "2026-06-21T12:51:12.149Z",
+  "assertions": {
+    "salesOrderId": "6a37de40598bdb968b0da9c7",
+    "salesOrderItemId": "6a37de40598bdb968b0da9c8",
+    "reservedBefore": 0,
+    "reservedAfter": 3,
+    "oversellStatus": 400
+  },
+  "ids": {
+    "categoryId": "6a37de40598bdb968b0da9bb",
+    "supplierId": "6a37de40598bdb968b0da9bd",
+    "warehouseMainId": "6a37de40598bdb968b0da9bf",
+    "warehouseSecondaryId": "6a37de40598bdb968b0da9c1",
+    "productId": "6a37de40598bdb968b0da9c3",
+    "salesOrderId": "6a37de40598bdb968b0da9c7"
+  },
+  "notes": [
+    "Sales Order berhasil dibuat.",
+    "Reservation naik sesuai kuantitas order.",
+    "Oversell prevention aktif."
+  ],
+  "artifactPath": "docs/evidence/auto/TS-01.png",
+  "finishedAt": "2026-06-21T12:51:14.031Z"
+}

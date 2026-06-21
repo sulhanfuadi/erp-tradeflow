@@ -32,8 +32,6 @@ const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
-/** Force dynamic rendering for all routes so useSearchParams etc. work without Suspense and pages render instantly. */
-export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: {

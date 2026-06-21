@@ -193,9 +193,9 @@ export default function P2PWorkbench() {
     try {
       const [masterData, poList, receiptList, apList] = await Promise.all([
         apiFetch<MasterDataResponse>("/api/p2p/master-data"),
-        apiFetch<PurchaseOrderRecord[]>("/api/p2p/purchase-orders"),
-        apiFetch<GoodsReceiptRecord[]>("/api/p2p/goods-receipts"),
-        apiFetch<APInvoiceRecord[]>("/api/p2p/ap-invoices"),
+        apiFetch<PurchaseOrderRecord[]>("/api/netsuite/purchase-orders"),
+        apiFetch<GoodsReceiptRecord[]>("/api/netsuite/item-receipts"),
+        apiFetch<APInvoiceRecord[]>("/api/netsuite/vendor-bills"),
       ]);
 
       setSuppliers(masterData.suppliers);
@@ -388,7 +388,7 @@ export default function P2PWorkbench() {
   ) {
     setIsSubmitting(true);
     try {
-      await apiFetch(`/api/p2p/purchase-orders/${purchaseOrderId}`, {
+      await apiFetch(`/api/netsuite/purchase-orders/${purchaseOrderId}`, {
         method: "PATCH",
         body: JSON.stringify({ status }),
       });
@@ -617,7 +617,7 @@ export default function P2PWorkbench() {
 
     setIsSubmitting(true);
     try {
-      await apiFetch(`/api/p2p/goods-receipts/${receiptId}/reverse`, {
+      await apiFetch(`/api/netsuite/item-receipts/${receiptId}/reverse`, {
         method: "POST",
         body: JSON.stringify({
           notes: "Reversed from procurement workbench",

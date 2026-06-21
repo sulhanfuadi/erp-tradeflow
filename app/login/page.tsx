@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth-server";
 import LoginPage from "@/components/Pages/LoginPage";
@@ -12,5 +13,9 @@ export default async function LoginRoute() {
   if (user) {
     redirect("/");
   }
-  return <LoginPage />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginPage />
+    </Suspense>
+  );
 }

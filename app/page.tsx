@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth-server";
 import HomePage from "@/components/Pages/HomePage";
@@ -30,10 +31,12 @@ export default async function HomeRoute() {
     getSuppliersForUser(user.id),
   ]);
   return (
-    <HomePage
-      initialProducts={products}
-      initialCategories={categories}
-      initialSuppliers={suppliers}
-    />
+    <Suspense fallback={<div>Loading...</div>}>
+      <HomePage
+        initialProducts={products}
+        initialCategories={categories}
+        initialSuppliers={suppliers}
+      />
+    </Suspense>
   );
 }

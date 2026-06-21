@@ -1,0 +1,20 @@
+{
+  "scenarioId": "TS-03",
+  "title": "Customer Invoice generation from fulfilled quantity",
+  "status": "PASS",
+  "startedAt": "2026-06-21T12:51:15.969Z",
+  "assertions": {
+    "customerInvoiceId": "6a37de43598bdb968b0da9cf",
+    "customerInvoiceStatus": "draft",
+    "netsuiteStatus": "Draft"
+  },
+  "ids": {
+    "salesOrderId": "6a37de40598bdb968b0da9c7",
+    "customerInvoiceId": "6a37de43598bdb968b0da9cf"
+  },
+  "notes": [
+    "Customer Invoice berhasil dibuat setelah fulfillment selesai."
+  ],
+  "artifactPath": "docs/evidence/auto/TS-03.png",
+  "finishedAt": "2026-06-21T12:51:17.049Z"
+}

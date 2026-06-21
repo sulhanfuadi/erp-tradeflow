@@ -638,7 +638,7 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
       const poPostRes = await apiCall(
         api,
         "PATCH",
-        `/api/p2p/purchase-orders/${state.purchaseOrderId}`,
+        `/api/netsuite/purchase-orders/${state.purchaseOrderId}`,
         {
           status: "posted",
           notes: "TS-05 posted",
@@ -1186,9 +1186,9 @@ test.describe("Submission E2E TS-01..TS-12 (NetSuite Alignment)", () => {
     try {
       const legacyOrders = await apiCall(api, "GET", "/api/orders");
       const legacyInvoices = await apiCall(api, "GET", "/api/invoices");
-      const legacyPurchaseOrders = await apiCall(api, "GET", "/api/p2p/purchase-orders");
-      const legacyGoodsReceipts = await apiCall(api, "GET", "/api/p2p/goods-receipts");
-      const legacyApInvoices = await apiCall(api, "GET", "/api/p2p/ap-invoices");
+      const legacyPurchaseOrders = await apiCall(api, "GET", "/api/netsuite/purchase-orders");
+      const legacyGoodsReceipts = await apiCall(api, "GET", "/api/netsuite/item-receipts");
+      const legacyApInvoices = await apiCall(api, "GET", "/api/netsuite/vendor-bills");
 
       expect(legacyOrders.status).toBe(200);
       expect(legacyInvoices.status).toBe(200);

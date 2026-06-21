@@ -99,7 +99,6 @@ export function createProductColumns(
           width={48}
           height={48}
           className="w-12 h-12 object-cover rounded-lg border border-rose-400/30"
-          unoptimized={imageUrl.includes("ik.imagekit.io")} // ImageKit handles optimization
         />
       );
     },

@@ -1,0 +1,20 @@
+{
+  "scenarioId": "TS-04",
+  "title": "Customer Payment partial to paid + payment doc",
+  "status": "PASS",
+  "startedAt": "2026-06-21T12:51:17.437Z",
+  "assertions": {
+    "partialPaymentStatus": "partial",
+    "finalPaymentStatus": "paid",
+    "customerPaymentDocs": 2
+  },
+  "ids": {
+    "customerInvoiceId": "6a37de43598bdb968b0da9cf"
+  },
+  "notes": [
+    "Customer Payment partial berhasil.",
+    "Customer Payment final berhasil dan invoice paid."
+  ],
+  "artifactPath": "docs/evidence/auto/TS-04.png",
+  "finishedAt": "2026-06-21T12:51:18.564Z"
+}

@@ -43,17 +43,17 @@ export const canReceivePurchaseOrder = (roleOrUser: RoleCarrier): boolean => {
 
 export const canCreateVendorBill = (roleOrUser: RoleCarrier): boolean => {
   const role = normalizeRole(roleOrUser);
-  return role === "ar_analyst" || role === "ap_analyst" || role === "admin";
+  return role === "ap_analyst" || role === "admin";
 };
 
 export const canApproveVendorBill = (roleOrUser: RoleCarrier): boolean => {
   const role = normalizeRole(roleOrUser);
-  return role === "ar_analyst" || role === "ap_analyst" || role === "admin";
+  return role === "ap_analyst" || role === "admin";
 };
 
 export const canPayVendorBill = (roleOrUser: RoleCarrier): boolean => {
   const role = normalizeRole(roleOrUser);
-  return role === "ar_analyst" || role === "ap_analyst" || role === "admin";
+  return role === "ap_analyst" || role === "admin";
 };
 
 export const canManageItemMaster = (roleOrUser: RoleCarrier): boolean => {
