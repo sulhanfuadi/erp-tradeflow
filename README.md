@@ -129,7 +129,7 @@ Diagram swimlane di bawah menunjukkan **alur lengkap O2C** per peran sesuai spes
 
 P2P is implemented as the functional procurement workbench flow:
 Purchase Order -> Item Receipt -> Vendor Bill -> Bill Payment.
-![BPMN Procure to Pay](docs/evidence/bpmn/TradeFlow_Level1_P2P_Procure_To_Pay_Process.jpg)
+![BPMN Procure to Pay](docs/evidence/bpmn/TradeFlow_Level1_P2P_Procure_To_Pay_Process.png)
 
 ### Step 1 — Creates Purchase Order
 > [!IMPORTANT]
