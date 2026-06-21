@@ -24,6 +24,7 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts";
 import { Button } from "@/components/ui/button";
 import { useAdminCounts } from "@/hooks/queries";
+import { canAccessRoute } from "@/lib/role-helpers";
 
 /**
  * Admin sidebar: section headlines + links.
@@ -152,7 +153,7 @@ export default function AdminSidebar({ collapsed = false }: { collapsed?: boolea
   };
 
   const renderNavItems = (items: NavItem[], isSub = true) =>
-    items.map((item) => {
+    items.filter(item => canAccessRoute(user?.role, item.href)).map((item) => {
       const Icon = item.icon;
       const count = getCount(item.countKey);
       const showBadge = count !== undefined && count > 0;

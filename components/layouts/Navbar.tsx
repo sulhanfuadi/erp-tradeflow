@@ -38,7 +38,7 @@ import { useTheme } from "next-themes";
 import ScrollControl from "../shared/ScrollControl";
 import Footer from "./Footer";
 import { NotificationBell } from "../shared";
-import { getNavigationItemsForRole } from "@/lib/role-helpers";
+import { getNavigationItemsForRole, isAdmin } from "@/lib/role-helpers";
 
 /**
  * RoboHash fallback avatar URL when user has no custom/Google image.
@@ -389,27 +389,31 @@ export default function Navbar({ children }: NavbarProps) {
                   <Settings className="mr-2 h-4 w-4" />
                   <span>Email Preferences</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    router.push("/api-docs");
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className={DROPDOWN_ITEM_CLASS}
-                >
-                  <FileCode className="mr-2 h-4 w-4" />
-                  <span>API Documentation</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    router.push("/api-status");
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className={DROPDOWN_ITEM_CLASS}
-                >
-                  <Activity className="mr-2 h-4 w-4" />
-                  <span>API Status</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-gray-200 dark:bg-gray-700" />
+                {isAdmin(user?.role) && (
+                  <>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        router.push("/api-docs");
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className={DROPDOWN_ITEM_CLASS}
+                    >
+                      <FileCode className="mr-2 h-4 w-4" />
+                      <span>API Documentation</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        router.push("/api-status");
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className={DROPDOWN_ITEM_CLASS}
+                    >
+                      <Activity className="mr-2 h-4 w-4" />
+                      <span>API Status</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator className="bg-gray-200 dark:bg-gray-700" />
+                  </>
+                )}
                 <DropdownMenuItem
                   onClick={handleLogout}
                   disabled={isLoggingOut}
@@ -555,33 +559,37 @@ export default function Navbar({ children }: NavbarProps) {
               Email Preferences
             </Button>
 
-            {/* API Documentation */}
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-gray-700 dark:text-white/80 hover:backdrop-grey-100 dark:hover:backdrop-white/10 transition-all duration-200 ease-in-out px-3 py-3 h-auto min-h-[44px]"
-              onClick={() => {
-                router.push("/api-docs");
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              <FileCode className="mr-2 h-4 w-4" />
-              API Documentation
-            </Button>
+            {isAdmin(user?.role) && (
+              <>
+                {/* API Documentation */}
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-gray-700 dark:text-white/80 hover:backdrop-grey-100 dark:hover:backdrop-white/10 transition-all duration-200 ease-in-out px-3 py-3 h-auto min-h-[44px]"
+                  onClick={() => {
+                    router.push("/api-docs");
+                    setIsMobileMenuOpen(false);
+                  }}
+                >
+                  <FileCode className="mr-2 h-4 w-4" />
+                  API Documentation
+                </Button>
 
-            {/* API Status */}
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-gray-700 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground hover:bg-gradient-to-br hover:from-sky-500/10 hover:via-sky-500/5 hover:to-sky-500/5 dark:hover:from-white/10 dark:hover:via-white/5 dark:hover:to-white/5 hover:backdrop-blur-sm transition-all duration-300 ease-in-out px-3 py-3.5 h-auto min-h-[44px]"
-              onClick={() => {
-                router.push("/api-status");
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              <Activity className="mr-2 h-4 w-4" />
-              API Status
-            </Button>
+                {/* API Status */}
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-gray-700 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground hover:bg-gradient-to-br hover:from-sky-500/10 hover:via-sky-500/5 hover:to-sky-500/5 dark:hover:from-white/10 dark:hover:via-white/5 dark:hover:to-white/5 hover:backdrop-blur-sm transition-all duration-300 ease-in-out px-3 py-3.5 h-auto min-h-[44px]"
+                  onClick={() => {
+                    router.push("/api-status");
+                    setIsMobileMenuOpen(false);
+                  }}
+                >
+                  <Activity className="mr-2 h-4 w-4" />
+                  API Status
+                </Button>
 
-            <Separator className="bg-gray-300/50 dark:bg-white/10" />
+                <Separator className="bg-gray-300/50 dark:bg-white/10" />
+              </>
+            )}
 
             {/* Logout */}
             <Button

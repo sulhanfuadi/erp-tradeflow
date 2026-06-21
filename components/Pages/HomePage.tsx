@@ -18,6 +18,7 @@ import { PageContentWrapper } from "@/components/shared";
 import FloatingActionButtons from "@/components/shared/FloatingActionButtons";
 import { useProducts } from "@/hooks/queries";
 import { queryKeys } from "@/lib/react-query";
+import { canAccessRoute, isAdmin } from "@/lib/role-helpers";
 import type {
   ProductForHome,
   CategoryForHome,
@@ -137,44 +138,54 @@ export default function HomePage({
     <Navbar>
       <PageContentWrapper>
         {/* Hero intro — store-wide overview and link to My Activities */}
-        <div className="pb-6 flex flex-col items-start text-left">
-          <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white pb-2">
-            Store overview
-          </h2>
-          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
-            The cards below show your store-wide metrics as the store owner,
-            including your own activity and activity from clients and others.
-            Numbers update automatically when you or others make changes. For
-            your personal orders, products, and activity only, visit{" "}
-            <Link
-              href="/admin/my-activity"
-              className="font-medium text-sky-600 hover:text-sky-800"
-            >
-              My Activities
-            </Link>
-            .
-          </p>
-        </div>
+        {isAdmin(user?.role) && (
+          <div className="pb-6 flex flex-col items-start text-left">
+            <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white pb-2">
+              Store overview
+            </h2>
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+              The cards below show your store-wide metrics as the store owner,
+              including your own activity and activity from clients and others.
+              Numbers update automatically when you or others make changes. For
+              your personal orders, products, and activity only, visit{" "}
+              <Link
+                href="/admin/my-activity"
+                className="font-medium text-sky-600 hover:text-sky-800"
+              >
+                My Activities
+              </Link>
+              .
+            </p>
+          </div>
+        )}
 
-        {/* Statistics Section - Warehouse Overview */}
-        <div id="statistics" className="pb-6 scroll-mt-20">
-          <StatisticsSection />
-        </div>
+        {/* Statistics Section - Store Overview */}
+        {isAdmin(user?.role) && (
+          <div id="statistics" className="pb-6 scroll-mt-20">
+            <StatisticsSection />
+          </div>
+        )}
 
         {/* Product List Section */}
-        <div id="products" className="pb-6 scroll-mt-20">
-          <ProductList />
-        </div>
+        {canAccessRoute(user?.role, "/products") && (
+          <div id="products" className="pb-6 scroll-mt-20">
+            <ProductList />
+          </div>
+        )}
 
         {/* Supplier List Section */}
-        <div id="suppliers" className="pb-6 scroll-mt-20">
-          <SupplierList />
-        </div>
+        {canAccessRoute(user?.role, "/suppliers") && (
+          <div id="suppliers" className="pb-6 scroll-mt-20">
+            <SupplierList />
+          </div>
+        )}
 
         {/* Category List Section */}
-        <div id="categories" className="pb-6 scroll-mt-20">
-          <CategoryList />
-        </div>
+        {canAccessRoute(user?.role, "/categories") && (
+          <div id="categories" className="pb-6 scroll-mt-20">
+            <CategoryList />
+          </div>
+        )}
 
         {/* Floating Action Buttons - Always render to prevent blinking */}
         <FloatingActionButtons
