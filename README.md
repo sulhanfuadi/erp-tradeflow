@@ -129,7 +129,49 @@ Diagram swimlane di bawah menunjukkan **alur lengkap O2C** per peran sesuai spes
 
 P2P is implemented as the functional procurement workbench flow:
 Purchase Order -> Item Receipt -> Vendor Bill -> Bill Payment.
-The strict BPMN P2P screenshot evidence section and its role-by-role Step 1 through final step images were removed from this README and from the app UI.
+![BPMN Procure to Pay](docs/evidence/bpmn/TradeFlow_Level1_P2P_Procure_To_Pay_Process.jpg)
+
+### Step 1 — Creates Purchase Order
+> [!IMPORTANT]
+> **Role-Switching Required:** Login sebagai **Purchasing Manager**.
+>
+> **Actor:** Purchasing Manager  
+> Melakukan pembuatan Purchase Order.
+
+![P2P Step 1 — Create PO](docs/evidence/auto/P2P-Step1-Create-PO.png)
+
+---
+
+### Step 2 — Review Item on Purchase Order
+> [!IMPORTANT]
+> **Role-Switching Required:** Logout dari Purchasing Manager, kemudian login kembali sebagai **Inventory Manager**.
+>
+> **Actor:** Inventory Manager  
+> Melakukan review terhadap item di PO, meng-approve, lalu memproses Item Receipt.
+
+![P2P Step 2 — Review Item](docs/evidence/auto/P2P-Step2-Review-Item.png)
+
+---
+
+### Step 3 — Bill Purchase Order (Enter Vendor Bill)
+> [!IMPORTANT]
+> **Role-Switching Required:** Logout dari Inventory Manager, kemudian login kembali sebagai **A/R Analyst**.
+>
+> **Actor:** A/R Analyst  
+> Membuat tagihan / Vendor Bill dari Purchase Order tersebut.
+
+![P2P Step 3 — Bill PO](docs/evidence/auto/P2P-Step3-Bill-PO.png)
+
+---
+
+### Step 4 — Pay Vendor Bill
+> [!IMPORTANT]
+> **Role-Switching Required:** Masih login sebagai **A/R Analyst**.
+>
+> **Actor:** A/R Analyst  
+> Menyelesaikan siklus dengan merekam Bill Payment untuk Vendor Bill.
+
+![P2P Step 4 — Pay Bill](docs/evidence/auto/P2P-Step4-Pay-Bill.png)
 
 ---
 
