@@ -27,6 +27,7 @@ const testAccounts = {
   "sales-mgr": { email: "salesmgr@demo.com", password: "12345678" },
   "inv-mgr": { email: "invmgr@demo.com", password: "12345678" },
   "ar-analyst": { email: "aranalyst@demo.com", password: "12345678" },
+  "ap-analyst": { email: "apanalyst@demo.com", password: "12345678" },
   "purchasing-mgr": { email: "purchasingmgr@demo.com", password: "12345678" },
   "warehouse": { email: "warehouse@demo.com", password: "12345678" },
   "guest-supplier": { email: "test@supplier.com", password: "12345678" },
@@ -274,6 +275,8 @@ export default function LoginPage() {
                     <b>Sales Rep:</b> Creates Sales Orders.
                     <br />
                     <b>Sales Manager:</b> Reviews & Approves Orders.
+                    <br />
+                    <b>A/R Analyst:</b> Invoices & Customer Payments.
                   </p>
                 </div>
 
@@ -290,7 +293,7 @@ export default function LoginPage() {
                   <p className="text-sm text-gray-600 dark:text-white/70 leading-relaxed">
                     <b>Purchasing Manager:</b> Creates Purchase Orders.
                     <br />
-                    <b>A/R Analyst:</b> Invoices, Bills, and Payments.
+                    <b>A/P Analyst:</b> Vendor Bills & Bill Payments.
                   </p>
                 </div>
 
@@ -394,7 +397,13 @@ export default function LoginPage() {
                           value="ar-analyst"
                           className="cursor-pointer text-gray-900 dark:text-white focus:bg-sky-100 dark:focus:bg-white/10 focus:text-gray-900 dark:focus:text-white"
                         >
-                          A/R Analyst (O2C / P2P)
+                          A/R Analyst (O2C)
+                        </SelectItem>
+                        <SelectItem
+                          value="ap-analyst"
+                          className="cursor-pointer text-gray-900 dark:text-white focus:bg-sky-100 dark:focus:bg-white/10 focus:text-gray-900 dark:focus:text-white"
+                        >
+                          A/P Analyst (P2P)
                         </SelectItem>
                         <SelectItem
                           value="guest-client"
