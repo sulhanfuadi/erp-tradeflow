@@ -2,8 +2,6 @@
  * Next.js instrumentation: Sentry (node + edge) and app services (Redis, QStash).
  */
 
-import * as Sentry from "@sentry/nextjs";
-
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
     try {
@@ -54,4 +52,13 @@ export async function register() {
 }
 
 /** App Router: report unhandled request errors to Sentry */
-export const onRequestError = Sentry.captureRequestError;
+export async function onRequestError(error: any, request: any, ctx: any) {
+  if (process.env.NODE_ENV === "production" || process.env.NEXT_PUBLIC_SENTRY_DSN) {
+    try {
+      const Sentry = await import("@sentry/nextjs");
+      Sentry.captureRequestError(error, request, ctx);
+    } catch {
+      // Sentry optional
+    }
+  }
+}
