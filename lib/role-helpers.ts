@@ -148,7 +148,7 @@ export function getNavigationItemsForRole(roleOrUser: RoleCarrier): NavigationIt
   if (role === "sales_manager") return all.filter((i) => ["/", "/orders", "/invoices"].includes(i.path));
   if (role === "inventory_manager") return all.filter((i) => ["/", "/products", "/orders", "/warehouses", "/procurement"].includes(i.path));
   if (role === "purchasing_manager") return all.filter((i) => ["/", "/products", "/suppliers", "/procurement"].includes(i.path));
-  if (role === "warehouse_staff") return all.filter((i) => ["/", "/products", "/warehouses"].includes(i.path));
+  if (role === "warehouse_staff") return all.filter((i) => ["/", "/products", "/warehouses", "/procurement"].includes(i.path));
   if (role === "ar_analyst") return all.filter((i) => ["/", "/invoices", "/procurement"].includes(i.path));
   if (role === "ap_analyst") return all.filter((i) => ["/", "/procurement"].includes(i.path));
   return all.filter((i) => ["/", "/products", "/orders"].includes(i.path));
@@ -162,7 +162,7 @@ export function canAccessRoute(roleOrUser: RoleCarrier, pathname: string): boole
   if (pathname.startsWith("/client")) return role === "client";
   if (pathname.startsWith("/supplier")) return role === "supplier";
   if (pathname.startsWith("/business-insights")) return false;
-  if (pathname.startsWith("/procurement")) return role === "purchasing_manager" || role === "ar_analyst" || role === "ap_analyst" || role === "inventory_manager";
+  if (pathname.startsWith("/procurement")) return role === "purchasing_manager" || role === "ar_analyst" || role === "ap_analyst" || role === "inventory_manager" || role === "warehouse_staff";
   if (pathname.startsWith("/warehouses")) return role === "inventory_manager" || role === "warehouse_staff";
   if (pathname.startsWith("/suppliers")) return role === "purchasing_manager";
   if (pathname.startsWith("/invoices")) return role === "sales_manager" || role === "ar_analyst" || role === "client";

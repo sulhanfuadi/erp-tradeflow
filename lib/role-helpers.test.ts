@@ -26,6 +26,6 @@ describe("role route access", () => {
       "/orders",
     ]);
     expect(getNavigationItemsForRole("purchasing_manager").map((item) => item.path)).toContain("/procurement");
-    expect(getNavigationItemsForRole("warehouse_staff").map((item) => item.path)).not.toContain("/procurement");
+    expect(getNavigationItemsForRole("warehouse_staff").map((item) => item.path)).toContain("/procurement");
   });
 });
