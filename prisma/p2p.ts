@@ -103,7 +103,10 @@ export async function createPurchaseOrder(
   const productIds = [...new Set(data.items.map((item) => item.productId))];
 
   const products = await prisma.product.findMany({
-    where: { id: { in: productIds }, deletedAt: null },
+    where: { 
+      id: { in: productIds }, 
+      OR: [{ deletedAt: null }, { deletedAt: { isSet: false } }] 
+    },
     select: {
       id: true,
       name: true,

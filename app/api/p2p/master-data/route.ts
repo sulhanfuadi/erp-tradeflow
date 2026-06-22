@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionFromRequest } from "@/utils/auth";
 import { logger } from "@/lib/logger";
@@ -36,7 +37,6 @@ export async function GET(request: NextRequest) {
         orderBy: { name: "asc" },
       }),
       prisma.product.findMany({
-        where: { deletedAt: null },
         select: {
           id: true,
           name: true,
@@ -48,6 +48,9 @@ export async function GET(request: NextRequest) {
         orderBy: { name: "asc" },
       }),
     ]);
+
+    console.log("MASTER DATA PRODUCTS LENGTH:", products.length);
+    console.log("CACHE BUSTER: PLEASE REBUILD ROUTE");
 
     return NextResponse.json({
       suppliers: suppliers.map((supplier) => ({

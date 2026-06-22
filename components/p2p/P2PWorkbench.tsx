@@ -113,6 +113,7 @@ async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
       "Content-Type": "application/json",
       ...(options?.headers ?? {}),
     },
+    cache: "no-store",
     ...options,
   });
 
@@ -730,7 +731,7 @@ export default function P2PWorkbench() {
               </div>
 
               <div className="space-y-1">
-                <Label>Product</Label>
+                <Label>Product (Total: {products.length}, Filtered: {filteredProducts.length})</Label>
                 <select
                   value={poForm.productId}
                   onChange={(event) => {
