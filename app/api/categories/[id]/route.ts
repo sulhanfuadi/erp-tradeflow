@@ -37,8 +37,10 @@ export async function GET(
 
     const { id } = await params;
     const userId = session.id;
-    const isAdmin = session.role === "admin";
+    const isSupplier = session.role === "supplier";
+    const isRetailer = session.role === "retailer";
     const isClient = session.role === "client";
+    const isInternal = !isClient && !isSupplier && !isRetailer;
 
     // Check cache first
     const cacheKey = cacheKeys.categories.detail(id);
@@ -51,9 +53,9 @@ export async function GET(
     // Cache miss: fetch from database
     logger.info(`❌ Cache miss for category: ${cacheKey} - fetching from database`);
 
-    // Fetch category (admin or client: any by id; else own by userId)
+    // Fetch category (internal or client: any by id; else own by userId)
     const category =
-      isAdmin || isClient
+      isInternal || isClient
         ? await prisma.category.findUnique({ where: { id } })
         : await getCategoryById(id, userId);
 

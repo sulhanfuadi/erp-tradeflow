@@ -81,9 +81,9 @@ export function mapAPInvoiceToNetSuiteStatus(invoice: {
   return "Open";
 }
 
-export async function getNetSuiteSalesOrders(userId: string) {
+export async function getNetSuiteSalesOrders(userId?: string) {
   const rows = await prisma.order.findMany({
-    where: { userId },
+    where: userId ? { userId } : {},
     include: {
       items: true,
       invoice: { select: { id: true, invoiceNumber: true } },
@@ -527,9 +527,9 @@ export async function recordBillPayment(
   });
 }
 
-export async function getNetSuiteItemReceipts(userId: string) {
+export async function getNetSuiteItemReceipts(userId?: string) {
   const rows = await prisma.goodsReceipt.findMany({
-    where: { userId },
+    where: userId ? { userId } : {},
     include: { items: true, purchaseOrder: true },
     orderBy: { createdAt: "desc" },
   });
@@ -558,9 +558,9 @@ export async function getNetSuiteVendorBills(userId?: string) {
   }));
 }
 
-export async function listCustomerPayments(userId: string) {
+export async function listCustomerPayments(userId?: string) {
   return prisma.customerPayment.findMany({
-    where: { userId },
+    where: userId ? { userId } : {},
     orderBy: { createdAt: "desc" },
   });
 }

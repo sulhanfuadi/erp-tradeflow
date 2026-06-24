@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     const guard = await requireNetSuiteSession(request);
     if (guard.errorResponse) return guard.errorResponse;
 
-    const rows = await listCustomerPayments(guard.session!.id);
+    const rows = await listCustomerPayments(undefined);
     return NextResponse.json(rows);
   } catch (error) {
     logger.error("Error fetching customer payments:", error);

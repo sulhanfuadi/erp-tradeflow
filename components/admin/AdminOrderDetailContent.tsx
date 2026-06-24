@@ -459,7 +459,10 @@ export default function AdminOrderDetailContent({
                   getStatusBadgeClasses(order.status),
                 )}
               >
-                {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                {order.status
+                  .split("_")
+                  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                  .join(" ")}
               </Badge>
               <Select
                 value={order.status}
@@ -489,8 +492,10 @@ export default function AdminOrderDetailContent({
                 getPaymentStatusBadgeClasses(order.paymentStatus),
               )}
             >
-              {order.paymentStatus.charAt(0).toUpperCase() +
-                order.paymentStatus.slice(1)}
+              {order.paymentStatus
+                .split("_")
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(" ")}
             </Badge>
           </GlassCard>
         </div>

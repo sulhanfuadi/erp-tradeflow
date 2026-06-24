@@ -168,6 +168,10 @@ export default function P2PWorkbench() {
     purchaseOrderId: "",
     notes: "",
   });
+  const [reviewForm, setReviewForm] = useState({
+    purchaseOrderId: "",
+    notes: "",
+  });
   const [receiptQuantities, setReceiptQuantities] = useState<
     Record<string, string>
   >({});
@@ -405,6 +409,47 @@ export default function P2PWorkbench() {
         error instanceof Error ? error.message : "Failed to update PO status";
       toast({
         title: "Update failed",
+        description: message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  async function submitReviewItem(approved: boolean) {
+    if (reviewForm.purchaseOrderId === "") {
+      toast({
+        title: "Select purchase order",
+        description: "Please select a draft purchase order to review.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await apiFetch("/api/netsuite/inventory/review-item", {
+        method: "POST",
+        body: JSON.stringify({
+          purchaseOrderId: reviewForm.purchaseOrderId,
+          notes: reviewForm.notes,
+          approved,
+        }),
+      });
+
+      toast({
+        title: approved ? "Item Approved" : "Item Rejected",
+        description: `Review recorded successfully.`,
+      });
+
+      setReviewForm({ purchaseOrderId: "", notes: "" });
+      await reloadAfterMutation();
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Failed to review item";
+      toast({
+        title: "Review failed",
         description: message,
         variant: "destructive",
       });
@@ -680,7 +725,7 @@ export default function P2PWorkbench() {
         </CardContent>
       </Card>
 
-      <div className="grid gap-6 xl:grid-cols-3">
+      <div className="grid gap-6 xl:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle>Create Purchase Order</CardTitle>
@@ -746,7 +791,7 @@ export default function P2PWorkbench() {
                         selectedProduct != null
                           ? String(selectedProduct.price)
                           : previous.unitCost,
-                    }));
+                    }))
                   }}
                   className="w-full rounded-md border bg-background px-3 py-2 text-sm"
                 >
@@ -847,6 +892,75 @@ export default function P2PWorkbench() {
                 Create Purchase Order
               </Button>
               {!canCreatePo && <p className="text-xs text-muted-foreground mt-2">Requires Purchasing Manager</p>}
+            </form>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Review Item</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form className="space-y-3">
+              <div className="space-y-1">
+                <Label>Purchase Order</Label>
+                <select
+                  value={reviewForm.purchaseOrderId}
+                  onChange={(event) =>
+                    setReviewForm((previous) => ({
+                      ...previous,
+                      purchaseOrderId: event.target.value,
+                    }))
+                  }
+                  className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                >
+                  <option value="">Select draft PO</option>
+                  {purchaseOrders
+                    .filter((po) => po.status === "draft")
+                    .map((po) => (
+                      <option key={po.id} value={po.id}>
+                        {po.poNumber} ({po.status})
+                      </option>
+                    ))}
+                </select>
+              </div>
+
+              <div className="space-y-1">
+                <Label>Notes</Label>
+                <Textarea
+                  rows={3}
+                  value={reviewForm.notes}
+                  onChange={(event) =>
+                    setReviewForm((previous) => ({
+                      ...previous,
+                      notes: event.target.value,
+                    }))
+                  }
+                />
+              </div>
+
+              <div className="flex gap-2">
+                <Button 
+                  disabled={isSubmitting || !canReviewPo} 
+                  title={!canReviewPo ? "Requires Inventory Manager" : ""}
+                  type="button" 
+                  onClick={() => submitReviewItem(true)}
+                  className="flex-1"
+                >
+                  Approve
+                </Button>
+                <Button 
+                  disabled={isSubmitting || !canReviewPo} 
+                  title={!canReviewPo ? "Requires Inventory Manager" : ""}
+                  type="button" 
+                  variant="destructive"
+                  onClick={() => submitReviewItem(false)}
+                  className="flex-1"
+                >
+                  Reject
+                </Button>
+              </div>
+              {!canReviewPo && <p className="text-xs text-muted-foreground mt-2">Requires Inventory Manager</p>}
             </form>
           </CardContent>
         </Card>
@@ -1112,13 +1226,13 @@ export default function P2PWorkbench() {
 
           <Button 
             disabled={isSubmitting || !canCreateBill} 
-            title={!canCreateBill ? "Requires A/R Analyst or A/P Analyst" : ""}
+            title={!canCreateBill ? "Requires A/P Analyst" : ""}
             type="submit" 
             className="w-full"
           >
             Create Vendor Bill
           </Button>
-          {!canCreateBill && <p className="text-xs text-muted-foreground mt-2">Requires A/R Analyst or A/P Analyst</p>}
+          {!canCreateBill && <p className="text-xs text-muted-foreground mt-2">Requires A/P Analyst</p>}
         </form>
           </CardContent>
         </Card>
@@ -1186,12 +1300,12 @@ export default function P2PWorkbench() {
             <div className="md:col-span-4">
               <Button 
                 disabled={isSubmitting || !canPayBill} 
-                title={!canPayBill ? "Requires A/R Analyst or A/P Analyst" : ""}
+                title={!canPayBill ? "Requires A/P Analyst" : ""}
                 type="submit"
               >
                 Record Payment
               </Button>
-              {!canPayBill && <p className="text-xs text-muted-foreground mt-2">Requires A/R Analyst or A/P Analyst</p>}
+              {!canPayBill && <p className="text-xs text-muted-foreground mt-2">Requires A/P Analyst</p>}
             </div>
           </form>
         </CardContent>
@@ -1239,37 +1353,15 @@ export default function P2PWorkbench() {
                     <td className="py-2">
                       <div className="flex gap-2">
                         {purchaseOrder.status === "draft" && (
-                          <>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              disabled={isSubmitting || !canReviewPo}
-                              title={!canReviewPo ? "Requires Inventory Manager" : ""}
-                              onClick={async () => {
-                                setIsSubmitting(true);
-                                try {
-                                  await apiFetch(`/api/netsuite/purchase-orders/${purchaseOrder.id}/review`, { method: "POST" });
-                                  toast({ title: "Purchase order reviewed" });
-                                  await reloadAfterMutation();
-                                } catch (e) {
-                                  toast({ title: "Failed to review", variant: "destructive" });
-                                } finally {
-                                  setIsSubmitting(false);
-                                }
-                              }}
-                            >
-                              Review
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              disabled={isSubmitting || !canCreatePo}
-                              title={!canCreatePo ? "Requires Purchasing Manager" : ""}
-                              onClick={() => updatePoStatus(purchaseOrder.id, "posted")}
-                            >
-                              Post
-                            </Button>
-                          </>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            disabled={isSubmitting || !canCreatePo}
+                            title={!canCreatePo ? "Requires Purchasing Manager" : ""}
+                            onClick={() => updatePoStatus(purchaseOrder.id, "posted")}
+                          >
+                            Post
+                          </Button>
                         )}
                         {(purchaseOrder.status === "draft" ||
                           purchaseOrder.status === "posted") && (
@@ -1389,7 +1481,7 @@ export default function P2PWorkbench() {
                               size="sm"
                               variant="outline"
                               disabled={isSubmitting || !canApproveBill}
-                              title={!canApproveBill ? "Requires A/R Analyst or A/P Analyst" : ""}
+                              title={!canApproveBill ? "Requires A/P Analyst" : ""}
                               onClick={async () => {
                                 setIsSubmitting(true);
                                 try {
@@ -1409,7 +1501,7 @@ export default function P2PWorkbench() {
                               size="sm"
                               variant="destructive"
                               disabled={isSubmitting || !canApproveBill}
-                              title={!canApproveBill ? "Requires A/R Analyst or A/P Analyst" : ""}
+                              title={!canApproveBill ? "Requires A/P Analyst" : ""}
                               onClick={async () => {
                                 setIsSubmitting(true);
                                 try {

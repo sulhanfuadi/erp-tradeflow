@@ -77,8 +77,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const isAdmin = session.role === "admin";
-    if (isAdmin) {
+    const isClient = session.role === "client";
+    const isSupplier = session.role === "supplier";
+    const isRetailer = session.role === "retailer";
+    const isInternal = !isClient && !isSupplier && !isRetailer;
+    
+    if (isInternal || isSupplier || isRetailer) {
       const { searchParams } = new URL(request.url);
       const view = searchParams.get("view") as "all" | "assigned_to_me" | "created_by_me" | null;
       if (view === "assigned_to_me" || view === "created_by_me") {
@@ -109,13 +113,15 @@ export async function GET(request: NextRequest) {
         );
         return NextResponse.json(transformed);
       }
-      // Admin "all" = only tickets assigned to this admin (product owner), not every ticket
-      const cacheKey = cacheKeys.supportTickets.list({
-        assignedToId: session.id,
-      });
-      const cached = await getCache<SupportTicket[]>(cacheKey);
-      if (cached) return NextResponse.json(cached);
-      const records = await getSupportTicketsByAssignedTo(session.id);
+      
+      // If "all" or default view
+      const { getAllSupportTickets, getSupportTicketsByAssignedTo } = await import("@/prisma/support-ticket");
+      
+      // Vendors only see tickets assigned to them by default if not "created_by_me"
+      const records = isInternal 
+        ? await getAllSupportTickets() 
+        : await getSupportTicketsByAssignedTo(session.id);
+        
       const ticketIds = records.map((r) => r.id);
       const replyCounts =
         ticketIds.length > 0
@@ -136,7 +142,6 @@ export async function GET(request: NextRequest) {
           replyCountMap.get(r.id) ?? 0,
         ),
       );
-      await setCache(cacheKey, transformed, 300);
       return NextResponse.json(transformed);
     }
 

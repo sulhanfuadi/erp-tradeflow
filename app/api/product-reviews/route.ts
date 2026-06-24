@@ -62,8 +62,11 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const isAdmin = session.role === "admin";
-    const cacheFilter = isAdmin
+    const isSupplier = session.role === "supplier";
+    const isRetailer = session.role === "retailer";
+    const isProductOwnerRole = isSupplier || isRetailer;
+    
+    const cacheFilter = isProductOwnerRole
       ? { productOwnerId: session.id }
       : {};
     const cacheKey = cacheKeys.productReviews.list(cacheFilter);
@@ -74,7 +77,7 @@ export async function GET(request: NextRequest) {
       (cached.length === 0 || (first != null && ("reviewerName" in first || "reviewerEmail" in first)));
     if (cached && hasReviewerInfo) return NextResponse.json(cached);
 
-    const records = isAdmin
+    const records = isProductOwnerRole
       ? await getProductReviewsForProductOwner(session.id)
       : await getAllProductReviews();
     const userIds = [...new Set(records.map((r) => r.userId))];

@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const stats = await getDashboardForAdmin(session.id);
+    const stats = await getDashboardForAdmin(session.id, session.role);
     return NextResponse.json(stats);
   } catch (error) {
     logger.error("Error fetching dashboard:", error);

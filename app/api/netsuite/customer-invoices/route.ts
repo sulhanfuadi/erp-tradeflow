@@ -19,7 +19,6 @@ export async function GET(request: NextRequest) {
     if (guard.errorResponse) return guard.errorResponse;
 
     const rows = await prisma.invoice.findMany({
-      where: { userId: guard.session!.id },
       include: {
         order: {
           select: {

@@ -10,7 +10,6 @@ export async function GET(request: NextRequest) {
     if (guard.errorResponse) return guard.errorResponse;
 
     const rows = await prisma.itemFulfillment.findMany({
-      where: { userId: guard.session!.id },
       include: { items: true },
       orderBy: { createdAt: "desc" },
     });

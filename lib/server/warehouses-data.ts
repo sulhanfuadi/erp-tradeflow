@@ -22,11 +22,16 @@ export type WarehouseForPage = {
 /**
  * Fetch warehouses for the given user
  */
+import { isInternalRole } from "@/lib/role-helpers";
+
 export async function getWarehousesForUser(
   userId: string,
+  role?: string | null,
 ): Promise<WarehouseForPage[]> {
+  const isInternal = role ? isInternalRole(role) : false;
+  
   const warehouses = await prisma.warehouse.findMany({
-    where: { userId },
+    where: isInternal ? {} : { userId },
   });
 
   return warehouses.map((w) => ({

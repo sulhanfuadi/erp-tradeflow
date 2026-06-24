@@ -27,8 +27,11 @@ export async function GET(request: NextRequest) {
 
     const userId = session.id;
     const isClient = session.role === "client";
+    const isSupplierRole = session.role === "supplier";
+    const isRetailer = session.role === "retailer";
+    const isInternal = !isClient && !isSupplierRole && !isRetailer;
 
-    const suppliers = isClient
+    const suppliers = isClient || isSupplierRole || isRetailer
       ? await prisma.supplier.findMany({ where: { userId } })
       : await getSuppliersForAdminIncludingDemo(userId);
 
@@ -122,6 +125,11 @@ export async function PUT(request: NextRequest) {
     }
 
     const userId = session.id;
+    const isClient = session.role === "client";
+    const isSupplierRole = session.role === "supplier";
+    const isRetailer = session.role === "retailer";
+    const isInternal = !isClient && !isSupplierRole && !isRetailer;
+    
     const body = await request.json();
     const { id, name, status, description, notes } = body;
 
@@ -132,9 +140,9 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Verify supplier belongs to user
+    // Verify supplier belongs to user (or user is internal)
     const existingSupplier = await prisma.supplier.findFirst({
-      where: { id, userId },
+      where: isInternal ? { id } : { id, userId },
     });
 
     if (!existingSupplier) {
@@ -211,6 +219,11 @@ export async function DELETE(request: NextRequest) {
     }
 
     const userId = session.id;
+    const isClient = session.role === "client";
+    const isSupplierRole = session.role === "supplier";
+    const isRetailer = session.role === "retailer";
+    const isInternal = !isClient && !isSupplierRole && !isRetailer;
+    
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
 
@@ -221,9 +234,9 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    // Verify supplier belongs to user
+    // Verify supplier belongs to user (or user is internal)
     const existingSupplier = await prisma.supplier.findFirst({
-      where: { id, userId },
+      where: isInternal ? { id } : { id, userId },
     });
 
     if (!existingSupplier) {

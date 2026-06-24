@@ -230,7 +230,10 @@ export const createOrderColumns = (
         <Badge className={getStatusColor(status)}>
           <span className="flex items-center gap-1">
             {getStatusIcon(status)}
-            {status.charAt(0).toUpperCase() + status.slice(1)}
+            {status
+              .split("_")
+              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(" ")}
           </span>
         </Badge>
       );
@@ -243,7 +246,10 @@ export const createOrderColumns = (
       const paymentStatus = row.original.paymentStatus;
       return (
         <Badge className={getPaymentStatusColor(paymentStatus)}>
-          {paymentStatus.charAt(0).toUpperCase() + paymentStatus.slice(1)}
+          {paymentStatus
+            .split("_")
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ")}
         </Badge>
       );
     },

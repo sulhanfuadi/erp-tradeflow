@@ -13,6 +13,8 @@ import { createAuditLog } from "@/prisma/audit-log";
  * GET /api/warehouses
  * Fetch all warehouses for the authenticated user
  */
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
   try {
     const session = await getSessionFromRequest(request);
@@ -21,10 +23,19 @@ export async function GET(request: NextRequest) {
     }
 
     const userId = session.id;
+    const { isInternalRole } = await import("@/lib/role-helpers");
+    const isInternal = isInternalRole(session.role);
 
-    const warehouses = await prisma.warehouse.findMany({
-      where: { userId },
-    });
+    let warehouses;
+    if (isInternal) {
+      warehouses = await prisma.warehouse.findMany();
+    } else {
+      warehouses = await prisma.warehouse.findMany({
+        where: { userId },
+      });
+    }
+
+    console.log(`[API /warehouses] role=${session.role}, isInternal=${isInternal}, returned ${warehouses.length} warehouses`);
 
     return NextResponse.json(warehouses);
   } catch (error) {
@@ -117,8 +128,11 @@ export async function PUT(request: NextRequest) {
       );
     }
 
+    const { isInternalRole } = await import("@/lib/role-helpers");
+    const isInternal = isInternalRole(session.role);
+
     const existing = await prisma.warehouse.findFirst({
-      where: { id, userId },
+      where: isInternal ? { id } : { id, userId },
     });
 
     if (!existing) {
@@ -200,8 +214,11 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
+    const { isInternalRole } = await import("@/lib/role-helpers");
+    const isInternal = isInternalRole(session.role);
+
     const existing = await prisma.warehouse.findFirst({
-      where: { id, userId },
+      where: isInternal ? { id } : { id, userId },
     });
 
     if (!existing) {

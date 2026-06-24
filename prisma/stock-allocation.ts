@@ -225,9 +225,9 @@ export async function getStockTransfers(userId?: string) {
 /**
  * Get one transfer
  */
-export async function getStockTransferById(id: string, userId: string) {
+export async function getStockTransferById(id: string, userId?: string) {
   return prisma.stockTransfer.findFirst({
-    where: { id, userId },
+    where: userId ? { id, userId } : { id },
   });
 }
 

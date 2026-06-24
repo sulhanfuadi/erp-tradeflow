@@ -2,20 +2,20 @@
   "scenarioId": "TS-06",
   "title": "Item Receipt + stock increment",
   "status": "PASS",
-  "startedAt": "2026-06-21T12:51:20.110Z",
+  "startedAt": "2026-06-22T04:46:59.603Z",
   "assertions": {
-    "itemReceiptId": "6a37de48598bdb968b0da9d5",
+    "itemReceiptId": "6a38be431e76ec8d76f2c8f1",
     "itemReceiptStatus": "received",
     "quantityBefore": 47,
     "quantityAfter": 53
   },
   "ids": {
-    "itemReceiptId": "6a37de48598bdb968b0da9d5",
-    "purchaseOrderId": "6a37de46598bdb968b0da9d2"
+    "itemReceiptId": "6a38be431e76ec8d76f2c8f1",
+    "purchaseOrderId": "6a38be421e76ec8d76f2c8ee"
   },
   "notes": [
     "Item Receipt berhasil, stok bertambah."
   ],
   "artifactPath": "docs/evidence/auto/TS-06.png",
-  "finishedAt": "2026-06-21T12:51:21.084Z"
+  "finishedAt": "2026-06-22T04:47:00.537Z"
 }

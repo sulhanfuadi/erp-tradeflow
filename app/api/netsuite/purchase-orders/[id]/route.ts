@@ -21,7 +21,7 @@ export async function GET(
     const session = guard.session!;
 
     const { id } = await params;
-    const purchaseOrder = await getPurchaseOrderById(id, session.id);
+    const purchaseOrder = await getPurchaseOrderById(id, undefined);
 
     if (purchaseOrder == null) {
       return NextResponse.json(

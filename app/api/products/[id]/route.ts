@@ -38,9 +38,10 @@ export async function GET(
 
     const { id } = await params;
     const userId = session.id;
-    const isAdmin = session.role === "admin";
     const isSupplier = session.role === "supplier";
     const isClient = session.role === "client";
+    const isRetailer = session.role === "retailer";
+    const isInternal = !isClient && !isSupplier && !isRetailer;
 
     // Check cache first
     const cacheKey = cacheKeys.products.detail(id);
@@ -74,7 +75,7 @@ export async function GET(
         orderBy: { createdAt: "desc" as const },
       },
     };
-    if (isAdmin) {
+    if (isInternal) {
       product = await prisma.product.findFirst({
         where: mergeProductListWhere({ id }),
         include: productInclude,
