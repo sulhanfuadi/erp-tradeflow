@@ -22,9 +22,13 @@ export async function GET(request: NextRequest) {
     }
 
     const userId = session.id;
+    const isClient = session.role === "client";
+    const isSupplier = session.role === "supplier";
+    const isRetailer = session.role === "retailer";
+    const isInternal = !isClient && !isSupplier && !isRetailer;
 
     const categories = await prisma.category.findMany({
-      where: { userId },
+      where: isInternal ? undefined : { userId },
     });
 
     return NextResponse.json(categories);
@@ -109,6 +113,11 @@ export async function PUT(request: NextRequest) {
     }
 
     const userId = session.id;
+    const isClient = session.role === "client";
+    const isSupplier = session.role === "supplier";
+    const isRetailer = session.role === "retailer";
+    const isInternal = !isClient && !isSupplier && !isRetailer;
+    
     const body = await request.json();
     const { id, name, status, description, notes } = body;
 
@@ -119,9 +128,9 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Verify category belongs to user
+    // Verify category belongs to user (or user is internal)
     const existingCategory = await prisma.category.findFirst({
-      where: { id, userId },
+      where: isInternal ? { id } : { id, userId },
     });
 
     if (!existingCategory) {
@@ -198,6 +207,11 @@ export async function DELETE(request: NextRequest) {
     }
 
     const userId = session.id;
+    const isClient = session.role === "client";
+    const isSupplier = session.role === "supplier";
+    const isRetailer = session.role === "retailer";
+    const isInternal = !isClient && !isSupplier && !isRetailer;
+    
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
 
@@ -208,9 +222,9 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    // Verify category belongs to user
+    // Verify category belongs to user (or user is internal)
     const existingCategory = await prisma.category.findFirst({
-      where: { id, userId },
+      where: isInternal ? { id } : { id, userId },
     });
 
     if (!existingCategory) {

@@ -80,8 +80,13 @@ export async function GET(
     }
     const isCreator = record.userId === session.id;
     const isAssignee = record.assignedToId === session.id;
-    // Only ticket creator or assigned-to (product owner) can view; admins only see if they are the assignee
-    if (!isCreator && !isAssignee) {
+    const isClient = session.role === "client";
+    const isSupplier = session.role === "supplier";
+    const isRetailer = session.role === "retailer";
+    const isInternal = !isClient && !isSupplier && !isRetailer;
+
+    // Ticket creator, assigned-to (product owner), or any internal staff can view
+    if (!isCreator && !isAssignee && !isInternal) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -141,7 +146,12 @@ export async function PUT(
     }
     const isCreator = existing.userId === session.id;
     const isAssignee = existing.assignedToId === session.id;
-    if (!isCreator && !isAssignee) {
+    const isClient = session.role === "client";
+    const isSupplier = session.role === "supplier";
+    const isRetailer = session.role === "retailer";
+    const isInternal = !isClient && !isSupplier && !isRetailer;
+
+    if (!isCreator && !isAssignee && !isInternal) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -262,7 +272,12 @@ export async function DELETE(
     }
     const isCreator = existing.userId === session.id;
     const isAssignee = existing.assignedToId === session.id;
-    if (!isCreator && !isAssignee) {
+    const isClient = session.role === "client";
+    const isSupplier = session.role === "supplier";
+    const isRetailer = session.role === "retailer";
+    const isInternal = !isClient && !isSupplier && !isRetailer;
+
+    if (!isCreator && !isAssignee && !isInternal) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

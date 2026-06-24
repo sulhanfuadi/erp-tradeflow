@@ -71,9 +71,9 @@ export async function getPurchaseOrders(userId?: string) {
   });
 }
 
-export async function getPurchaseOrderById(id: string, userId: string) {
+export async function getPurchaseOrderById(id: string, userId?: string) {
   return prisma.purchaseOrder.findFirst({
-    where: { id, userId },
+    where: userId ? { id, userId } : { id },
     include: { items: true, goodsReceipts: true, apInvoices: true },
   });
 }
@@ -186,7 +186,7 @@ export async function updatePurchaseOrder(
   userId: string,
 ) {
   const existing = await prisma.purchaseOrder.findFirst({
-    where: { id, userId },
+    where: { id },
     select: { id: true, status: true },
   });
 
@@ -235,7 +235,7 @@ export async function updatePurchaseOrder(
 
 export async function deletePurchaseOrder(id: string, userId: string) {
   const existing = await prisma.purchaseOrder.findFirst({
-    where: { id, userId },
+    where: { id },
     select: { id: true, status: true },
   });
 

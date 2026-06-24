@@ -98,19 +98,22 @@ async function getStoreOrderIds(productOwnerUserId: string): Promise<string[]> {
   return Array.from(ids);
 }
 
-export async function getDashboardForAdmin(userId: string): Promise<DashboardStats> {
+export async function getDashboardForAdmin(userId: string, role?: string | null): Promise<DashboardStats> {
   const cacheKey = cacheKeys.dashboard.overview(userId);
   const cached = await getCache<DashboardStats>(cacheKey);
   if (cached) return cached;
 
+  const { isInternalRole } = await import("@/lib/role-helpers");
+  const isInternal = isInternalRole(role);
+
   const demoUserId = await getDemoSupplierUserId();
   const whereSuppliers =
-    demoUserId != null
+    demoUserId != null && !isInternal
       ? { OR: [{ userId }, { userId: demoUserId }] }
-      : userScope(userId);
+      : isInternal ? {} : userScope(userId);
 
   const since = getTwelveMonthsAgo();
-  const whereUser = userScope(userId);
+  const whereUser = isInternal ? {} : userScope(userId);
 
   const userProductIds = (
     await prisma.product.findMany({
@@ -124,8 +127,8 @@ export async function getDashboardForAdmin(userId: string): Promise<DashboardSta
       : { productId: { in: [] } };
 
   const storeOrderIds = await getStoreOrderIds(userId);
-  const whereStoreOrders = storeOrderIds.length > 0 ? { id: { in: storeOrderIds } } : { id: { in: [] } };
-  const whereInvoiceForStore = storeOrderIds.length > 0 ? { orderId: { in: storeOrderIds } } : { orderId: { in: [] } };
+  const whereStoreOrders = isInternal ? {} : storeOrderIds.length > 0 ? { id: { in: storeOrderIds } } : { id: { in: [] } };
+  const whereInvoiceForStore = isInternal ? {} : storeOrderIds.length > 0 ? { orderId: { in: storeOrderIds } } : { orderId: { in: [] } };
 
   const selfOrderIds =
     storeOrderIds.length > 0

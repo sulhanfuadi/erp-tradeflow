@@ -18,6 +18,6 @@ export default async function WarehousesRoute() {
   if (!canAccessRoute(user.role, "/warehouses")) {
     redirect("/");
   }
-  const initialWarehouses = await getWarehousesForUser(user.id);
+  const initialWarehouses = await getWarehousesForUser(user.id, user.role);
   return <WarehousesPage initialWarehouses={initialWarehouses} />;
 }

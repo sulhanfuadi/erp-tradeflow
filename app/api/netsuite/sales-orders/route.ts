@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
     const guard = await requireNetSuiteSession(request);
     if (guard.errorResponse) return guard.errorResponse;
 
-    const rows = await getNetSuiteSalesOrders(guard.session!.id);
+    const rows = await getNetSuiteSalesOrders(undefined);
 
     return NextResponse.json(rows);
   } catch (error) {

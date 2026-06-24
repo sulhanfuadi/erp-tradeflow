@@ -38,8 +38,10 @@ export async function GET(
 
     const { id } = await params;
     const userId = session.id;
-    const isAdmin = session.role === "admin";
+    const isSupplierRole = session.role === "supplier";
+    const isRetailer = session.role === "retailer";
     const isClient = session.role === "client";
+    const isInternal = !isClient && !isSupplierRole && !isRetailer;
 
     // Check cache first
     const cacheKey = cacheKeys.suppliers.detail(id);
@@ -52,10 +54,10 @@ export async function GET(
     // Cache miss: fetch from database
     logger.info(`❌ Cache miss for supplier: ${cacheKey} - fetching from database`);
 
-    // Fetch supplier: admin any by id; client any by id; else own or global demo
+    // Fetch supplier: internal or client any by id; else own or global demo
     let supplier: Awaited<ReturnType<typeof getSupplierById>> | null;
     const demoUserId = await getDemoSupplierUserId();
-    if (isAdmin || isClient) {
+    if (isInternal || isClient) {
       supplier = await prisma.supplier.findUnique({ where: { id } });
     } else {
       supplier = await getSupplierById(id, userId);

@@ -2,10 +2,10 @@
   "scenarioId": "P2P-Step2-Review-Item",
   "title": "Review Item on Purchase Order",
   "status": "PASS",
-  "startedAt": "2026-06-21T12:52:19.694Z",
+  "startedAt": "2026-06-22T04:47:56.268Z",
   "ids": {
-    "goodsReceiptId": "6a37de83598bdb968b0daa00"
+    "goodsReceiptId": "6a38be7c1e76ec8d76f2c91c"
   },
   "artifactPath": "docs/evidence/auto/P2P-Step2-Review-Item.png",
-  "finishedAt": "2026-06-21T12:52:24.277Z"
+  "finishedAt": "2026-06-22T04:48:00.674Z"
 }

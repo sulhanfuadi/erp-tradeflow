@@ -76,8 +76,12 @@ export async function GET(
       );
     }
 
-    // Admin may only view reviews for products they own (product.userId === session.id).
-    if (session.role === "admin") {
+    // Product owners may only view reviews for products they own (product.userId === session.id).
+    const isSupplier = session.role === "supplier";
+    const isRetailer = session.role === "retailer";
+    const isProductOwnerRole = isSupplier || isRetailer;
+    
+    if (isProductOwnerRole) {
       const product = await prisma.product.findUnique({
         where: { id: record.productId },
         select: { userId: true },
@@ -139,7 +143,10 @@ export async function PUT(
       select: { userId: true },
     });
     const isProductOwner = product?.userId === session.id;
-    const isAdmin = session.role === "admin";
+    const isClient = session.role === "client";
+    const isSupplier = session.role === "supplier";
+    const isRetailer = session.role === "retailer";
+    const isInternal = !isClient && !isSupplier && !isRetailer;
 
     const body = await request.json();
     const parsed = updateProductReviewSchema.safeParse(body);
@@ -153,7 +160,7 @@ export async function PUT(
     const data = parsed.data;
     const updatePayload: UpdateProductReviewInput = {};
     if (data.status != null) {
-      if (isAuthor && !isAdmin && !isProductOwner) {
+      if (isAuthor && !isInternal && !isProductOwner) {
         return NextResponse.json(
           { error: "Only product owner or admin can change status." },
           { status: 403 },
@@ -162,13 +169,13 @@ export async function PUT(
       updatePayload.status = data.status;
     }
     if (data.rating != null) {
-      if (!isAuthor && !isAdmin && !isProductOwner) {
+      if (!isAuthor && !isInternal && !isProductOwner) {
         return NextResponse.json({ error: "Forbidden" }, { status: 403 });
       }
       updatePayload.rating = data.rating;
     }
     if (data.comment != null) {
-      if (!isAuthor && !isAdmin && !isProductOwner) {
+      if (!isAuthor && !isInternal && !isProductOwner) {
         return NextResponse.json({ error: "Forbidden" }, { status: 403 });
       }
       updatePayload.comment = data.comment;
@@ -237,8 +244,11 @@ export async function DELETE(
       select: { userId: true, name: true },
     });
     const isProductOwner = product?.userId === session.id;
-    const isAdmin = session.role === "admin";
-    if (!isAuthor && !isAdmin && !isProductOwner) {
+    const isClient = session.role === "client";
+    const isSupplier = session.role === "supplier";
+    const isRetailer = session.role === "retailer";
+    const isInternal = !isClient && !isSupplier && !isRetailer;
+    if (!isAuthor && !isInternal && !isProductOwner) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

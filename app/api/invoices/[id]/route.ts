@@ -229,11 +229,13 @@ export async function PUT(
       id,
     };
 
-    // Admin can update any invoice; product owners can update invoices linked to
+    // Internal users can update any invoice; product owners can update invoices linked to
     // their products (including legacy invoices where userId = client).
-    const isAdmin = session.role === "admin";
+    const isClient = session.role === "client";
+    const isSupplier = session.role === "supplier";
+    const isInternal = !isClient && !isSupplier;
     let ownerUserId = userId;
-    if (isAdmin) {
+    if (isInternal) {
       const existing = await prisma.invoice.findUnique({ where: { id } });
       if (!existing) {
         return NextResponse.json({ error: "Invoice not found" }, { status: 404 });
@@ -372,11 +374,13 @@ export async function DELETE(
     }
 
     const userId = session.id;
-    const isAdmin = session.role === "admin";
+    const isClient = session.role === "client";
+    const isSupplier = session.role === "supplier";
+    const isInternal = !isClient && !isSupplier;
 
-    // Admin can delete any invoice; product owners can delete invoices linked to their products.
+    // Internal users can delete any invoice; product owners can delete invoices linked to their products.
     let ownerUserId = userId;
-    if (isAdmin) {
+    if (isInternal) {
       const existing = await prisma.invoice.findUnique({ where: { id: invoiceId } });
       if (existing) ownerUserId = existing.userId;
     } else {

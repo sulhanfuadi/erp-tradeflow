@@ -427,8 +427,13 @@ export default function OrderDetailPage() {
                         getStatusBadgeClasses(order.status),
                       )}
                     >
-                      {order.status.charAt(0).toUpperCase() +
-                        order.status.slice(1)}
+                      {order.status
+                        .split("_")
+                        .map(
+                          (word) =>
+                            word.charAt(0).toUpperCase() + word.slice(1)
+                        )
+                        .join(" ")}
                     </Badge>
                   </GlassCard>
                   <GlassCard variant="emerald">
@@ -441,8 +446,13 @@ export default function OrderDetailPage() {
                         getPaymentStatusBadgeClasses(order.paymentStatus),
                       )}
                     >
-                      {order.paymentStatus.charAt(0).toUpperCase() +
-                        order.paymentStatus.slice(1)}
+                      {order.paymentStatus
+                        .split("_")
+                        .map(
+                          (word) =>
+                            word.charAt(0).toUpperCase() + word.slice(1)
+                        )
+                        .join(" ")}
                     </Badge>
                   </GlassCard>
                 </div>

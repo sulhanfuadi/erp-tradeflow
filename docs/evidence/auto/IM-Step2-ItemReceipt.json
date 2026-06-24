@@ -2,7 +2,7 @@
   "scenarioId": "IM-Step2-ItemReceipt",
   "title": "Item Receipt updates stock",
   "status": "PASS",
-  "startedAt": "2026-06-21T12:52:03.525Z",
+  "startedAt": "2026-06-22T04:47:41.270Z",
   "artifactPath": "docs/evidence/auto/IM-Step2-ItemReceipt.png",
-  "finishedAt": "2026-06-21T12:52:06.080Z"
+  "finishedAt": "2026-06-22T04:47:43.669Z"
 }

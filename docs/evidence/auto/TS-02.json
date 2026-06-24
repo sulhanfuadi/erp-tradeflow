@@ -2,13 +2,13 @@
   "scenarioId": "TS-02",
   "title": "Item Fulfillment partial/full + status transition",
   "status": "PASS",
-  "startedAt": "2026-06-21T12:51:14.388Z",
+  "startedAt": "2026-06-22T04:46:53.791Z",
   "assertions": {
     "partialFulfillmentStatus": "picked",
     "finalSalesOrderNetSuiteStatus": "Pending Billing"
   },
   "ids": {
-    "salesOrderId": "6a37de40598bdb968b0da9c7"
+    "salesOrderId": "6a38be3b1e76ec8d76f2c8e3"
   },
   "notes": [
     "Item Fulfillment partial berhasil.",
@@ -16,5 +16,5 @@
     "Status Sales Order menjadi Pending Billing."
   ],
   "artifactPath": "docs/evidence/auto/TS-02.png",
-  "finishedAt": "2026-06-21T12:51:15.582Z"
+  "finishedAt": "2026-06-22T04:46:54.964Z"
 }

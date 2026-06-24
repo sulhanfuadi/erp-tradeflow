@@ -21,15 +21,9 @@ export async function getDemoSupplierUserId(): Promise<string | null> {
  * So every admin sees at least the demo supplier in product dropdown and suppliers list.
  */
 export async function getSuppliersForAdminIncludingDemo(
-  userId: string,
+  userId?: string,
 ): Promise<Awaited<ReturnType<typeof getSuppliersByUser>>> {
-  const demoUserId = await getDemoSupplierUserId();
-  const where =
-    demoUserId != null
-      ? { OR: [{ userId }, { userId: demoUserId }] }
-      : { userId };
   return prisma.supplier.findMany({
-    where,
     orderBy: { name: "asc" },
   });
 }

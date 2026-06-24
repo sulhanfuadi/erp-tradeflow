@@ -543,8 +543,14 @@ export default function AdminMyActivityContent() {
                             )}
                           >
                             {order.status
-                              ? order.status.charAt(0).toUpperCase() +
-                                order.status.slice(1).toLowerCase()
+                              ? order.status
+                                  .split("_")
+                                  .map(
+                                    (word) =>
+                                      word.charAt(0).toUpperCase() +
+                                      word.slice(1).toLowerCase()
+                                  )
+                                  .join(" ")
                               : "—"}
                           </Badge>
                         </TableCell>

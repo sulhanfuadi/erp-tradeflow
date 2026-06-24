@@ -24,10 +24,13 @@ export async function GET(
 
     const { id } = await params;
     const userId = session.id;
-    const isAdmin = session.role === "admin";
+    const isClient = session.role === "client";
+    const isSupplier = session.role === "supplier";
+    const isRetailer = session.role === "retailer";
+    const isInternal = !isClient && !isSupplier && !isRetailer;
 
     const warehouse = await prisma.warehouse.findFirst({
-      where: isAdmin ? { id } : { id, userId },
+      where: isInternal ? { id } : { id, userId },
     });
 
     if (!warehouse) {

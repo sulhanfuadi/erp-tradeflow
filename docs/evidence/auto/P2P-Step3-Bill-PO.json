@@ -2,10 +2,10 @@
   "scenarioId": "P2P-Step3-Bill-PO",
   "title": "Bill Purchase Order",
   "status": "PASS",
-  "startedAt": "2026-06-21T12:52:24.617Z",
+  "startedAt": "2026-06-22T04:48:00.881Z",
   "ids": {
-    "apInvoiceId": "6a37de88598bdb968b0daa04"
+    "apInvoiceId": "6a38be801e76ec8d76f2c920"
   },
   "artifactPath": "docs/evidence/auto/P2P-Step3-Bill-PO.png",
-  "finishedAt": "2026-06-21T12:52:30.270Z"
+  "finishedAt": "2026-06-22T04:48:06.317Z"
 }
